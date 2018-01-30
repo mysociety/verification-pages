@@ -25,6 +25,8 @@ gem 'twitter-bootstrap-rails'
 gem 'rack-cors', require: 'rack/cors'
 # Simple HTTP client for retrieving SPARQL queries
 gem 'rest-client'
+# API for retrieving data from Wikidata
+gem 'mediawiki_api'
 
 group :development, :test do
   gem 'dotenv-rails', '~> 0.7.0'

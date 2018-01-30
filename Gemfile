@@ -23,6 +23,8 @@ gem 'rubocop', '~> 0.52.1', require: false
 gem 'twitter-bootstrap-rails'
 
 group :development, :test do
+  gem 'dotenv-rails', '~> 0.7.0'
+  gem 'foreman', '~> 0.64.0'
   gem 'rspec-rails', '~> 3.7'
 
   # Call 'byebug' anywhere in the code to stop execution and get a debugger

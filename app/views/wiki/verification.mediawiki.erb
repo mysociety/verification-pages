@@ -10,7 +10,7 @@
 
 {{User:<%= wikidata_bot %>/verification/table_header}}
 <% statements.actionable.each do |statement| %>
-  <%= render_row page, statement, type: :actionable %>
+  <%= render_row page, statement, type: :actionable, url: results_url %>
 <% end %>
 {{User:<%= wikidata_bot %>/verification/table_footer}}
 <% end %>

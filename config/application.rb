@@ -30,5 +30,8 @@ module VerificationPages
 
     # Don't generate system test files.
     config.generators.system_tests = nil
+
+    # Load app/services/concerns
+    config.autoload_paths += %w[app/services/concerns]
   end
 end

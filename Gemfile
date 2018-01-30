@@ -23,6 +23,8 @@ gem 'rubocop', '~> 0.52.1', require: false
 gem 'twitter-bootstrap-rails'
 # For configuring CORS headers
 gem 'rack-cors', require: 'rack/cors'
+# Simple HTTP client for retrieving SPARQL queries
+gem 'rest-client'
 
 group :development, :test do
   gem 'dotenv-rails', '~> 0.7.0'

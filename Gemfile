@@ -19,6 +19,8 @@ gem 'sass-rails', '~> 5.0'
 gem 'uglifier', '>= 1.3.0'
 # Code linting
 gem 'rubocop', '~> 0.52.1', require: false
+# Bootstrap styling
+gem 'twitter-bootstrap-rails'
 
 group :development, :test do
   gem 'rspec-rails', '~> 3.7'

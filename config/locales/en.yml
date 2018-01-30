@@ -30,4 +30,13 @@
 # available at http://guides.rubyonrails.org/i18n.html.
 
 en:
-  hello: "Hello world"
+  attributes:
+    id: ID
+
+  activerecord:
+    attributes:
+      page:
+        position_held_item: Position
+        parliamentary_term_item: Term
+        reference_url: Reference URL
+        require_parliamentary_group: Party required

@@ -1,0 +1,12 @@
+AllCops:
+  Exclude:
+    - 'bin/**'
+    - 'db/migrate/**'
+    - 'db/schema.rb'
+
+Rails:
+  Enabled: true
+
+Metrics/BlockLength:
+  Exclude:
+    - 'spec/**/*.rb'

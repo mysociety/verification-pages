@@ -21,6 +21,8 @@ gem 'uglifier', '>= 1.3.0'
 gem 'rubocop', '~> 0.52.1', require: false
 # Bootstrap styling
 gem 'twitter-bootstrap-rails'
+# For configuring CORS headers
+gem 'rack-cors', require: 'rack/cors'
 
 group :development, :test do
   gem 'dotenv-rails', '~> 0.7.0'

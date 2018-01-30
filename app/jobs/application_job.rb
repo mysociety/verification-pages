@@ -1,4 +1,4 @@
 # frozen_string_literal: true
 
-class ApplicationJob < ActiveJob::Base
+class ApplicationJob < ActiveJob::Base # :nodoc:
 end

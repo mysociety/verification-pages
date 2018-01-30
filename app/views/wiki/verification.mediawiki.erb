@@ -1,0 +1,38 @@
+=Dashboard of statements for {{Q|<%= page.position_held_item %>}}=
+
+<br>
+
+{{cmbox | text = <div style="margin-top:14px">You can contribute your own verifications to this page by adding the following line to '''[[Special:MyPage/common.js|your common.js]]''':</div><pre>importScript('User:<%= wikidata_bot %>/verification.js');</pre> }}
+
+
+<% unless statements.actionable.empty? %>
+=New statements to verify=
+
+{{User:<%= wikidata_bot %>/verification/table_header}}
+<% statements.actionable.each do |statement| %>
+  <%= render_row page, statement, type: :actionable %>
+<% end %>
+{{User:<%= wikidata_bot %>/verification/table_footer}}
+<% end %>
+
+
+<% unless statements.manual.empty? %>
+=Statements requiring manual intervention=
+
+{{User:<%= wikidata_bot %>/verification/table_header}}
+<% statements.manual.each do |statement| %>
+  <%= render_row page, statement, type: :manual, why_not_actionable: "This suggest the person switched parties midterm; you'll have to verify and fix this manually if it's correct" %>
+<% end %>
+{{User:<%= wikidata_bot %>/verification/table_footer}}
+<% end %>
+
+
+<% unless statements.evidenced.empty? %>
+=Statements already verified=
+
+{{User:<%= wikidata_bot %>/verification/table_header}}
+<% statements.evidenced.each do |statement| %>
+  <%= render_row page, statement, type: :evidenced, user: statement.result_user %>
+<% end %>
+{{User:<%= wikidata_bot %>/verification/table_footer}}
+<% end %>

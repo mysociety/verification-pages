@@ -19,6 +19,14 @@ Page.create_with(
   parliamentary_term_item: 'Q29974940' # 57th UK Parliament
 )
 
+Statement.create_with(
+  parliamentary_group_item: 'Q6467393', # Labour Co-operative
+  electoral_district_item: 'Q3238926', # Cardiff South & Penarth
+  parliamentary_term_item: 'Q29974940' # 57th UK Parliament
+).find_or_create_by(
+  person_item: 'Q7609085' # Stephen Doughty
+)
+
 Page.create_with(
   title: 'User:Graemebp/verification/ca',
   reference_url: 'https://www.ourcommons.ca/Parliamentarians/en/members?view=ListAll',

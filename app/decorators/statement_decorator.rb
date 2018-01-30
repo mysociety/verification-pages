@@ -38,4 +38,8 @@ class StatementDecorator < SimpleDelegator
     data.start_date && data.start_of_term &&
       Date.parse(data.start_date) < Date.parse(data.start_of_term) - 1.day
   end
+
+  def result_user
+    latest_result.user
+  end
 end

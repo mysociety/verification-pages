@@ -17,4 +17,10 @@ namespace :verification_page do
     statements = LoadStatements.run(args.page_title)
     puts "#{statements.count} Statements loaded"
   end
+
+  desc 'Generate verification page for the page_title given'
+  task :generate, %i[page_title] => %i[environment] do |_, args|
+    abort('Require page title argument') if args.page_title.blank?
+    puts GenerateVerificationPage.run(args.page_title)
+  end
 end

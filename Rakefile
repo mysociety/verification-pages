@@ -33,4 +33,20 @@ namespace :verification_page do
   rescue MediawikiApi::EditError => ex
     puts ex.response.inspect
   end
+
+  namespace :update do
+    desc 'Update verification page templates'
+    task templates: :environment do
+      UpdateVerificationTemplates.run(
+        "User:#{ENV.fetch('WIKIDATA_USERNAME')}/verification"
+      )
+    end
+
+    desc 'Update verification page javascript'
+    task javascript: :environment do
+      UpdateVerificationJavascript.run(
+        "User:#{ENV.fetch('WIKIDATA_USERNAME')}/verification.js"
+      )
+    end
+  end
 end

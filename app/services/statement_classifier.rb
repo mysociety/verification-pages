@@ -37,9 +37,9 @@ class StatementClassifier
 
   def statement_type(statement)
     return unless statement.data
-    return if statement.term_invalid? || statement.result_negative?
+    return if statement.term_invalid? || statement.reconciliation_negative?
 
-    if statement.result_positive?
+    if statement.reconciliation_positive?
       :evidenced
     elsif statement.started_before_term? || statement.qualifiers_contradicting?
       :manual

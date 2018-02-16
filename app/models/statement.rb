@@ -4,6 +4,8 @@
 class Statement < ApplicationRecord
   has_many :results, dependent: :destroy
 
+  def latest_reconciliation; end
+
   def latest_result
     results.last
   end

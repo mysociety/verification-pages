@@ -26,12 +26,12 @@ class StatementDecorator < SimpleDelegator
     parliamentary_term_item != data.term
   end
 
-  def result_negative?
-    latest_result && latest_result.status == 'no'
+  def reconciliation_negative?
+    latest_reconciliation && latest_reconciliation.status == 'no'
   end
 
-  def result_positive?
-    latest_result && latest_result.status == 'yes'
+  def reconciliation_positive?
+    latest_reconciliation && latest_reconciliation.status == 'yes'
   end
 
   def started_before_term?
@@ -39,7 +39,7 @@ class StatementDecorator < SimpleDelegator
       Date.parse(data.start_date) < Date.parse(data.start_of_term) - 1.day
   end
 
-  def result_user
-    latest_result.user
+  def reconciliation_user
+    latest_reconciliation.user
   end
 end

@@ -75,15 +75,21 @@ RSpec.describe StatementClassifier, type: :service do
       it { expect(classifier.evidenced).to be_empty }
     end
 
-    context 'when result is positive' do
-      before { statement.results.build(status: :yes) }
+    context 'when reconciliation is positive' do
+      before do
+        allow(statement).to receive(:latest_reconciliation)
+          .and_return(double(status: 'yes'))
+      end
       it { expect(classifier.actionable).to be_empty }
       it { expect(classifier.manual).to be_empty }
       it { expect(classifier.evidenced).to eq(statements) }
     end
 
-    context 'when result is negative' do
-      before { statement.results.build(status: :no) }
+    context 'when reconciliation is negative' do
+      before do
+        allow(statement).to receive(:latest_reconciliation)
+          .and_return(double(status: 'no'))
+      end
       it { expect(classifier.actionable).to be_empty }
       it { expect(classifier.manual).to be_empty }
       it { expect(classifier.evidenced).to be_empty }

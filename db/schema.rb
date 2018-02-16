@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20180130145133) do
+ActiveRecord::Schema.define(version: 20180216122354) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -36,14 +36,17 @@ ActiveRecord::Schema.define(version: 20180130145133) do
 
   create_table "statements", force: :cascade do |t|
     t.string "transaction_id"
-    t.string "person_item", null: false
+    t.string "person_item"
     t.string "person_revision"
     t.string "statement_uuid"
     t.string "parliamentary_group_item"
-    t.string "electoral_district_item", null: false
+    t.string "electoral_district_item"
     t.string "parliamentary_term_item", null: false
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.string "person_name"
+    t.string "parliamentary_group_name"
+    t.string "electoral_district_name"
   end
 
 end

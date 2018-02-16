@@ -8,12 +8,11 @@ class LoadStatements < ServiceBase
   def run
     json.map do |result|
       Statement.create_with(
-        parliamentary_group_item: result[:parliamentary_group_identifier],
-        electoral_district_item: result[:electoral_district_identifier],
+        person_name: result[:person_name],
+        electoral_district_name: result[:electoral_district_name],
         parliamentary_term_item: page.parliamentary_term_item
       ).find_or_create_by(
-        transaction_id: result[:transaction_id],
-        person_item: result[:person_identifier]
+        transaction_id: result[:transaction_id]
       )
     end
   end

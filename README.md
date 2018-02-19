@@ -6,7 +6,7 @@ Generates position held verification and reconciliation pages for Wikidata
 
 To run this application you will need:
 
-- Ruby 2.2.2 or greater
+- Ruby 2.3.0 or greater
 - PostgreSQL server
 
 Follow these steps to clone and install the application:

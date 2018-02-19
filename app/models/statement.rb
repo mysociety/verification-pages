@@ -4,6 +4,8 @@
 class Statement < ApplicationRecord
   has_many :verifications, dependent: :destroy
 
+  validates :transaction_id, presence: true, uniqueness: true
+
   def latest_reconciliation; end
 
   def latest_verification

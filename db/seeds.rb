@@ -20,14 +20,15 @@ Page.create_with(
 )
 
 Statement.create_with(
+  person_item: 'Q7609085',
+  person_name: 'Stephen Doughty',
   parliamentary_group_item: 'Q6467393',
   parliamentary_group_name: 'Labour Co-operative',
   electoral_district_item: 'Q3238926',
   electoral_district_name: 'Cardiff South & Penarth',
   parliamentary_term_item: 'Q29974940' # 57th UK Parliament
 ).find_or_create_by(
-  person_item: 'Q7609085',
-  person_name: 'Stephen Doughty'
+  transaction_id: '123'
 )
 
 Page.create_with(

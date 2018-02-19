@@ -7,7 +7,7 @@ module ApplicationHelper # :nodoc:
 
   def row_options(page, statement)
     {
-      id: statement.id,
+      id: statement.transaction_id,
       statement: statement.statement_uuid,
       subject: statement.person_item,
       subject_name: statement.person_name,

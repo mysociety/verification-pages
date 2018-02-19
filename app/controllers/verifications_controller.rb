@@ -6,7 +6,7 @@ class VerificationsController < ApplicationController
   skip_before_action :verify_authenticity_token
 
   def create
-    statement = Statement.find(params.fetch(:id))
+    statement = Statement.find_by(transaction_id: params.fetch(:id))
     statement.create_verification!(verification_params)
   end
 

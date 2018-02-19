@@ -17,13 +17,8 @@ class StatementDecorator < SimpleDelegator
     super(statement)
   end
 
-  def qualifiers_contradicting?
-    electoral_district_item != data.district ||
-      parliamentary_group_item != data.group
-  end
-
   def term_invalid?
-    parliamentary_term_item != data.term
+    data&.term && parliamentary_term_item != data.term
   end
 
   def reconciliation_negative?
@@ -35,8 +30,21 @@ class StatementDecorator < SimpleDelegator
   end
 
   def started_before_term?
-    data.start_date && data.start_of_term &&
+    data&.start_date && data&.start_of_term &&
       Date.parse(data.start_date) < Date.parse(data.start_of_term) - 1.day
+  end
+
+  def qualifiers_contradicting?
+    electoral_district_item != data&.district ||
+      parliamentary_group_item != data&.group
+  end
+
+  def unverifiable?
+    latest_verification && latest_verification.status == false
+  end
+
+  def verified?
+    latest_verification && latest_verification.status == true
   end
 
   def reconciliation_user

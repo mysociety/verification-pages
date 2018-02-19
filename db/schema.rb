@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20180216122354) do
+ActiveRecord::Schema.define(version: 20180219084933) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -23,15 +23,6 @@ ActiveRecord::Schema.define(version: 20180216122354) do
     t.boolean "require_parliamentary_group", default: false
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
-  end
-
-  create_table "results", force: :cascade do |t|
-    t.bigint "statement_id", null: false
-    t.integer "status", null: false
-    t.string "user", null: false
-    t.datetime "created_at", null: false
-    t.datetime "updated_at", null: false
-    t.index ["statement_id"], name: "index_results_on_statement_id"
   end
 
   create_table "statements", force: :cascade do |t|
@@ -47,6 +38,15 @@ ActiveRecord::Schema.define(version: 20180216122354) do
     t.string "person_name"
     t.string "parliamentary_group_name"
     t.string "electoral_district_name"
+  end
+
+  create_table "verifications", force: :cascade do |t|
+    t.bigint "statement_id", null: false
+    t.boolean "status", default: false
+    t.string "user", null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["statement_id"], name: "index_verifications_on_statement_id"
   end
 
 end

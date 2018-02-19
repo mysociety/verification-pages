@@ -6,8 +6,8 @@ RSpec.describe Statement, type: :model do
   let(:statement) { Statement.new }
 
   describe 'assoications' do
-    it 'has many results' do
-      expect(statement.results.build).to be_a(Result)
+    it 'has many verifications' do
+      expect(statement.verifications.build).to be_a(Verification)
     end
   end
 end

@@ -48,7 +48,24 @@ RSpec.describe StatementClassifier, type: :service do
         district: 'Q4' }
     end
 
-    context 'when actionable' do
+    context 'when verifiable' do
+      it { expect(classifier.verifiable).to eq(statements) }
+      it { expect(classifier.actionable).to be_empty }
+      it { expect(classifier.manual).to be_empty }
+      it { expect(classifier.evidenced).to be_empty }
+    end
+
+    context 'when unverifiable' do
+      before { statement.verifications.build(status: false) }
+      it { expect(classifier.verifiable).to be_empty }
+      it { expect(classifier.actionable).to be_empty }
+      it { expect(classifier.manual).to be_empty }
+      it { expect(classifier.evidenced).to be_empty }
+    end
+
+    context 'when verified' do
+      before { statement.verifications.build(status: true) }
+      it { expect(classifier.verifiable).to be_empty }
       it { expect(classifier.actionable).to eq(statements) }
       it { expect(classifier.manual).to be_empty }
       it { expect(classifier.evidenced).to be_empty }
@@ -56,6 +73,7 @@ RSpec.describe StatementClassifier, type: :service do
 
     context 'when district qualifier contradict' do
       before { position_held.district = 'other-district' }
+      it { expect(classifier.verifiable).to be_empty }
       it { expect(classifier.actionable).to be_empty }
       it { expect(classifier.manual).to eq(statements) }
       it { expect(classifier.evidenced).to be_empty }
@@ -63,6 +81,7 @@ RSpec.describe StatementClassifier, type: :service do
 
     context 'when group qualifier contradict' do
       before { position_held.group = 'other-group' }
+      it { expect(classifier.verifiable).to be_empty }
       it { expect(classifier.actionable).to be_empty }
       it { expect(classifier.manual).to eq(statements) }
       it { expect(classifier.evidenced).to be_empty }
@@ -70,6 +89,7 @@ RSpec.describe StatementClassifier, type: :service do
 
     context 'when position start is 2 days before term start' do
       before { position_held.start_date = '2017-12-30' }
+      it { expect(classifier.verifiable).to be_empty }
       it { expect(classifier.actionable).to be_empty }
       it { expect(classifier.manual).to eq(statements) }
       it { expect(classifier.evidenced).to be_empty }
@@ -80,6 +100,7 @@ RSpec.describe StatementClassifier, type: :service do
         allow(statement).to receive(:latest_reconciliation)
           .and_return(double(status: 'yes'))
       end
+      it { expect(classifier.verifiable).to be_empty }
       it { expect(classifier.actionable).to be_empty }
       it { expect(classifier.manual).to be_empty }
       it { expect(classifier.evidenced).to eq(statements) }
@@ -90,6 +111,7 @@ RSpec.describe StatementClassifier, type: :service do
         allow(statement).to receive(:latest_reconciliation)
           .and_return(double(status: 'no'))
       end
+      it { expect(classifier.verifiable).to be_empty }
       it { expect(classifier.actionable).to be_empty }
       it { expect(classifier.manual).to be_empty }
       it { expect(classifier.evidenced).to be_empty }
@@ -97,6 +119,7 @@ RSpec.describe StatementClassifier, type: :service do
 
     context 'when terms do not match' do
       before { position_held.term = 'other-term' }
+      it { expect(classifier.verifiable).to be_empty }
       it { expect(classifier.actionable).to be_empty }
       it { expect(classifier.manual).to be_empty }
       it { expect(classifier.evidenced).to be_empty }
@@ -104,6 +127,7 @@ RSpec.describe StatementClassifier, type: :service do
 
     context 'when there are not any statements' do
       let(:statement) { nil }
+      it { expect(classifier.verifiable).to be_empty }
       it { expect(classifier.actionable).to be_empty }
       it { expect(classifier.manual).to be_empty }
       it { expect(classifier.evidenced).to be_empty }

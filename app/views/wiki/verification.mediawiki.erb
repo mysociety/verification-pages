@@ -5,12 +5,22 @@
 {{cmbox | text = <div style="margin-top:14px">You can contribute your own verifications to this page by adding the following line to '''[[Special:MyPage/common.js|your common.js]]''':</div><pre>importScript('User:<%= wikidata_bot %>/verification.js');</pre> }}
 
 
-<% unless statements.actionable.empty? %>
+<% unless statements.verifiable.empty? %>
 =New statements to verify=
 
 {{User:<%= wikidata_bot %>/verification/table_header}}
+<% statements.verifiable.each do |statement| %>
+  <%= render_row page, statement, type: :verifiable, url: verifications_url %>
+<% end %>
+{{User:<%= wikidata_bot %>/verification/table_footer}}
+<% end %>
+
+<% unless statements.actionable.empty? %>
+=Statements to reconcile=
+
+{{User:<%= wikidata_bot %>/verification/table_header}}
 <% statements.actionable.each do |statement| %>
-  <%= render_row page, statement, type: :actionable, url: results_url %>
+  <%= render_row page, statement, type: :actionable %>
 <% end %>
 {{User:<%= wikidata_bot %>/verification/table_footer}}
 <% end %>
@@ -28,7 +38,7 @@
 
 
 <% unless statements.evidenced.empty? %>
-=Statements already verified=
+=Statements already verified & reconciled=
 
 {{User:<%= wikidata_bot %>/verification/table_header}}
 <% statements.evidenced.each do |statement| %>

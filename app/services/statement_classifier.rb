@@ -11,6 +11,10 @@ class StatementClassifier
     @statements = page.statements
   end
 
+  def verifiable
+    classified_statements.fetch(:verifiable, [])
+  end
+
   def actionable
     classified_statements.fetch(:actionable, [])
   end
@@ -36,15 +40,18 @@ class StatementClassifier
   end
 
   def statement_type(statement)
-    return unless statement.data
-    return if statement.term_invalid? || statement.reconciliation_negative?
-
-    if statement.reconciliation_positive?
+    if statement.term_invalid? ||
+       statement.reconciliation_negative? ||
+       statement.unverifiable?
+      # noop
+    elsif statement.reconciliation_positive?
       :evidenced
     elsif statement.started_before_term? || statement.qualifiers_contradicting?
       :manual
-    else
+    elsif statement.verified?
       :actionable
+    else
+      :verifiable
     end
   end
 

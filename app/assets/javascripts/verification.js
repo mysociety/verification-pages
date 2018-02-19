@@ -18,12 +18,12 @@ $(document).ready(function () {
     var noButton = $('.verification-no', row)
 
     var statementData = row.data()
-    var handleClick = function (value) {
+    var handleClick = function (status) {
       return function (e) {
         e.preventDefault()
         var anchor = $(this).parent('a')
         recordDecision(anchor, $.extend({}, statementData, {
-          value: value,
+          status: status,
           user: wgUserName
         }))
       }

@@ -3,7 +3,7 @@
 Rails.application.routes.draw do
   resources :pages
 
-  resources :results, only: %i[create] do
+  resources :verifications, only: %i[create] do
     root to: redirect('/'), as: nil
   end
 

@@ -8,6 +8,7 @@ To run this application you will need:
 
 - Ruby 2.3.0 or greater
 - PostgreSQL server
+- Yarn
 
 Follow these steps to clone and install the application:
 
@@ -15,6 +16,7 @@ Follow these steps to clone and install the application:
     cd verification-pages
     bundle install
     rails db:setup
+    yarn install
 
 ## Configuration
 

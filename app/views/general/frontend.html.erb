@@ -8,8 +8,12 @@
 
   <body>
     <div id="verification-tool">
-      <p>{{status}}</p>
-      <p>Statement is about: <span v-if="statements.length > 0">{{ statements[0].person_name }}</span></p>
+      <div v-if="loaded">
+        <p>Statement is about: {{ statement().person_name }}</p>
+      </div>
+      <div v-else>
+        Loading...
+      </div>
     </div>
   </body>
 </html>

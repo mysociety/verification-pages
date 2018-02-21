@@ -5,7 +5,7 @@ document.addEventListener('DOMContentLoaded', () => {
   const app = new Vue({
     el: '#verification-tool',
     data: {
-      status: 'Loading...',
+      loaded: false,
       statements: [],
       statementIndex: 0,
     },
@@ -21,7 +21,7 @@ document.addEventListener('DOMContentLoaded', () => {
           console.log(response.data);
           app.statements = response.data.statements
         }).then(() => {
-          app.status = 'Loaded'
+          app.loaded = true
         })
       }
     }

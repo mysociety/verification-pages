@@ -42,6 +42,14 @@ class StatementClassifier
     classified_statements.fetch(:done, [])
   end
 
+  def to_a
+    decorated_statements.map do |decorated_statement|
+      decorated_statement.tap do |s|
+        s.type = statement_type(s)
+      end
+    end
+  end
+
   private
 
   def classified_statements

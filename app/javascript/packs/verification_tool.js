@@ -6,14 +6,19 @@ document.addEventListener('DOMContentLoaded', () => {
     el: '#verification-tool',
     data: {
       status: 'Loading...',
-      statements: []
+      statements: [],
+      statementIndex: 0,
     },
     created: function () {
       this.loadStatements()
     },
     methods: {
+      statement: function() {
+        return app.statements[app.statementIndex];
+      },
       loadStatements: function () {
-        Axios.get('/statements/2.json').then(response => {
+        Axios.get('/statements/1.json').then(response => {
+          console.log(response.data);
           app.statements = response.data
         }).then(() => {
           app.status = 'Loaded'

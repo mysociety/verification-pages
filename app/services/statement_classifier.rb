@@ -2,13 +2,12 @@
 
 # Service to classify statements into actionable, manual or evidenced groups
 class StatementClassifier
-  include Enumerable
-
   attr_reader :page, :statements
 
   def initialize(page_title)
     @page = Page.find_by!(title: page_title)
-    @statements = page.statements
+    @statements = page.statements.includes(:verifications)
+                      .references(:verifications)
   end
 
   def verifiable
@@ -30,7 +29,8 @@ class StatementClassifier
   private
 
   def classified_statements
-    @classified_statements ||= each_with_object({}) do |statement, h|
+    @classified_statements ||= decorated_statements
+                               .each_with_object({}) do |statement, h|
       type = statement_type(statement)
       next unless type
 
@@ -55,9 +55,9 @@ class StatementClassifier
     end
   end
 
-  def each
-    statements.map do |statement|
-      yield decorate_statement(statement)
+  def decorated_statements
+    statements.to_a.map do |statement|
+      decorate_statement(statement)
     end
   end
 

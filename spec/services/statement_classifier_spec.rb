@@ -3,11 +3,14 @@
 require 'rails_helper'
 
 RSpec.describe StatementClassifier, type: :service do
-  let(:page) { double(:page, statements: statements, position_held_item: 'Q2') }
+  let(:page) do
+    double(:page, statements: statement_relation, position_held_item: 'Q2')
+  end
 
   let(:data) { { person_item: 'Q1' } }
   let(:statement) { Statement.new(data) }
   let(:statements) { [statement].compact }
+  let(:statement_relation) { double(:relation, to_a: statements) }
 
   let(:wikidata_data) { { person: 'Q1' } }
   let(:position_held) { OpenStruct.new(wikidata_data) }
@@ -16,6 +19,8 @@ RSpec.describe StatementClassifier, type: :service do
   let(:classifier) { StatementClassifier.new('page_title') }
 
   before do
+    allow(statement_relation).to receive_message_chain(:includes, :references)
+      .and_return(statement_relation)
     allow(Page).to receive(:find_by!)
       .with(title: 'page_title')
       .and_return(page)
@@ -27,7 +32,7 @@ RSpec.describe StatementClassifier, type: :service do
   describe 'initialisation' do
     it 'assigns instance variables' do
       expect(classifier.page).to eq page
-      expect(classifier.statements).to eq statements
+      expect(classifier.statements).to eq statement_relation
     end
   end
 

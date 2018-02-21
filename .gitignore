@@ -14,7 +14,11 @@
 !/tmp/.keep
 
 /node_modules
-/yarn-error.log
+/public/packs
+/public/packs-test
+yarn-error.log*
+yarn-debug.log*
+.yarn-integrity
 
 .byebug_history
 

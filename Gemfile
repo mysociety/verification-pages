@@ -29,6 +29,8 @@ gem 'rack-cors', require: 'rack/cors'
 gem 'rest-client'
 # API for retrieving data from Wikidata
 gem 'mediawiki_api'
+# Webpack for client side asset compilation
+gem 'webpacker', '~> 3.2'
 
 group :development, :test do
   gem 'dotenv-rails', '~> 0.7.0'

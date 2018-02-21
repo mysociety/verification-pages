@@ -18,6 +18,7 @@ class StatementDecorator < SimpleDelegator
   end
 
   def done?
+    # FIXME: we think this should return true if the statement data matches Wikidata
     false
   end
 

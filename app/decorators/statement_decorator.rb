@@ -3,6 +3,7 @@
 # Decorator with merges statements with up-to-date position held data
 class StatementDecorator < SimpleDelegator
   attr_reader :data
+  attr_accessor :type
 
   def initialize(statement, position_held_data)
     @data = position_held_data

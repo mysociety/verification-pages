@@ -9,7 +9,7 @@
   <body>
     <div id="verification-tool">
       <p>{{status}}</p>
-      <p>Statement is about: {{ statement() }}</p>
+      <p>Statement is about: <span v-if="statements.length > 0">{{ statements[0].person_name }}</span></p>
     </div>
   </body>
 </html>

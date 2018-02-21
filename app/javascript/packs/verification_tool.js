@@ -19,7 +19,7 @@ document.addEventListener('DOMContentLoaded', () => {
       loadStatements: function () {
         Axios.get('/statements/1.json').then(response => {
           console.log(response.data);
-          app.statements = response.data
+          app.statements = response.data.statements
         }).then(() => {
           app.status = 'Loaded'
         })

@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-# Service to classify statements into actionable, manual or evidenced groups
+# Service to classify statements into actionable, manually_actionable or done groups
 class StatementClassifier
   attr_reader :page, :statements
 
@@ -10,20 +10,36 @@ class StatementClassifier
                       .references(:verifications)
   end
 
+  # verifiable
+  # unverifiable
+  # reconcilable
+  # actionable
+  # manually_actionable
+  # done(able)
+  #
+
   def verifiable
     classified_statements.fetch(:verifiable, [])
+  end
+
+  def unverifiable
+    classified_statements.fetch(:unverifiable, [])
+  end
+
+  def reconcilable
+    classified_statements.fetch(:reconcilable, [])
   end
 
   def actionable
     classified_statements.fetch(:actionable, [])
   end
 
-  def manual
-    classified_statements.fetch(:manual, [])
+  def manually_actionable
+    classified_statements.fetch(:manually_actionable, [])
   end
 
-  def evidenced
-    classified_statements.fetch(:evidenced, [])
+  def done
+    classified_statements.fetch(:done, [])
   end
 
   private
@@ -40,16 +56,16 @@ class StatementClassifier
   end
 
   def statement_type(statement)
-    if statement.term_invalid? ||
-       statement.reconciliation_negative? ||
-       statement.unverifiable?
-      # noop
-    elsif statement.reconciliation_positive?
-      :evidenced
-    elsif statement.started_before_term? || statement.qualifiers_contradicting?
-      :manual
-    elsif statement.verified?
+    if statement.done?
+      :done
+    elsif statement.reconciled? && (statement.started_before_term? || statement.qualifiers_contradicting?)
+      :manually_actionable
+    elsif statement.reconciled?
       :actionable
+    elsif statement.verified?
+      :reconcilable
+    elsif statement.unverifiable?
+      :unverifiable
     else
       :verifiable
     end

@@ -17,6 +17,10 @@ class StatementDecorator < SimpleDelegator
     super(statement)
   end
 
+  def done?
+    false
+  end
+
   def term_invalid?
     data&.term && parliamentary_term_item != data.term
   end

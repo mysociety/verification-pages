@@ -9,5 +9,6 @@ Rails.application.routes.draw do
     root to: redirect('/'), as: nil
   end
 
+  get 'frontend', to: 'general#frontend'
   root 'general#index'
 end

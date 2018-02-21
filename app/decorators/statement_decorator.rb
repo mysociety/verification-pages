@@ -17,6 +17,10 @@ class StatementDecorator < SimpleDelegator
     super(statement)
   end
 
+  def done?
+    false
+  end
+
   def term_invalid?
     data&.term && parliamentary_term_item != data.term
   end
@@ -45,6 +49,10 @@ class StatementDecorator < SimpleDelegator
 
   def verified?
     latest_verification && latest_verification.status == true
+  end
+
+  def reconciled?
+    person_item.present?
   end
 
   def reconciliation_user

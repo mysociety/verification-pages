@@ -51,6 +51,10 @@ class StatementDecorator < SimpleDelegator
     latest_verification && latest_verification.status == true
   end
 
+  def reconciled?
+    person_item.present?
+  end
+
   def reconciliation_user
     latest_reconciliation.user
   end

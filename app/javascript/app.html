@@ -1,0 +1,8 @@
+<div id="verification-tool">
+  <div v-if="loaded">
+    <p>Statement is about: {{ statement().person_name }}</p>
+  </div>
+  <div v-else>
+    Loading...
+  </div>
+</div>

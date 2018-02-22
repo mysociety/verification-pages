@@ -2,18 +2,11 @@
 <html>
   <head>
     <title>Verification Pages</title>
-
     <%= javascript_pack_tag 'verification_tool' %>
   </head>
-
   <body>
-    <div id="verification-tool">
-      <div v-if="loaded">
-        <p>Statement is about: {{ statement().person_name }}</p>
-      </div>
-      <div v-else>
-        Loading...
-      </div>
+    <div id="mw-content-text">
+      <!-- This div matches one on every Mediawiki page -->
     </div>
   </body>
 </html>

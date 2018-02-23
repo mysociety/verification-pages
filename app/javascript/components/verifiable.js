@@ -19,7 +19,7 @@ export default template({
           throw 'Response has too many statements. We don\'t know which one to update'
         }
         const newStatement = response.data.statements[0]
-        this.$emit('statement-update', newStatement)
+        this.$parent.$emit('statement-update', newStatement)
         this.submitting = false
       })
     }

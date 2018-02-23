@@ -1,6 +1,23 @@
 <div id="verification-tool">
   <div v-if="loaded">
-    <p>Statement is about: {{ statement().person_name }}</p>
+    <table>
+      <tr>
+        <td>{{ statement().person_name }}</td>
+        <td>{{ statement().electoral_district_name }}</td>
+        <td>{{ statement().parliamentary_group_name }}</td>
+        <td>{{ statement().type }}</td>
+      </tr>
+      <tr>
+        <td colspan="4">
+          <span v-if="!submitting">
+            <component v-bind:is="currentView()" :statement.sync="statement()"></component>
+          </span>
+          <span v-else>
+            Loading...
+          </span>
+        </td>
+      </tr>
+    </table>
     <button v-on:click="skipStatement()">Skip</button>
   </div>
   <div v-else>

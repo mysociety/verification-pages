@@ -1,6 +1,7 @@
 <div id="verification-tool">
   <div v-if="loaded">
     <p>Statement is about: {{ statement().person_name }}</p>
+    <button v-on:click="skipStatement()">Skip</button>
   </div>
   <div v-else>
     Loading...

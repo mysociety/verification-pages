@@ -1,4 +1,9 @@
 <span>
-  <button v-on:click="verifyStatement()">Yes, verify</button>
-  <button v-on:click="unverifyStatement()">No evidence</button>
+  <span v-if="!submitting">
+    <button v-on:click="verifyStatement()">Yes, verify</button>
+    <button v-on:click="unverifyStatement()">No evidence</button>
+  </span>
+  <span v-else>
+    Submitting...
+  </span>
 </span>

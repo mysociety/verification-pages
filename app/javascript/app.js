@@ -22,6 +22,9 @@ export default template({
       }).then(() => {
         this.loaded = true
       })
+    },
+    skipStatement: function () {
+      this.statementIndex++
     }
   }
 })

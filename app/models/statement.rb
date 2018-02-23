@@ -6,6 +6,10 @@ class Statement < ApplicationRecord
 
   validates :transaction_id, presence: true, uniqueness: true
 
+  def page
+    Page.find_by(parliamentary_term_item: parliamentary_term_item)
+  end
+
   def latest_reconciliation; end
 
   def latest_verification

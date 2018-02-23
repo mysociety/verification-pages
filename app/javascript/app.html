@@ -10,7 +10,7 @@
       <tr>
         <td colspan="4">
           <span v-if="!submitting">
-            <component v-bind:is="currentView()" :statement.sync="statement()"></component>
+            <component v-bind:is="currentView()" :statement="statement()"></component>
           </span>
           <span v-else>
             Loading...

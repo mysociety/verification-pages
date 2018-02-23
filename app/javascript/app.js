@@ -19,6 +19,12 @@ export default template({
   },
   created: function () {
     this.loadStatements()
+    this.$on('statement-update', function (statement) {
+      const index = this.statements.findIndex(s => {
+        return s.transaction_id === statement.transaction_id
+      })
+      this.statements.splice(index, 1, statement)
+    })
   },
   methods: {
     currentView () {

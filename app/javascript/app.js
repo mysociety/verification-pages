@@ -42,7 +42,7 @@ export default template({
       })
     },
     skipStatement: function () {
-      this.statementIndex++
+      this.statementIndex = (this.statementIndex + 1) % this.statements.length;
     }
   }
 })

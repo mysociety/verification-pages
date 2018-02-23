@@ -1,12 +1,16 @@
-<!DOCTYPE html>
-<html>
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01//EN">
+<html class="client-js" lang="en" dir="ltr">
   <head>
+    <meta charset="UTF-8">
     <title>Verification Pages</title>
     <%= javascript_pack_tag 'verification_tool' %>
+    <%= stylesheet_link_tag 'wikidata_styles' %>
   </head>
   <body>
-    <div id="mw-content-text">
-      <!-- This div matches one on every Mediawiki page -->
+    <div class="mw-body">
+      <div class="mw-body-content">
+        <div id="mw-content-text"></div>
+      </div>
     </div>
   </body>
 </html>

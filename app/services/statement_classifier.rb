@@ -4,10 +4,14 @@
 class StatementClassifier
   attr_reader :page, :statements
 
-  def initialize(page_title)
+  def initialize(page_title, transaction_id = nil)
     @page = Page.find_by!(title: page_title)
     @statements = page.statements.includes(:verifications)
                       .references(:verifications)
+                      .order(:id)
+
+    return unless transaction_id
+    @statements = @statements.where(transaction_id: transaction_id)
   end
 
   # verifiable

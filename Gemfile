@@ -31,6 +31,8 @@ gem 'rest-client'
 gem 'mediawiki_api'
 # Webpack for client side asset compilation
 gem 'webpacker', '~> 3.2'
+# pry for debugging help
+gem 'pry'
 
 group :development, :test do
   gem 'dotenv-rails', '~> 0.7.0'

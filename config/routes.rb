@@ -9,6 +9,8 @@ Rails.application.routes.draw do
     root to: redirect('/'), as: nil
   end
 
+  match '/api-proxy' => 'media_wiki_api#api_proxy', via: [:get, :post]
+
   get 'frontend', to: 'general#frontend'
   root 'general#index'
 end

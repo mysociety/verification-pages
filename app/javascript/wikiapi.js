@@ -281,20 +281,16 @@ var wikidata = function(spec) {
   var that = {};
 
   if (typeof mw === 'undefined') {
-    window.mw = {
-      config: {
-        get: function(k) {
-          return {
-            wgServer: '//www.wikidata.org',
-            wgServerName: 'www.wikidata.org'
-          }[k]
-        }
-      }
-    }
+    that.useAPIProxy = true;
+    that.apiURL = '/api-proxy'
+    that.serverName = 'localhost'
+    that.neverUseToken = true;
+  } else {
+    that.useAPIProxy = false;
+    that.apiURL = 'https:' + mw.config.get('wgServer') + '/w/api.php';
+    that.serverName = mw.config.get('wgServerName');
+    that.neverUseToken = false;
   }
-
-  that.apiURL = 'https:' + mw.config.get('wgServer') + '/w/api.php';
-  that.serverName = mw.config.get('wgServerName');
 
   that.ajaxAPIBasic = function (data) {
     console.log(data)
@@ -309,17 +305,19 @@ var wikidata = function(spec) {
     });
   };
 
-  // that.tokenDeferred = that.ajaxAPIBasic({
-  //   action: 'query',
-  //   meta: 'tokens'
-  // }).then(function(data) {
-  //   return data.query.tokens.csrftoken;
-  // });
+  if (!that.neverUseToken) {
+    that.tokenDeferred = that.ajaxAPIBasic({
+      action: 'query',
+      meta: 'tokens'
+    }).then(function(data) {
+      return data.query.tokens.csrftoken;
+    });
+  }
 
   that.ajaxAPI = function(writeOperation, action, data) {
     var completeData = $.extend({}, data, {action: action});
     console.log(completeData)
-    if (writeOperation) {
+    if (writeOperation && !that.neverUseToken) {
       return that.tokenDeferred.then(function (token) {
         completeData.token = token;
         return that.ajaxAPIBasic(completeData);
@@ -339,6 +337,12 @@ var wikidata = function(spec) {
       return 'P854'; // reference URL
     } else if (that.serverName == 'test.wikidata.org') {
       return 'P140'; // Return any old property that takes string values:
+    } else if (that.serverName == 'localhost') {
+      // For local development assume we're using test.wikidata for
+      // the moment (FIXME: though it would be better to ask the
+      // server for this information, since it must know which server
+      // it's proxying to..)
+      return 'P140';
     } else {
       throw new Error('Running on an unknown Wikidata instance: ' + that.serverName);
     }

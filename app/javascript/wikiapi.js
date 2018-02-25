@@ -49,7 +49,7 @@ function getReferenceSnaks(referenceURLProp, referenceURL) {
 }
 
 function getNewQualifiers(qualifiersFromAPI, wantedQualifiers) {
-  var newQualifiers = $.extend({}, wantedQualifiers),
+  var newQualifiers = Object.assign({}, wantedQualifiers),
       qualifiersToCheck = Object.keys(newQualifiers),
       existingQualifiersForProperty, newValue, i;
   if (qualifiersFromAPI) {
@@ -154,7 +154,7 @@ var wikidataItem = function(spec) {
         checkForError(data);
       });
     } else {
-      return $.Deferred().resolve();
+      return Promise.resolve(null);
     }
   };
 
@@ -173,8 +173,8 @@ var wikidataItem = function(spec) {
         checkForError(data);
         lastRevisionID = data.pageinfo.lastrevid;
         return data.claim.id;
-      }).fail(function(jqXHR, textStatus, errorThrown) {
-        console.log("AJAX failure when trying to create a new claim:", jqXHR, textStatus, errorThrown);
+      }).catch(function(error) {
+        console.log("AJAX failure when trying to create a new claim:", error);
       });
   };
 
@@ -207,7 +207,7 @@ var wikidataItem = function(spec) {
         if (my.alreadyHasReferenceURL(
           data.claims[newClaim.property][0].references,
           newClaim.referenceURL)) {
-          return $.Deferred().resolve();
+          return Promise.resolve(null);
         } else {
           // We should set the referenceURL:
           return wikidata.ajaxAPI(true, 'wbsetreference', {
@@ -233,7 +233,7 @@ var wikidataItem = function(spec) {
         if (!statement) {
           throw new Error("Creating the new statement failed");
         }
-        return my.updateClaim($.extend({}, claimData, {statement: statement}));
+        return my.updateClaim(Object.assign({}, claimData, {statement: statement}));
       });
     }
   };
@@ -317,7 +317,7 @@ var wikidata = function(spec) {
   // });
 
   that.ajaxAPI = function(writeOperation, action, data) {
-    var completeData = $.extend({}, data, {action: action});
+    var completeData = Object.assign({}, data, {action: action});
     console.log(completeData)
     if (writeOperation) {
       return that.tokenDeferred.then(function (token) {
@@ -354,7 +354,7 @@ var wikidata = function(spec) {
       type: 'item'
     }).then(function (data) {
       checkForError(data);
-      allResults.fromWikidata = $.map(data.search, function(searchResult) {
+      allResults.fromWikidata = data.search.map(function(searchResult) {
         return {
           item: searchResult.id,
           label: searchResult.label,
@@ -368,13 +368,13 @@ var wikidata = function(spec) {
           })
       );
     }).then(function(data) {
-      var searchResults = $.map(data.query.search, function(result) {
+      var searchResults = data.query.search.map(function(result) {
         return {
           title: result.title,
           item: null,
           snippetHTML: result.snippet,
         }}),
-          titles = $.map(searchResults, function(result) { return result.title });
+          titles = searchResults.map(function(result) { return result.title });
       allResults.fromWikipedia = searchResults;
       // Get any Wikidata items associated with those titles from
       // sitelinks:
@@ -385,18 +385,18 @@ var wikidata = function(spec) {
         sites: site,
       });
     }).then(function (sitelinksData) {
-        var titleToWikidataItem = {};
-        checkForError(sitelinksData);
-      $.each(sitelinksData.entities, function (wikidataItem, sitelinkData) {
+      var titleToWikidataItem = {};
+      checkForError(sitelinksData);
+      for (let [wikidataItem, sitelinkData] of Object.entries(sitelinksData.entities)) {
         // For titles that can't be found, you get back a string of
         // a negative number as the key. If it can be found, the key
         // is an Wikidata item ID.
         if (Number(wikidataItem) < 0) {
-          return;
+          continue;
         }
         titleToWikidataItem[sitelinkData.sitelinks[site].title] = wikidataItem;
-      });
-      $.each(allResults.fromWikipedia, function(index, data) {
+      }
+      allResults.fromWikipedia.forEach(function(data, index) {
         if (titleToWikidataItem[data.title]) {
           data.item = titleToWikidataItem[data.title];
         }

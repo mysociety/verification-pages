@@ -2,6 +2,7 @@
 'use strict';
 
 import Axios from 'axios'
+import jsonp from 'jsonp'
 
 function lowerCaseSnak(upperCase) {
   var parts = upperCase.split('$');
@@ -258,6 +259,18 @@ var wikidataItem = function(spec) {
 
   return that;
 };
+
+const jsonpPromise = function(url) {
+  return new Promise(function (resolve, reject) {
+    jsonp(url, null, function(err, data) {
+      if (err) {
+        reject(err);
+      } else {
+        resolve(data);
+      }
+    });
+  });
+}
 
 var wikidata = function(spec) {
   var that = {};

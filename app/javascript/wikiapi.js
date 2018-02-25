@@ -304,7 +304,9 @@ var wikidata = function(spec) {
         data: Object.assign({}, data, { format: 'json' }),
         responseType: 'json'
       }
-    );
+    ).then(function(data) {
+      return data.data;
+    });
   };
 
   // that.tokenDeferred = that.ajaxAPIBasic({

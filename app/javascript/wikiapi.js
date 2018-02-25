@@ -260,6 +260,11 @@ var wikidataItem = function(spec) {
   return that;
 };
 
+function encodeURIParams(o) {
+  // From a comment on: https://stackoverflow.com/a/18116302/223092
+  return Object.entries(o).map(e => e.map(ee => encodeURIComponent(ee)).join('=')).join('&');
+}
+
 const jsonpPromise = function(url) {
   return new Promise(function (resolve, reject) {
     jsonp(url, null, function(err, data) {
@@ -356,9 +361,11 @@ var wikidata = function(spec) {
           description: searchResult.description,
         }
       });
-      return $.getJSON(
-        'https://' + wikipediaToSearch + '.wikipedia.org/w/api.php?callback=?',
-        {action: 'query', list: 'search', format: 'json', srsearch: name}
+      return jsonpPromise(
+        'https://' + wikipediaToSearch + '.wikipedia.org/w/api.php?' +
+          encodeURIParams({
+            action: 'query', list: 'search', format: 'json', srsearch: name
+          })
       );
     }).then(function(data) {
       var searchResults = $.map(data.query.search, function(result) {

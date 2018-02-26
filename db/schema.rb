@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20180219084933) do
+ActiveRecord::Schema.define(version: 20180226153852) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -23,6 +23,15 @@ ActiveRecord::Schema.define(version: 20180219084933) do
     t.boolean "require_parliamentary_group", default: false
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+  end
+
+  create_table "reconciliations", force: :cascade do |t|
+    t.bigint "statement_id"
+    t.string "item"
+    t.string "user"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["statement_id"], name: "index_reconciliations_on_statement_id"
   end
 
   create_table "statements", force: :cascade do |t|
@@ -49,4 +58,5 @@ ActiveRecord::Schema.define(version: 20180219084933) do
     t.index ["statement_id"], name: "index_verifications_on_statement_id"
   end
 
+  add_foreign_key "reconciliations", "statements"
 end

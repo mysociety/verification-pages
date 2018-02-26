@@ -1,3 +1,4 @@
+import Axios from 'axios'
 import wikidataClient from '../wikiapi.js'
 import template from './reconcilable.html'
 
@@ -27,7 +28,13 @@ export default template({
       })
     },
     reconcileWithItem: function(itemID) {
-      alert('FIXME: submit ' + itemID + ' back to verification-pages');
+      this.$parent.$emit('statement-update', () => {
+        return Axios.post('/reconciliations.json', {
+          id: this.statement.transaction_id,
+          user: wikidataClient.user,
+          item: itemID
+        })
+      })
     },
     createPerson: function() {
       wikidataClient.createPerson(

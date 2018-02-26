@@ -248,7 +248,11 @@ var wikidataItem = function(spec) {
       titles: item,
     }).then(function(data) {
       checkForError(data);
-      var pageKey, revision = null, pages = data.query.pages;
+      var pageKey, revision = null,
+          // FIXME: this is very weird; the response from the
+          // mediawiki API doesn't include the .query, but when
+          // calling the API directly it doesn't (!)
+          pages = data.pages || data.query.pages;
       for (pageKey in pages) {
         if (pages.hasOwnProperty(pageKey)) {
           if (pages[pageKey].title == item) {

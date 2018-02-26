@@ -339,9 +339,11 @@ var wikidata = function(spec) {
     return {
       'www.wikidata.org': {
         'reference URL': 'P854',
+        'occupation': 'P106',
       },
       'test.wikidata.org': {
         'reference URL': 'P43659',
+        'occupation': 'P70554',
       },
       'localhost': {
         // For local development assume we're using test.wikidata for
@@ -353,6 +355,69 @@ var wikidata = function(spec) {
       }
     }[that.serverName][propertyLabel];
   };
+
+  that.getItemID = function(itemLabel) {
+    return {
+      'www.wikidata.org': {
+        'politician': 'Q82955',
+        'Canada': 'Q16',
+      },
+      'test.wikidata.org': {
+        'politician': 'Q514',
+        'Canada': 'Q620',
+      },
+      'localhost': {
+        // For local development assume we're using test.wikidata for
+        // the moment (FIXME: though it might be better to ask the
+        // server for this information, since it must know which server
+        // it's proxying to..)
+        'politician': 'Q514',
+        'Canada': 'Q620',
+      }
+    }[that.serverName][itemLabel];
+  };
+
+  function getPersonCreateData(label, description) {
+    var data = {
+      labels: {},
+      descriptions: {},
+    };
+    data.labels[label.lang] = {
+      language: label.lang,
+      value: label.value,
+    };
+    data.descriptions[label.lang] = {
+      language: description.lang,
+      value: description.value,
+    };
+    data.claims = [
+      {
+        'mainsnak': {
+          'snaktype': 'value',
+          'property': that.getPropertyID('occupation'),
+          'datavalue': {
+            'value': getItemValue(that.getItemID('politician')),
+            'type': 'wikibase-entityid'
+          }
+        },
+        'type': 'statement',
+        'rank': 'normal',
+      },
+    ];
+    return JSON.stringify(data);
+  }
+
+  that.createPerson = function(personLabel, personDescription) {
+    return that.ajaxAPI(true, 'wbeditentity', {
+      new: 'item',
+      data: getPersonCreateData(personLabel, personDescription)
+    }).then(function (result) {
+      return {
+        item: result.entity.id,
+        revisionID: result.entity.lastrevid,
+      }
+    });
+  }
 
   that.search = (function(name, wikipediaToSearch, language) {
     var allResults = {}, site = wikipediaToSearch + 'wiki';

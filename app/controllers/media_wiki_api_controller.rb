@@ -59,6 +59,8 @@ class MediaWikiApiController < ApplicationController
       data.permit(:action, :entity, :snaktype, :property, :value, :baserevid)
     elsif data[:action] == 'wbgetclaims'
       data.permit(:action, :entity, :claim)
+    elsif data[:action] == 'wbeditentity'
+      data.permit(:action, :new, :data)
     else
       raise "Unknown action: #{data[:action]}"
     end.to_h

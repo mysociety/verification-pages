@@ -3,6 +3,7 @@
   <div v-if="searchResultsLoaded">
     <label>Wikidata item: <input id="chosen-item" type="text"></input></label>
     <h3>Create a new item</h3>
+    <button v-on:click="createPerson()">Create {{ statement.person_name }}</button>
     <h3>Wikidata search results</h3>
     <ul class="wd-search-results">
       <li v-for="wdResult in searchResults.fromWikidata">

@@ -13,7 +13,7 @@
       <li v-for="wdResult in searchResults.fromWikidata">
         <button v-on:click="reconcileWithItem(wdResult.item)">Use this</button>
         <span class="item-from-search">{{ wdResult.item }}</span>
-        <a :href="wdResult.url">{{ wdResult.label }} ({{ wdResult.description }})</a>
+        <a target="_blank" rel="noopener nofollow" class="external free" :href="wdResult.url">{{ wdResult.label }} ({{ wdResult.description }})</a>
       </li>
     </ul>
     <h3>Wikipedia search results</h3>
@@ -21,9 +21,7 @@
       <li v-for="wpResult in searchResults.fromWikipedia">
         <button v-on:click="reconcileWithItem(wpResult.item)">Use this</button>
         <span class="item-from-search">{{ wpResult.item }}</span>
-        <a :href="wpResult.wpURL">
-          {{ wpResult.title }}
-        </a>
+        <a target="_blank" rel="noopener nofollow" class="external free" :href="wpResult.wpURL">{{ wpResult.title }} </a>
         <div v-html="wpResult.snippetHTML"></div>
       </li>
     </ul>

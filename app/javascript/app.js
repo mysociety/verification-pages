@@ -1,3 +1,4 @@
+import ENV from './env'
 import Axios from 'axios'
 import wikidataClient from './wikiapi.js'
 import template from './app.html'
@@ -53,7 +54,7 @@ export default template({
     },
     loadStatements: function () {
       const title = encodeURIComponent(wikidataClient.page)
-      Axios.get('/statements/' + title + '.json').then(response => {
+      Axios.get(ENV.url + '/statements/' + title + '.json').then(response => {
         this.statements = response.data.statements
         this.page = response.data.page
       }).then(() => {

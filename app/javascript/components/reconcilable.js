@@ -1,3 +1,4 @@
+import ENV from '../env'
 import Axios from 'axios'
 import wikidataClient from '../wikiapi.js'
 import template from './reconcilable.html'
@@ -29,7 +30,7 @@ export default template({
     },
     reconcileWithItem: function(itemID) {
       this.$parent.$emit('statement-update', () => {
-        return Axios.post('/reconciliations.json', {
+        return Axios.post(ENV.url + '/reconciliations.json', {
           id: this.statement.transaction_id,
           user: wikidataClient.user,
           item: itemID

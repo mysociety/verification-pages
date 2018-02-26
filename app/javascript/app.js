@@ -1,4 +1,5 @@
 import Axios from 'axios'
+import wikidataClient from './wikiapi.js'
 import template from './app.html'
 
 import verifiableComponent from './components/verifiable.js'
@@ -50,7 +51,8 @@ export default template({
       return this.statements[this.statementIndex]
     },
     loadStatements: function () {
-      Axios.get('/statements/1.json').then(response => {
+      const title = encodeURIComponent(wikidataClient.page)
+      Axios.get('/statements/' + title + '.json').then(response => {
         this.statements = response.data.statements
         this.page = response.data.page
       }).then(() => {

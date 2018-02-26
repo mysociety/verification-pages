@@ -1,7 +1,7 @@
 <span>
   <span v-if="!submitting">
-    <button v-on:click="verifyStatement()">Yes, verify</button>
-    <button v-on:click="unverifyStatement()">No evidence</button>
+    <button v-on:click="verifyStatement()" class="mw-ui-button mw-ui-progressive">Yes, verify</button>
+    <button v-on:click="unverifyStatement()" class="mw-ui-button">No evidence</button>
   </span>
   <span v-else>
     Submitting...

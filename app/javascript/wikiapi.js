@@ -348,10 +348,16 @@ var wikidata = function(spec) {
       'www.wikidata.org': {
         'reference URL': 'P854',
         'occupation': 'P106',
+        'parliamentary group': 'P4100',
+        'electoral district': 'P768',
+        'position held': 'P39',
       },
       'test.wikidata.org': {
         'reference URL': 'P43659',
         'occupation': 'P70554',
+        'parliamentary group': 'P70557',
+        'electoral district': 'P70558',
+        'position held': 'P39',
       },
       'localhost': {
         // For local development assume we're using test.wikidata for
@@ -360,6 +366,9 @@ var wikidata = function(spec) {
         // it's proxying to..)
         'reference URL': 'P43659',
         'occupation': 'P70554',
+        'parliamentary group': 'P70557',
+        'electoral district': 'P70558',
+        'position held': 'P39',
       }
     }[that.serverName][propertyLabel];
   };

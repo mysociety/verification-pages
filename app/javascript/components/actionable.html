@@ -1,0 +1,34 @@
+<div>
+  <p>You can set the following 'position held' information for
+    statement for {{ statement.person_name }} now:</p>
+
+  <ul>
+    <li v-if="statement.parliamentary_group_item">'parliamentary group' qualifier:
+      {{ statement.parliamentary_group_name }}
+      ({{ statement.parliamentary_group_item }})
+    </li>
+    <li v-if="statement.electoral_district_item">'electoral district' qualifier:
+      {{ statement.electoral_district_name }}
+      ({{ statement.electoral_district_item }})
+    </li>
+    <li>'parliamentary term' qualifier:
+      {{ statement.parliamentary_term_item }}
+    </li>
+    <li>'reference URL' qualifier:
+      <a :href="page.reference_url">{{ page.reference_url }}</a>
+    </li>
+  </ul>
+
+  <div v-if="!updating && !finished">
+    <button v-on:click="updatePositionHeld()">Create or update 'position held'</button>
+  </div>
+  <div v-else-if="updating">
+    Updating...
+  </div>
+  <div v-else-if="!updating && finished && updateError">
+    There was an error when updating: {{ updateError }}
+  </div>
+  <div v-else>
+    Successfully updated!
+  </div>
+</div>

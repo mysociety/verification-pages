@@ -7,12 +7,15 @@ class LoadStatements < ServiceBase
 
   def run
     json.map do |result|
-      Statement.create_with(
-        person_name: result[:person_name],
-        electoral_district_name: result[:electoral_district_name],
-        parliamentary_term_item: page.parliamentary_term_item
-      ).find_or_create_by(
+      statement = Statement.find_or_initialize_by(
         transaction_id: result[:transaction_id]
+      )
+
+      statement.update_attributes(
+        person_name: result[:person_name],
+        parliamentary_term_item: page.parliamentary_term_item,
+        electoral_district_name: result[:electoral_district_name],
+        electoral_district_item: result[:electoral_district_item]
       )
     end
   end

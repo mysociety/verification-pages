@@ -1,4 +1,5 @@
 import Axios from 'axios'
+import wikidataClient from '../wikiapi.js'
 import template from './verifiable.html'
 
 export default template({
@@ -11,7 +12,7 @@ export default template({
       this.submitting = true
       const data = {
         id: this.statement.transaction_id,
-        user: 'ExampleUser',
+        user: wikidataClient.user,
         status: true
       }
       Axios.post('/verifications.json', data).then(response => {

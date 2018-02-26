@@ -285,11 +285,13 @@ var wikidata = function(spec) {
     that.apiURL = '/api-proxy'
     that.serverName = 'localhost'
     that.neverUseToken = true;
+    that.user = 'ExampleUser';
   } else {
     that.useAPIProxy = false;
     that.apiURL = 'https:' + mw.config.get('wgServer') + '/w/api.php';
     that.serverName = mw.config.get('wgServerName');
     that.neverUseToken = false;
+    that.user = mw.config.get('wgUserName');
   }
 
   that.ajaxAPIBasic = function (data) {

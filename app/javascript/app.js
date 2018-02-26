@@ -19,11 +19,19 @@ export default template({
   },
   created: function () {
     this.loadStatements()
-    this.$on('statement-update', function (statement) {
-      const index = this.statements.findIndex(s => {
-        return s.transaction_id === statement.transaction_id
+    this.$on('statement-update', requestFunction => {
+      this.submitting = true
+      requestFunction().then(response => {
+        if (response.data.statements.length > 1) {
+          throw 'Response has too many statements. We don\'t know which one to update'
+        }
+        const newStatement = response.data.statements[0]
+        const index = this.statements.findIndex(s => {
+          return s.transaction_id === newStatement.transaction_id
+        })
+        this.statements.splice(index, 1, newStatement)
+        this.submitting = false
       })
-      this.statements.splice(index, 1, statement)
     })
   },
   methods: {

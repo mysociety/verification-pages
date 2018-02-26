@@ -28,6 +28,20 @@ export default template({
     },
     reconcileWithItem: function(itemID) {
       alert('FIXME: submit ' + itemID + ' back to verification-pages');
-    }
+    },
+    createPerson: function() {
+      wikidataClient.createPerson(
+        {
+          lang: 'en',
+          value: this.statement.person_name,
+        },
+        {
+          lang: 'en',
+          value: 'Canadian politician',
+        },
+      ).then(createdItemData => {
+        this.reconcileWithItem(createdItemData.item);
+      })
+    },
   }
 })

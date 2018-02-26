@@ -10,8 +10,11 @@ function lowerCaseSnak(upperCase) {
 }
 
 function getItemValue(item) {
-  return JSON.stringify(
-    {'entity-type': 'item', 'numeric-id': Number(item.substring(1))});
+  return {'entity-type': 'item', 'numeric-id': Number(item.substring(1))};
+}
+
+function getItemValueString(item) {
+  return JSON.stringify(getItemValue(item));
 }
 
 function getQualifiersFromAPIClaims(apiClaims, property) {
@@ -99,7 +102,7 @@ var wikidataItem = function(spec) {
     referencesFromAPI = referencesFromAPI || [];
     for (i = 0; i < referencesFromAPI.length; ++i) {
       referenceFromAPI = referencesFromAPI[i];
-      values = referenceFromAPI.snaks[wikidata.referenceURLProperty] || [];
+      values = referenceFromAPI.snaks[wikidata.getPropertyID('reference URL')] || [];
       for (j = 0; j < values.length; ++j) {
         if (values[j].datatype == 'string' && values[j].datavalue.value == wantedReference) {
           return true;
@@ -113,7 +116,7 @@ var wikidataItem = function(spec) {
     return wikidata.ajaxAPI(true, 'wbsetqualifier', {
             claim: qualifierDetails.statement,
             property: qualifierDetails.qualifierProperty,
-            value: getItemValue(qualifierDetails.value),
+            value: getItemValueString(qualifierDetails.value),
             baseRevisionID: lastRevisionID,
             snaktype: 'value',
     }).then(function(data) {
@@ -167,7 +170,7 @@ var wikidataItem = function(spec) {
       entity: item,
       snaktype: 'value',
       property: claimData.property,
-      value: getItemValue(claimData.object),
+      value: getItemValueString(claimData.object),
       baserevid: lastRevisionID,
     }).then(function(data) {
         checkForError(data);
@@ -213,7 +216,7 @@ var wikidataItem = function(spec) {
           return wikidata.ajaxAPI(true, 'wbsetreference', {
             statement: newClaim.statement,
             snaks: getReferenceSnaks(
-              wikidata.referenceURLProperty,
+              wikidata.getPropertyID('reference URL'),
               newClaim.referenceURL
             ),
             baserevid: lastRevisionID,
@@ -317,7 +320,7 @@ var wikidata = function(spec) {
   }
 
   that.ajaxAPI = function(writeOperation, action, data) {
-    var completeData = $.extend({}, data, {action: action});
+    var completeData = Object.assign({}, data, {action: action});
     console.log(completeData)
     if (writeOperation && !that.neverUseToken) {
       return that.tokenDeferred.then(function (token) {
@@ -334,21 +337,89 @@ var wikidata = function(spec) {
     return wikidataItem({wikidata: that, item: itemID});
   };
 
-  that.referenceURLProperty = (function() {
-    if (that.serverName == 'www.wikidata.org') {
-      return 'P854'; // reference URL
-    } else if (that.serverName == 'test.wikidata.org') {
-      return 'P140'; // Return any old property that takes string values:
-    } else if (that.serverName == 'localhost') {
-      // For local development assume we're using test.wikidata for
-      // the moment (FIXME: though it would be better to ask the
-      // server for this information, since it must know which server
-      // it's proxying to..)
-      return 'P140';
-    } else {
-      throw new Error('Running on an unknown Wikidata instance: ' + that.serverName);
-    }
-  })();
+  that.getPropertyID = function(propertyLabel) {
+    return {
+      'www.wikidata.org': {
+        'reference URL': 'P854',
+        'occupation': 'P106',
+      },
+      'test.wikidata.org': {
+        'reference URL': 'P43659',
+        'occupation': 'P70554',
+      },
+      'localhost': {
+        // For local development assume we're using test.wikidata for
+        // the moment (FIXME: though it might be better to ask the
+        // server for this information, since it must know which server
+        // it's proxying to..)
+        'reference URL': 'P43659',
+        'occupation': 'P70554',
+      }
+    }[that.serverName][propertyLabel];
+  };
+
+  that.getItemID = function(itemLabel) {
+    return {
+      'www.wikidata.org': {
+        'politician': 'Q82955',
+        'Canada': 'Q16',
+      },
+      'test.wikidata.org': {
+        'politician': 'Q514',
+        'Canada': 'Q620',
+      },
+      'localhost': {
+        // For local development assume we're using test.wikidata for
+        // the moment (FIXME: though it might be better to ask the
+        // server for this information, since it must know which server
+        // it's proxying to..)
+        'politician': 'Q514',
+        'Canada': 'Q620',
+      }
+    }[that.serverName][itemLabel];
+  };
+
+  function getPersonCreateData(label, description) {
+    var data = {
+      labels: {},
+      descriptions: {},
+    };
+    data.labels[label.lang] = {
+      language: label.lang,
+      value: label.value,
+    };
+    data.descriptions[label.lang] = {
+      language: description.lang,
+      value: description.value,
+    };
+    data.claims = [
+      {
+        'mainsnak': {
+          'snaktype': 'value',
+          'property': that.getPropertyID('occupation'),
+          'datavalue': {
+            'value': getItemValue(that.getItemID('politician')),
+            'type': 'wikibase-entityid'
+          }
+        },
+        'type': 'statement',
+        'rank': 'normal',
+      },
+    ];
+    return JSON.stringify(data);
+  }
+
+  that.createPerson = function(personLabel, personDescription) {
+    return that.ajaxAPI(true, 'wbeditentity', {
+      new: 'item',
+      data: getPersonCreateData(personLabel, personDescription)
+    }).then(function (result) {
+      return {
+        item: result.entity.id,
+        revisionID: result.entity.lastrevid,
+      }
+    });
+  }
 
   that.search = (function(name, wikipediaToSearch, language) {
     var allResults = {}, site = wikipediaToSearch + 'wiki';

@@ -13,4 +13,4 @@ json.statements @classifier.to_a,
   :parliamentary_group_name,
   :electoral_district_name
 
-json.page @classifier.page, :reference_url
+json.page @classifier.page, :reference_url, :position_held_item

@@ -10,8 +10,11 @@ function lowerCaseSnak(upperCase) {
 }
 
 function getItemValue(item) {
-  return JSON.stringify(
-    {'entity-type': 'item', 'numeric-id': Number(item.substring(1))});
+  return {'entity-type': 'item', 'numeric-id': Number(item.substring(1))};
+}
+
+function getItemValueString(item) {
+  return JSON.stringify(getItemValue(item));
 }
 
 function getQualifiersFromAPIClaims(apiClaims, property) {
@@ -113,7 +116,7 @@ var wikidataItem = function(spec) {
     return wikidata.ajaxAPI(true, 'wbsetqualifier', {
             claim: qualifierDetails.statement,
             property: qualifierDetails.qualifierProperty,
-            value: getItemValue(qualifierDetails.value),
+            value: getItemValueString(qualifierDetails.value),
             baseRevisionID: lastRevisionID,
             snaktype: 'value',
     }).then(function(data) {
@@ -167,7 +170,7 @@ var wikidataItem = function(spec) {
       entity: item,
       snaktype: 'value',
       property: claimData.property,
-      value: getItemValue(claimData.object),
+      value: getItemValueString(claimData.object),
       baserevid: lastRevisionID,
     }).then(function(data) {
         checkForError(data);

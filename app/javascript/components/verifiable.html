@@ -1,9 +1,5 @@
 <span>
-  <span v-if="!submitting">
-    <button v-on:click="verifyStatement()" class="mw-ui-button mw-ui-progressive">Yes, verify</button>
-    <button v-on:click="unverifyStatement()" class="mw-ui-button">No evidence</button>
-  </span>
-  <span v-else>
-    Submitting...
-  </span>
+  Does <a rel="nofollow" class="external free" href="https://www.ourcommons.ca/Parliamentarians/en/members">https://www.ourcommons.ca/Parliamentarians/en/members</a> provide evidence for this position? –
+  <button v-on:click="verifyStatement()" class="mw-ui-button mw-ui-progressive">Yes, verify</button>
+  <button v-on:click="unverifyStatement()" class="mw-ui-button">No evidence</button>
 </span>

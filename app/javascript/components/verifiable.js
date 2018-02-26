@@ -4,7 +4,7 @@ import template from './verifiable.html'
 
 export default template({
   data () { return {} },
-  props: ['statement'],
+  props: ['statement', 'page'],
   methods: {
     verifyStatement: function () {
       this.$parent.$emit('statement-update', () => {

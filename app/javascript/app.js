@@ -58,9 +58,11 @@ export default template({
       })
     },
     prevStatement: function () {
+      this.$emit('statement-changed')
       this.statementIndex = Math.max(this.statementIndex - 1, 0);
     },
     nextStatement: function () {
+      this.$emit('statement-changed')
       this.statementIndex = (this.statementIndex + 1) % this.statements.length;
     }
   }

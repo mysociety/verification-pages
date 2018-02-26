@@ -9,6 +9,12 @@ export default template({
     chosenPersonItem: null,
   } },
   props: ['statement'],
+  created: function () {
+    this.$parent.$on('statement-changed', () => {
+      this.searchResultsLoading = false
+      this.searchResultsLoaded = false
+    })
+  },
   methods: {
     searchForName: function () {
       this.searchResultsLoading = true;

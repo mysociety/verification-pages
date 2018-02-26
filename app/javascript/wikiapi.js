@@ -362,6 +362,7 @@ var wikidata = function(spec) {
         return {
           item: searchResult.id,
           label: searchResult.label,
+          url: 'https://' + that.serverName + '/wiki/' + searchResult.id,
           description: searchResult.description,
         }
       });
@@ -377,6 +378,8 @@ var wikidata = function(spec) {
           title: result.title,
           item: null,
           snippetHTML: result.snippet,
+          wpURL: 'https://' + wikipediaToSearch + '.wikipedia.org/wiki/' +
+            encodeURIComponent(result.title.replace(/ /, '_')),
         }}),
           titles = searchResults.map(function(result) { return result.title });
       allResults.fromWikipedia = searchResults;
@@ -401,8 +404,10 @@ var wikidata = function(spec) {
         titleToWikidataItem[sitelinkData.sitelinks[site].title] = wikidataItem;
       }
       allResults.fromWikipedia.forEach(function(data, index) {
-        if (titleToWikidataItem[data.title]) {
-          data.item = titleToWikidataItem[data.title];
+        var item = titleToWikidataItem[data.title];
+        if (item) {
+          data.item = item;
+          data.wdURL = 'https://' + that.serverName + '/wiki/' + item;
         }
       })
       return allResults;

@@ -23,18 +23,6 @@ class StatementDecorator < SimpleDelegator
     false
   end
 
-  def term_invalid?
-    data&.term && parliamentary_term_item != data.term
-  end
-
-  def reconciliation_negative?
-    latest_reconciliation && latest_reconciliation.status == 'no'
-  end
-
-  def reconciliation_positive?
-    latest_reconciliation && latest_reconciliation.status == 'yes'
-  end
-
   def started_before_term?
     data&.start_date && data&.start_of_term &&
       Date.parse(data.start_date) < Date.parse(data.start_of_term) - 1.day
@@ -55,9 +43,5 @@ class StatementDecorator < SimpleDelegator
 
   def reconciled?
     person_item.present?
-  end
-
-  def reconciliation_user
-    latest_reconciliation.user
   end
 end

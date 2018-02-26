@@ -13,6 +13,7 @@ export default template({
   data () {
     return {
       loaded: false,
+      empty: true,
       submitting: false,
       statements: [],
       statementIndex: 0,
@@ -57,6 +58,7 @@ export default template({
         this.page = response.data.page
       }).then(() => {
         this.loaded = true
+        this.empty = this.statements.length == 0
       })
     },
     prevStatement: function () {

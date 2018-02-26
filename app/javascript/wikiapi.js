@@ -289,12 +289,14 @@ var wikidata = function(spec) {
     that.serverName = 'localhost'
     that.neverUseToken = true;
     that.user = 'ExampleUser';
+    that.page = CURRENT_PAGE_TITLE;
   } else {
     that.useAPIProxy = false;
     that.apiURL = 'https:' + mw.config.get('wgServer') + '/w/api.php';
     that.serverName = mw.config.get('wgServerName');
     that.neverUseToken = false;
     that.user = mw.config.get('wgUserName');
+    that.page = mw.config.get('wgRelevantPageName');
   }
 
   that.ajaxAPIBasic = function (data) {

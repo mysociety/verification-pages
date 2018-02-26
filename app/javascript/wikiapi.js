@@ -318,7 +318,7 @@ var wikidata = function(spec) {
   }
 
   that.ajaxAPI = function(writeOperation, action, data) {
-    var completeData = $.extend({}, data, {action: action});
+    var completeData = Object.assign({}, data, {action: action});
     console.log(completeData)
     if (writeOperation && !that.neverUseToken) {
       return that.tokenDeferred.then(function (token) {

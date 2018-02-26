@@ -1,13 +1,13 @@
 # frozen_string_literal: true
 
 Rails.application.routes.draw do
-  resources :statements, only: %i[show]
-
+  # Admin
   resources :pages
 
-  resources :verifications, only: %i[create] do
-    root to: redirect('/'), as: nil
-  end
+  # Frontend
+  resources :statements, only: %i[show]
+  resources :verifications, only: %i[create]
+  resources :reconciliations, only: %i[create]
 
   match '/api-proxy' => 'media_wiki_api#api_proxy', via: [:get, :post]
 

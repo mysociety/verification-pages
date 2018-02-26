@@ -15,8 +15,4 @@ class Statement < ApplicationRecord
   def latest_verification
     verifications.last
   end
-
-  def create_verification!(params)
-    verifications.create!(params)
-  end
 end

@@ -52,7 +52,7 @@ function getReferenceSnaks(referenceURLProp, referenceURL) {
 }
 
 function getNewQualifiers(qualifiersFromAPI, wantedQualifiers) {
-  var newQualifiers = $.extend({}, wantedQualifiers),
+  var newQualifiers = Object.assign({}, wantedQualifiers),
       qualifiersToCheck = Object.keys(newQualifiers),
       existingQualifiersForProperty, newValue, i;
   if (qualifiersFromAPI) {
@@ -157,7 +157,7 @@ var wikidataItem = function(spec) {
         checkForError(data);
       });
     } else {
-      return $.Deferred().resolve();
+      return Promise.resolve(null);
     }
   };
 
@@ -210,7 +210,7 @@ var wikidataItem = function(spec) {
         if (my.alreadyHasReferenceURL(
           data.claims[newClaim.property][0].references,
           newClaim.referenceURL)) {
-          return $.Deferred().resolve();
+          return Promise.resolve(null);
         } else {
           // We should set the referenceURL:
           return wikidata.ajaxAPI(true, 'wbsetreference', {
@@ -236,7 +236,7 @@ var wikidataItem = function(spec) {
         if (!statement) {
           throw new Error("Creating the new statement failed");
         }
-        return my.updateClaim($.extend({}, claimData, {statement: statement}));
+        return my.updateClaim(Object.assign({}, claimData, {statement: statement}));
       });
     }
   };

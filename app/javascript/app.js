@@ -14,7 +14,8 @@ export default template({
       loaded: false,
       submitting: false,
       statements: [],
-      statementIndex: 0
+      statementIndex: 0,
+      page: null
     }
   },
   created: function () {
@@ -51,6 +52,7 @@ export default template({
     loadStatements: function () {
       Axios.get('/statements/1.json').then(response => {
         this.statements = response.data.statements
+        this.page = response.data.page
       }).then(() => {
         this.loaded = true
       })

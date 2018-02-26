@@ -22,7 +22,7 @@
       <tr>
         <td colspan="4" style="padding: 0.5em 1em; border-bottom: 3px solid #2980b9; background: #e2f0f9;">
           <span v-if="!submitting">
-            <component v-bind:is="currentView()" :statement="statement()"></component>
+            <component v-bind:is="currentView()" :statement="statement()" :page="page"></component>
           </span>
           <span v-else>
             Submitting...

@@ -10,6 +10,7 @@ class LoadStatements < ServiceBase
       Statement.create_with(
         person_name: result[:person_name],
         electoral_district_name: result[:electoral_district_name],
+        electoral_district_item: result[:electoral_district_item],
         parliamentary_term_item: page.parliamentary_term_item
       ).find_or_create_by(
         transaction_id: result[:transaction_id]

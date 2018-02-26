@@ -8,7 +8,7 @@
         </td>
         <td style="padding: 1em;">
           <span style="font-size: 0.8em; font-weight: bold; display: block;">District</span>
-          {{ statement().electoral_district_name }}
+          {{ statement().electoral_district_name || '&nbsp;' }}
         </td>
         <td style="padding: 1em;">
           <span style="font-size: 0.8em; font-weight: bold; display: block;">Parliamentary group</span>

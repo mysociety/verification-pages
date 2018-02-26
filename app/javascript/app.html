@@ -36,6 +36,11 @@
     <br>
     <button v-on:click="prevStatement()" class="mw-ui-button">Previous</button>
     <button v-on:click="nextStatement()" class="mw-ui-button">Next</button>
+    <span style="float: right;">
+      Statement
+      <input v-model:number="displayIndex" v-on:keyup="goToStatement()" v-on:change="goToStatement()" type="number" style="width: 40px;">
+      of {{ statements.length }}
+    </span>
   </div>
   <div v-if="!loaded">
     Loading...

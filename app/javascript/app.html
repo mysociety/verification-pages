@@ -1,8 +1,8 @@
 <div id="verification-tool">
-  <div v-if="loaded && empty">
+  <div v-if="loaded && statements.length === 0">
     No statements
   </div>
-  <div v-if="loaded && !empty">
+  <div v-if="loaded && statements.length > 0">
     <table style="width: 100%; border: 1px solid #ccc; border-collapse: collapse; table-layout: fixed;">
       <tr>
         <td style="padding: 1em;">

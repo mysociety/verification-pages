@@ -102,7 +102,7 @@ var wikidataItem = function(spec) {
     referencesFromAPI = referencesFromAPI || [];
     for (i = 0; i < referencesFromAPI.length; ++i) {
       referenceFromAPI = referencesFromAPI[i];
-      values = referenceFromAPI.snaks[wikidata.referenceURLProperty] || [];
+      values = referenceFromAPI.snaks[wikidata.getPropertyID('reference URL')] || [];
       for (j = 0; j < values.length; ++j) {
         if (values[j].datatype == 'string' && values[j].datavalue.value == wantedReference) {
           return true;
@@ -216,7 +216,7 @@ var wikidataItem = function(spec) {
           return wikidata.ajaxAPI(true, 'wbsetreference', {
             statement: newClaim.statement,
             snaks: getReferenceSnaks(
-              wikidata.referenceURLProperty,
+              wikidata.getPropertyID('reference URL'),
               newClaim.referenceURL
             ),
             baserevid: lastRevisionID,
@@ -337,21 +337,24 @@ var wikidata = function(spec) {
     return wikidataItem({wikidata: that, item: itemID});
   };
 
-  that.referenceURLProperty = (function() {
-    if (that.serverName == 'www.wikidata.org') {
-      return 'P854'; // reference URL
-    } else if (that.serverName == 'test.wikidata.org') {
-      return 'P140'; // Return any old property that takes string values:
-    } else if (that.serverName == 'localhost') {
-      // For local development assume we're using test.wikidata for
-      // the moment (FIXME: though it would be better to ask the
-      // server for this information, since it must know which server
-      // it's proxying to..)
-      return 'P140';
-    } else {
-      throw new Error('Running on an unknown Wikidata instance: ' + that.serverName);
-    }
-  })();
+  that.getPropertyID = function(propertyLabel) {
+    return {
+      'www.wikidata.org': {
+        'reference URL': 'P854',
+      },
+      'test.wikidata.org': {
+        'reference URL': 'P43659',
+      },
+      'localhost': {
+        // For local development assume we're using test.wikidata for
+        // the moment (FIXME: though it might be better to ask the
+        // server for this information, since it must know which server
+        // it's proxying to..)
+        'reference URL': 'P43659',
+        'occupation': 'P70554',
+      }
+    }[that.serverName][propertyLabel];
+  };
 
   that.search = (function(name, wikipediaToSearch, language) {
     var allResults = {}, site = wikipediaToSearch + 'wiki';

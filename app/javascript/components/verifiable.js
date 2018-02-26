@@ -1,6 +1,6 @@
 import ENV from '../env'
 import Axios from 'axios'
-import wikidataClient from '../wikiapi.js'
+import wikidataClient from '../wikiapi'
 import template from './verifiable.html'
 
 export default template({

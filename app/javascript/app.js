@@ -47,7 +47,10 @@ export default template({
         this.loaded = true
       })
     },
-    skipStatement: function () {
+    prevStatement: function () {
+      this.statementIndex = Math.max(this.statementIndex - 1, 0);
+    },
+    nextStatement: function () {
       this.statementIndex = (this.statementIndex + 1) % this.statements.length;
     }
   }

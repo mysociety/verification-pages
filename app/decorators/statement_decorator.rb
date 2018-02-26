@@ -7,20 +7,16 @@ class StatementDecorator < SimpleDelegator
 
   def initialize(statement, position_held_data)
     @data = position_held_data
-
-    statement.person_item ||= data&.person
     statement.person_revision ||= data&.revision
-    statement.statement_uuid ||= data&.position
-    statement.parliamentary_group_item ||= data&.group
-    statement.electoral_district_item ||= data&.district
-    statement.parliamentary_term_item ||= data&.term
-
     super(statement)
   end
 
   def done?
-    # FIXME: we think this should return true if the statement data matches Wikidata
-    false
+    data&.person && statement.person_item == data&.person &&
+      data&.district && statement.electoral_district_item == data&.district &&
+      data&.group && statement.parliamentary_group_item == data&.group &&
+      data&.position && statement.statement_uuid == data&.position &&
+      data&.term && statement.parliamentary_term_item == data&.term
   end
 
   def started_before_term?
@@ -29,8 +25,8 @@ class StatementDecorator < SimpleDelegator
   end
 
   def qualifiers_contradicting?
-    electoral_district_item != data&.district ||
-      parliamentary_group_item != data&.group
+    data&.district && electoral_district_item != data&.district ||
+      data&.group && parliamentary_group_item != data&.group
   end
 
   def unverifiable?

@@ -1,14 +1,14 @@
 import ENV from './env'
 import Axios from 'axios'
-import wikidataClient from './wikiapi.js'
+import wikidataClient from './wikiapi'
 import template from './app.html'
 
-import verifiableComponent from './components/verifiable.js'
-import unverifiableComponent from './components/unverifiable.js'
-import reconcilableComponent from './components/reconcilable.js'
-import actionableComponent from './components/actionable.js'
-import manuallyActionableComponent from './components/manually_actionable.js'
-import doneComponent from './components/done.js'
+import verifiableComponent from './components/verifiable'
+import unverifiableComponent from './components/unverifiable'
+import reconcilableComponent from './components/reconcilable'
+import actionableComponent from './components/actionable'
+import manuallyActionableComponent from './components/manually_actionable'
+import doneComponent from './components/done'
 
 export default template({
   data () {

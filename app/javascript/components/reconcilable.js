@@ -1,6 +1,6 @@
 import ENV from '../env'
 import Axios from 'axios'
-import wikidataClient from '../wikiapi.js'
+import wikidataClient from '../wikiapi'
 import template from './reconcilable.html'
 
 export default template({

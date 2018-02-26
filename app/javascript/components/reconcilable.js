@@ -3,6 +3,7 @@ import template from './reconcilable.html'
 
 export default template({
   data () { return {
+    searchResultsLoading: false,
     searchResultsLoaded: false,
     searchResults: null,
     chosenPersonItem: null,
@@ -10,11 +11,13 @@ export default template({
   props: ['statement'],
   methods: {
     searchForName: function () {
+      this.searchResultsLoading = true;
       const name = this.statement.person_name
       wikidataClient.search(name, 'en', 'en').then(data => {
         console.log(data);
         this.searchResults = data;
         this.searchResultsLoaded = true;
+        this.searchResultsLoading = false;
       })
     },
     reconcileWithItem: function(itemID) {

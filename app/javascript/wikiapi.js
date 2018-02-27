@@ -189,7 +189,7 @@ var wikidataItem = function(spec) {
       claim: newClaim.statement,
     }).then(function(data) {
         var i, requestChain, newQualifiers;
-
+        checkForError(data);
         try {
           newQualifiers = getNewQualifiers(
             getQualifiersFromAPIClaims(data.claims, newClaim.property),

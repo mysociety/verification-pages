@@ -58,7 +58,7 @@ export default template({
         console.log('updating the satement failed...', error);
         that.updating = false;
         that.finished = true;
-        that.updateError = error;
+        that.updateError = error.message;
       });
     }
   }

@@ -3,33 +3,26 @@
 require 'rails_helper'
 
 RSpec.describe ReconciliationsController, type: :controller do
-  let(:statement) do
-    Statement.create(
-      transaction_id: '123',
-      parliamentary_term_item: 'Q1'
-    )
-  end
+  let(:statement) { double(:statement).as_null_object }
+  let(:relation) { double(:reconciliation_relation).as_null_object }
+  let(:classifier) { double(:classifier) }
 
   let(:valid_attributes) do
     { id: '123', user: 'ExampleUser', item: 'Q1', format: 'json' }
   end
 
   describe 'POST #create' do
-    let(:page) { double(:page, title: 'Page title') }
-    let(:reconcilation_scope) { double(:relation) }
-    let(:classifier) { double }
-
     before do
       allow(Statement).to receive(:find_by!).and_return(statement)
-      allow(statement).to receive(:page).and_return(page)
+      allow(statement).to receive(:reconciliations).and_return(relation)
       allow(StatementClassifier).to receive(:new).and_return(classifier)
     end
 
     it 'finds statement and creates reconciliation' do
       expect(Statement).to receive(:find_by!).with(transaction_id: '123')
-      expect do
-        post :create, params: valid_attributes
-      end.to change(Reconciliation, :count).by(1)
+      post :create, params: valid_attributes
+      expect(relation).to have_received(:create!)
+        .with('user' => 'ExampleUser', 'item' => 'Q1')
     end
 
     it 'assigns classifier' do

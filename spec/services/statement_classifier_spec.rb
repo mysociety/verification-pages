@@ -19,8 +19,8 @@ RSpec.describe StatementClassifier, type: :service do
   let(:classifier) { StatementClassifier.new('page_title') }
 
   before do
-    allow(statement_relation).to receive_message_chain(:includes, :references)
-      .and_return(statement_relation)
+    allow(statement_relation).to receive_message_chain(
+      :includes, :references, :order).and_return(statement_relation)
     allow(Page).to receive(:find_by!)
       .with(title: 'page_title')
       .and_return(page)

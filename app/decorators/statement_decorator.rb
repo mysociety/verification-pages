@@ -14,10 +14,10 @@ class StatementDecorator < SimpleDelegator
 
   def done?
     verified? && reconciled? &&
-      (!data&.person || person_item == data&.person) &&
-      (!data&.district || electoral_district_item == data&.district) &&
-      (!data&.group || parliamentary_group_item == data&.group) &&
-      (!data&.term || parliamentary_term_item == data&.term)
+      person_item.present? && person_item == data&.person &&
+      electoral_district_item.present? && electoral_district_item == data&.district &&
+      parliamentary_term_item.present? && parliamentary_term_item == data&.term &&
+      (parliamentary_group_item.blank? || parliamentary_group_item == data&.group)
   end
 
   def started_before_term?

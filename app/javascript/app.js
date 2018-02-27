@@ -53,8 +53,9 @@ export default template({
       return this.statements[this.statementIndex]
     },
     loadStatements: function () {
-      const title = encodeURIComponent(wikidataClient.page)
-      Axios.get(ENV.url + '/statements/' + title + '.json').then(response => {
+      Axios.get(ENV.url + '/statements.json', {
+        params: { title: wikidataClient.page }
+      }).then(response => {
         this.statements = response.data.statements
         this.page = response.data.page
       }).then(() => {

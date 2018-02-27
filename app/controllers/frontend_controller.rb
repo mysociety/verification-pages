@@ -10,7 +10,7 @@ class FrontendController < ApplicationController
     @classifier = StatementClassifier.new(page.title, statement.transaction_id)
 
     respond_to do |format|
-      format.json { render file: 'statements/show' }
+      format.json { render file: 'statements/index' }
     end
   end
 end

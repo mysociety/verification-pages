@@ -42,6 +42,10 @@ export default template({
         that.updating = false;
         that.finished = true;
         that.updateError = null;
+
+        this.$parent.$emit('statement-update', () => {
+          return Axios.get(ENV.url + '/statements/' + this.statement.transaction_id + '.json')
+        })
       }).catch(function (error) {
         console.log('updating the satement failed...', error);
         that.updating = false;

@@ -25,7 +25,7 @@ class RetrievePositionData < ServiceBase
     <<~SPARQL
       SELECT DISTINCT ?person ?revision ?position ?start_of_term ?start_date ?term ?group ?district
       WHERE {
-        %<person_bind>
+        %<person_bind>s
         ?position ps:P39 wd:%<position_held_item>s .
         ?person wdt:P31 wd:Q5 ; p:P39 ?position .
         ?person schema:version ?revision .

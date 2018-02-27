@@ -2,13 +2,14 @@
 
 # Service to classify statements into actionable, manually_actionable or done groups
 class StatementClassifier
-  attr_reader :page, :statements
+  attr_reader :page, :statements, :transaction_id
 
   def initialize(page_title, transaction_id = nil)
     @page = Page.find_by!(title: page_title)
     @statements = page.statements.includes(:verifications)
                       .references(:verifications)
                       .order(:id)
+    @transaction_id = transaction_id
 
     return unless transaction_id
     @statements = @statements.where(transaction_id: transaction_id)
@@ -93,8 +94,16 @@ class StatementClassifier
     StatementDecorator.new(statement, position_data_for_statement(statement))
   end
 
+  def person_item_from_transaction_id
+    return unless transaction_id
+    statements.first.person_item
+  end
+
   def position_held_data
-    @position_held_data ||= RetrievePositionData.run(page.position_held_item)
+    @position_held_data ||= RetrievePositionData.run(
+      page.position_held_item,
+      person_item_from_transaction_id
+    )
   end
 
   def position_data_for_statement(statement)

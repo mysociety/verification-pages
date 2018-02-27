@@ -1,5 +1,7 @@
 =Dashboard of statements for {{Q|<%= page.position_held_item %>}}=
 
+<div id="js-verification-tool"></div>
+
 <br>
 
 {{cmbox | text = <div style="margin-top:14px">You can contribute your own verifications to this page by adding the following line to '''[[Special:MyPage/common.js|your common.js]]''':</div><pre>importScript('User:<%= wikidata_bot %>/verification.js');</pre> }}
@@ -10,39 +12,62 @@
 
 {{User:<%= wikidata_bot %>/verification/table_header}}
 <% statements.verifiable.each do |statement| %>
-  <%= render_row page, statement, type: :verifiable, url: verifications_url %>
+  <%= render_row page, statement %>
 <% end %>
 {{User:<%= wikidata_bot %>/verification/table_footer}}
 <% end %>
 
-<% unless statements.actionable.empty? %>
+
+<% unless statements.unverifiable.empty? %>
+=Statements which are unverifiable=
+
+{{User:<%= wikidata_bot %>/verification/table_header}}
+<% statements.unverifiable.each do |statement| %>
+  <%= render_row page, statement %>
+<% end %>
+{{User:<%= wikidata_bot %>/verification/table_footer}}
+<% end %>
+
+
+<% unless statements.reconcilable.empty? %>
 =Statements to reconcile=
 
 {{User:<%= wikidata_bot %>/verification/table_header}}
-<% statements.actionable.each do |statement| %>
-  <%= render_row page, statement, type: :actionable %>
+<% statements.reconcilable.each do |statement| %>
+  <%= render_row page, statement %>
 <% end %>
 {{User:<%= wikidata_bot %>/verification/table_footer}}
 <% end %>
 
 
-<% unless statements.manual.empty? %>
+<% unless statements.actionable.empty? %>
+=Statements to action=
+
+{{User:<%= wikidata_bot %>/verification/table_header}}
+<% statements.actionable.each do |statement| %>
+  <%= render_row page, statement %>
+<% end %>
+{{User:<%= wikidata_bot %>/verification/table_footer}}
+<% end %>
+
+
+<% unless statements.manually_actionable.empty? %>
 =Statements requiring manual intervention=
 
 {{User:<%= wikidata_bot %>/verification/table_header}}
-<% statements.manual.each do |statement| %>
-  <%= render_row page, statement, type: :manual, why_not_actionable: "This suggest the person switched parties midterm; you'll have to verify and fix this manually if it's correct" %>
+<% statements.manually_actionable.each do |statement| %>
+  <%= render_row page, statement %>
 <% end %>
 {{User:<%= wikidata_bot %>/verification/table_footer}}
 <% end %>
 
 
-<% unless statements.evidenced.empty? %>
+<% unless statements.done.empty? %>
 =Statements already verified & reconciled=
 
 {{User:<%= wikidata_bot %>/verification/table_header}}
-<% statements.evidenced.each do |statement| %>
-  <%= render_row page, statement, type: :evidenced, user: statement.result_user %>
+<% statements.done.each do |statement| %>
+  <%= render_row page, statement %>
 <% end %>
 {{User:<%= wikidata_bot %>/verification/table_footer}}
 <% end %>

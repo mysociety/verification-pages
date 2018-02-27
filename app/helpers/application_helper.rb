@@ -17,8 +17,7 @@ module ApplicationHelper # :nodoc:
       qualifier_p768_name: statement.electoral_district_name,
       qualifier_p4100: statement.parliamentary_group_item,
       qualifier_p4100_name: statement.parliamentary_group_name,
-      qualifier_p2937: statement.parliamentary_term_item,
-      reference: page.reference_url
+      qualifier_p2937: statement.parliamentary_term_item
     }
   end
 

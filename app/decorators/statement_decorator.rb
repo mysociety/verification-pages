@@ -8,6 +8,7 @@ class StatementDecorator < SimpleDelegator
   def initialize(statement, position_held_data)
     @data = position_held_data
     statement.person_revision ||= data&.revision
+    statement.statement_uuid ||= data&.position
     super(statement)
   end
 
@@ -15,7 +16,6 @@ class StatementDecorator < SimpleDelegator
     data&.person && person_item == data&.person &&
       data&.district && electoral_district_item == data&.district &&
       data&.group && parliamentary_group_item == data&.group &&
-      data&.position && statement_uuid == data&.position &&
       data&.term && parliamentary_term_item == data&.term
   end
 

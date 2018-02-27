@@ -84,6 +84,7 @@ RSpec.describe StatementClassifier, type: :service do
 
     context 'when statement is actionable' do
       before do
+        position_held.group = nil
         allow(statement).to receive(:person_item).and_return('Q1')
       end
       it { expect(classifier.verifiable).to be_empty }
@@ -95,10 +96,10 @@ RSpec.describe StatementClassifier, type: :service do
     end
 
     context 'when district qualifier contradict' do
-      before {
+      before do
         position_held.district = 'other-district'
         allow(statement).to receive(:person_item).and_return('Q1')
-      }
+      end
       it { expect(classifier.verifiable).to be_empty }
       it { expect(classifier.unverifiable).to be_empty }
       it { expect(classifier.reconcilable).to be_empty }
@@ -108,10 +109,10 @@ RSpec.describe StatementClassifier, type: :service do
     end
 
     context 'when group qualifier contradict' do
-      before {
+      before do
         position_held.group = 'other-group'
         allow(statement).to receive(:person_item).and_return('Q1')
-      }
+      end
       it { expect(classifier.verifiable).to be_empty }
       it { expect(classifier.unverifiable).to be_empty }
       it { expect(classifier.reconcilable).to be_empty }
@@ -121,10 +122,11 @@ RSpec.describe StatementClassifier, type: :service do
     end
 
     context 'when position start is 2 days before term start' do
-      before {
+      before do
+        position_held.group = nil
         position_held.start_date = '2017-12-30'
         allow(statement).to receive(:person_item).and_return('Q1')
-      }
+      end
       it { expect(classifier.verifiable).to be_empty }
       it { expect(classifier.unverifiable).to be_empty }
       it { expect(classifier.reconcilable).to be_empty }
@@ -134,7 +136,7 @@ RSpec.describe StatementClassifier, type: :service do
     end
 
     context 'when the statement has been actioned' do
-      before { }
+      before { allow(statement).to receive(:person_item).and_return('Q1') }
       it { expect(classifier.verifiable).to be_empty }
       it { expect(classifier.unverifiable).to be_empty }
       it { expect(classifier.reconcilable).to be_empty }

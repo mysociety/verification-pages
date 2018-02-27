@@ -3,19 +3,36 @@
 require 'rails_helper'
 
 RSpec.describe VerificationsController, type: :controller do
-  describe 'POST #create' do
-    let(:statement) { double(:statement).as_null_object }
+  let(:statement) { double(:statement).as_null_object }
+  let(:relation) { double(:verification_relation).as_null_object }
+  let(:classifier) { double(:classifier) }
 
-    it 'finds statement from transaction ID' do
-      expect(Statement).to receive(:find_by).with(transaction_id: '1').and_return(statement)
-      post :create, params: { id: '1' }
+  let(:valid_attributes) do
+    { id: '123', user: 'ExampleUser', status: 'true', format: 'json' }
+  end
+
+  describe 'POST #create' do
+    before do
+      allow(Statement).to receive(:find_by!).and_return(statement)
+      allow(statement).to receive(:verifications).and_return(relation)
+      allow(StatementClassifier).to receive(:new).and_return(classifier)
     end
 
-    it 'calls create_verification! on statement' do
-      verification_params = { user: 'Bilbo', status: 'true' }
-      allow(Statement).to receive(:find_by).with(transaction_id: '1').and_return(statement)
-      expect(statement).to receive(:create_verification!)
-      post :create, params: verification_params.merge(id: '1')
+    it 'finds statement and creates verification' do
+      expect(Statement).to receive(:find_by!).with(transaction_id: '123')
+      post :create, params: valid_attributes
+      expect(relation).to have_received(:create!)
+        .with('user' => 'ExampleUser', 'status' => 'true')
+    end
+
+    it 'assigns classifier' do
+      post :create, params: valid_attributes
+      expect(assigns(:classifier)).to eq classifier
+    end
+
+    it 'renders statements show JSON' do
+      post :create, params: valid_attributes
+      expect(response).to render_template('statements/index')
     end
   end
 end

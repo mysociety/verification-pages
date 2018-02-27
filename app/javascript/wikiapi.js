@@ -305,14 +305,15 @@ var wikidata = function(spec) {
 
   that.ajaxAPIBasic = function (data) {
     console.log(data)
+    data = Object.assign({}, data, { format: 'json' })
+    var params = new URLSearchParams()
+    for (let [k, v] of Object.entries(data)) {
+      params.append(k, v)
+    }
     return Axios.post(
-      that.apiURL,
-      {
-        data: Object.assign({}, data, { format: 'json' }),
-        responseType: 'json'
-      }
-    ).then(function(data) {
-      return data.data;
+      that.apiURL, params, { responseType: 'json' }
+    ).then(function(response) {
+      return response.data;
     });
   };
 

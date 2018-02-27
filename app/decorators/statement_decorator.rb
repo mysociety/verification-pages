@@ -13,10 +13,10 @@ class StatementDecorator < SimpleDelegator
   end
 
   def done?
-    data&.person && person_item == data&.person &&
-      data&.district && electoral_district_item == data&.district &&
-      data&.group && parliamentary_group_item == data&.group &&
-      data&.term && parliamentary_term_item == data&.term
+    (!data&.person || person_item == data&.person) &&
+      (!data&.district || electoral_district_item == data&.district) &&
+      (!data&.group || parliamentary_group_item == data&.group) &&
+      (!data&.term || parliamentary_term_item == data&.term)
   end
 
   def started_before_term?

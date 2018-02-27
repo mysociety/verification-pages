@@ -25,7 +25,9 @@ export default template({
       this.updating = true;
 
       if (this.statement.statement_uuid) {
-        updateData.statement = this.statement.statement_uuid;
+        // Make sure there's a $ in the claim ID separating the item
+        // ID from the UUID, otherwise we get invalid GUID errors.
+        updateData.statement = this.statement.statement_uuid.replace(/^(Q\d+)./, '$1$');
       }
 
       if (this.statement.parliamentary_group_item) {

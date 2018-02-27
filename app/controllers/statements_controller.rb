@@ -1,7 +1,8 @@
 class StatementsController < ApplicationController
-  def show
-    page = Page.find_by!(title: params[:id])
+  def index
+    page = Page.find_by!(title: params.require(:title))
     @classifier = StatementClassifier.new(page.title)
+
     respond_to do |format|
       format.json { render }
     end

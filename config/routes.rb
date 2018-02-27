@@ -5,7 +5,7 @@ Rails.application.routes.draw do
   resources :pages
 
   # Frontend
-  resources :statements, only: %i[show]
+  resources :statements, only: %i[index]
   resources :verifications, only: %i[create]
   resources :reconciliations, only: %i[create]
 

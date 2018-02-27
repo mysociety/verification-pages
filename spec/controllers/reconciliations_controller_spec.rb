@@ -39,7 +39,7 @@ RSpec.describe ReconciliationsController, type: :controller do
 
     it 'renders statements show JSON' do
       post :create, params: valid_attributes
-      expect(response).to render_template('statements/show')
+      expect(response).to render_template('statements/index')
     end
   end
 end

@@ -36,6 +36,10 @@ export default template({
         qualifiers[wikidataClient.getPropertyID('electoral district')] =
           this.statement.electoral_district_item;
       }
+      if (this.statement.parliamentary_term_item) {
+        qualifiers[wikidataClient.getPropertyID('parliamentary term')] =
+          this.statement.parliamentary_term_item;
+      }
 
       item.latestRevision().then(function(lastRevisionID) {
         return item.updateOrCreateClaim(lastRevisionID, updateData);

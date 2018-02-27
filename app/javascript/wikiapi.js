@@ -352,6 +352,7 @@ var wikidata = function(spec) {
         'parliamentary group': 'P4100',
         'electoral district': 'P768',
         'position held': 'P39',
+        'parliamentary term': 'P2937',
       },
       'test.wikidata.org': {
         'reference URL': 'P43659',

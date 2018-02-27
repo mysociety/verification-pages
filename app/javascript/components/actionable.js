@@ -1,4 +1,6 @@
-import wikidataClient from '../wikiapi.js'
+import ENV from '../env'
+import Axios from 'axios'
+import wikidataClient from '../wikiapi'
 import template from './actionable.html'
 
 export default template({
@@ -42,6 +44,10 @@ export default template({
         that.updating = false;
         that.finished = true;
         that.updateError = null;
+
+        that.$parent.$emit('statement-update', () => {
+          return Axios.get(ENV.url + '/statements/' + that.statement.transaction_id + '.json')
+        })
       }).catch(function (error) {
         console.log('updating the satement failed...', error);
         that.updating = false;

@@ -25,7 +25,7 @@ RSpec.describe StatementClassifier, type: :service do
       .with(title: 'page_title')
       .and_return(page)
     allow(RetrievePositionData).to receive(:run)
-      .with(page.position_held_item)
+      .with(page.position_held_item, nil)
       .and_return(position_held_data)
   end
 
@@ -136,7 +136,10 @@ RSpec.describe StatementClassifier, type: :service do
     end
 
     context 'when the statement has been actioned' do
-      before { allow(statement).to receive(:person_item).and_return('Q1') }
+      before do
+        statement.verifications.build(status: true)
+        allow(statement).to receive(:person_item).and_return('Q1')
+      end
       it { expect(classifier.verifiable).to be_empty }
       it { expect(classifier.unverifiable).to be_empty }
       it { expect(classifier.reconcilable).to be_empty }

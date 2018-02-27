@@ -8,7 +8,6 @@ export default template({
     searchResultsLoading: false,
     searchResultsLoaded: false,
     searchResults: null,
-    chosenPersonItem: null,
   } },
   props: ['statement'],
   created: function () {

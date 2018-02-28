@@ -4,7 +4,7 @@
 class Page < ApplicationRecord
   validates :title, presence: true
   validates :position_held_item, presence: true
-  validates :parliamentary_term_item, presence: true
+  validates :parliamentary_term_item, presence: true, uniqueness: true
   validates :reference_url, presence: true
 
   def statements

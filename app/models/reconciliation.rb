@@ -8,11 +8,15 @@ class Reconciliation < ApplicationRecord
 
   default_scope -> { order(updated_at: :asc) }
 
-  after_commit :update_statement
+  after_commit :update_statement, :send_to_id_mapping_store
 
   private
 
   def update_statement
     statement.update_attributes(person_item: item)
+  end
+
+  def send_to_id_mapping_store
+    UpdateIDMappingStore.run(self)
   end
 end

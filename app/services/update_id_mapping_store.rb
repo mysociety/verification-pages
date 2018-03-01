@@ -25,6 +25,7 @@ class UpdateIDMappingStore < ServiceBase
     # deprecate old FB ID
     mapper.new_fb_id_for(fb_id, wikidata_id, deprecated: true) if fb_id
     # add new FB ID
-    mapper.new_fb_id_for(facebook_id, wikidata_id, "Added FB ID for #{name}")
+    mapper.new_fb_id_for(facebook_id, wikidata_id,
+                         comment: "Added FB ID for #{name}")
   end
 end

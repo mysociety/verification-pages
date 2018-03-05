@@ -1,5 +1,5 @@
 <span>
   Does <a target="_blank" rel="noopener nofollow" class="external free" :href="page.reference_url">{{ page.reference_url }}</a> provide evidence for this position? –
-  <button v-on:click="verifyStatement()" class="mw-ui-button mw-ui-progressive">Yes, verify</button>
-  <button v-on:click="unverifyStatement()" class="mw-ui-button">No evidence</button>
+  <button v-on:click="submitStatement(true)" class="mw-ui-button mw-ui-progressive">Yes, verify</button>
+  <button v-on:click="submitStatement(false)" class="mw-ui-button">No evidence</button>
 </span>

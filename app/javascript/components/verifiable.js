@@ -7,12 +7,12 @@ export default template({
   data () { return {} },
   props: ['statement', 'page'],
   methods: {
-    verifyStatement: function () {
+    submitStatement: function (status) {
       this.$parent.$emit('statement-update', () => {
         return Axios.post(ENV.url + '/verifications.json', {
           id: this.statement.transaction_id,
           user: wikidataClient.user,
-          status: true
+          status
         })
       })
     }

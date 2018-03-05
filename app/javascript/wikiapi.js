@@ -363,6 +363,7 @@ var wikidata = function(spec) {
         'parliamentary group': 'P70557',
         'electoral district': 'P70558',
         'position held': 'P39',
+        'parliamentary term': 'P70901',
       },
       'localhost': {
         // For local development assume we're using test.wikidata for
@@ -374,6 +375,7 @@ var wikidata = function(spec) {
         'parliamentary group': 'P70557',
         'electoral district': 'P70558',
         'position held': 'P39',
+        'parliamentary term': 'P70901',
       }
     }[that.serverName][propertyLabel];
   };

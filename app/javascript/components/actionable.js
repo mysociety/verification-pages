@@ -52,7 +52,10 @@ export default template({
         that.updateError = null;
 
         that.$parent.$emit('statement-update', () => {
-          return Axios.get(ENV.url + '/statements/' + that.statement.transaction_id + '.json')
+          return Axios.get(
+            ENV.url + '/statements/' + that.statement.transaction_id + '.json',
+            { params: { force_type: 'done' } }
+          )
         })
       }).catch(function (error) {
         console.log('updating the satement failed...', error);

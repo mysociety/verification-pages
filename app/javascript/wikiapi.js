@@ -310,6 +310,9 @@ var wikidata = function(spec) {
     for (let [k, v] of Object.entries(data)) {
       params.append(k, v)
     }
+    if (that.useAPIProxy) {
+      params.append('action_name', data.action)
+    }
     return Axios.post(
       that.apiURL, params, { responseType: 'json' }
     ).then(function(response) {

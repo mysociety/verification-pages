@@ -9,12 +9,10 @@ class MediaWikiApiController < ApplicationController
               'API proxy (Warning: not for use on public installations!)'
       return render(:json => {error: error})
     end
-    action = api_data.delete(:action)
+    action = params[:action_name]
     return render(:json => {error: 'No action supplied'}) unless action
-    api_data.delete(:token)
-    unless TOKEN_REQUIRED_FOR_ACTION[action]
-      api_data[:token_type] = false
-    end
+    api_data = api_data_for_action(action)
+    api_data[:token_type] = false unless TOKEN_REQUIRED_FOR_ACTION[action]
     response = client.action action, api_data
     render(:json => response.data)
   end
@@ -43,26 +41,25 @@ class MediaWikiApiController < ApplicationController
     'wbcreateclaim' => true,
   }
 
-  def api_data
-    data = params.require(:data)
-    if data[:action] == 'wbsearchentities'
-      data.permit(:action, :search, :language, :limit, :type, :format)
-    elsif data[:action] == 'wbgetentities'
-      data.permit(:action, :props, :titles, :sites)
-    elsif data[:action] == 'query'
-      data.permit(:action, :prop, :titles)
-    elsif data[:action] == 'wbsetreference'
-      data.permit(:action, :statement, :snaks, :baserevid)
-    elsif data[:action] == 'wbsetqualifier'
-      data.permit(:action, :claim, :property, :value, :baserevisionid, :snaktype)
-    elsif data[:action] == 'wbcreateclaim'
-      data.permit(:action, :entity, :snaktype, :property, :value, :baserevid)
-    elsif data[:action] == 'wbgetclaims'
-      data.permit(:action, :entity, :claim)
-    elsif data[:action] == 'wbeditentity'
-      data.permit(:action, :new, :data)
+  def api_data_for_action(action)
+    if action == 'wbsearchentities'
+      params.permit(:search, :language, :limit, :type)
+    elsif action == 'wbgetentities'
+      params.permit(:props, :titles, :sites)
+    elsif action == 'query'
+      params.permit(:prop, :titles)
+    elsif action == 'wbsetreference'
+      params.permit(:statement, :snaks, :baserevid)
+    elsif action == 'wbsetqualifier'
+      params.permit(:claim, :property, :value, :baserevisionid, :snaktype)
+    elsif action == 'wbcreateclaim'
+      params.permit(:entity, :snaktype, :property, :value, :baserevid)
+    elsif action == 'wbgetclaims'
+      params.permit(:entity, :claim)
+    elsif action == 'wbeditentity'
+      params.permit(:new, :data)
     else
-      raise "Unknown action: #{data[:action]}"
+      raise "Unknown action: #{action}"
     end.to_h
   end
 end

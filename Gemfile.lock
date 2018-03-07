@@ -1,3 +1,11 @@
+GIT
+  remote: https://github.com/mysociety/id-mapper.git
+  revision: 42903c9b2239e6c902d777e943f10a717326042f
+  specs:
+    id-mapper (0.1.0)
+      json (~> 2.1)
+      rest-client (~> 2.0)
+
 GEM
   remote: https://rubygems.org/
   specs:
@@ -75,6 +83,7 @@ GEM
     jbuilder (2.7.0)
       activesupport (>= 4.2.0)
       multi_json (>= 1.2)
+    json (2.1.0)
     less (2.6.0)
       commonjs (~> 0.2.7)
     less-rails (2.8.0)
@@ -263,6 +272,7 @@ DEPENDENCIES
   byebug
   dotenv-rails (~> 0.7.0)
   foreman (~> 0.64.0)
+  id-mapper!
   jbuilder (~> 2.5)
   listen (>= 3.0.5, < 3.2)
   mediawiki_api

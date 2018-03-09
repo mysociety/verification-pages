@@ -7,15 +7,15 @@
       <tr>
         <td style="padding: 1em;">
           <span style="font-size: 0.8em; font-weight: bold; display: block;">Subject</span>
-          {{ statement().person_name }}
+          <wikilink :id="statement().person_item">{{ statement().person_name }}</wikilink>
         </td>
         <td style="padding: 1em;">
           <span style="font-size: 0.8em; font-weight: bold; display: block;">District</span>
-          {{ statement().electoral_district_name || '&nbsp;' }}
+          <wikilink :id="statement().electoral_district_item">{{ statement().electoral_district_name || '&nbsp;' }}</wikilink>
         </td>
         <td style="padding: 1em;">
           <span style="font-size: 0.8em; font-weight: bold; display: block;">Parliamentary group</span>
-          {{ statement().parliamentary_group_name || '&nbsp;' }}
+          <wikilink :id="statement().parliamentary_group_item">{{ statement().parliamentary_group_name || '&nbsp;' }}</wikilink>
         </td>
         <td style="padding: 1em;">
           <span style="font-size: 0.8em; font-weight: bold; display: block;">Type</span>

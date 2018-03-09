@@ -1,0 +1,6 @@
+<span>
+  <a v-if="id" :href="'/wiki/' + id">
+    <slot></slot>
+  </a>
+  <slot v-else></slot>
+</span>

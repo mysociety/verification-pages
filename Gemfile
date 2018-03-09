@@ -33,6 +33,8 @@ gem 'mediawiki_api'
 gem 'webpacker', '~> 3.2'
 # pry for debugging help
 gem 'pry'
+# redis for cache store
+gem 'redis-rails'
 
 group :development, :test do
   gem 'dotenv-rails', '~> 0.7.0'

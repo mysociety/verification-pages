@@ -1,8 +1,8 @@
 <div id="verification-tool">
-  <div v-if="loaded && currentStatements().length === 0">
+  <div v-if="loaded && currentStatements.length === 0">
     No statements
   </div>
-  <div v-if="loaded && currentStatements().length > 0">
+  <div v-if="loaded && currentStatements.length > 0">
     <button v-on:click="prevStatement()" class="mw-ui-button">Previous</button>
     <button v-on:click="nextStatement()" class="mw-ui-button">Next</button>
     <span style="float: right;">
@@ -19,31 +19,31 @@
       &nbsp;&nbsp;
       Statement
       <input v-model:number="displayIndex" type="number" style="width: 40px;">
-      of {{ currentStatements().length }}
+      of {{ currentStatements.length }}
     </span>
     <table style="width: 100%; margin-top: 1em; border: 1px solid #ccc; border-collapse: collapse; table-layout: fixed;">
       <tr>
         <td style="padding: 1em;">
           <span style="font-size: 0.8em; font-weight: bold; display: block;">Subject</span>
-          <wikilink :id="statement().person_item">{{ statement().person_name }}</wikilink>
+          <wikilink :id="statement.person_item">{{ statement.person_name }}</wikilink>
         </td>
         <td style="padding: 1em;">
           <span style="font-size: 0.8em; font-weight: bold; display: block;">District</span>
-          <wikilink :id="statement().electoral_district_item">{{ statement().electoral_district_name || '&nbsp;' }}</wikilink>
+          <wikilink :id="statement.electoral_district_item">{{ statement.electoral_district_name || '&nbsp;' }}</wikilink>
         </td>
         <td style="padding: 1em;">
           <span style="font-size: 0.8em; font-weight: bold; display: block;">Parliamentary group</span>
-          <wikilink :id="statement().parliamentary_group_item">{{ statement().parliamentary_group_name || '&nbsp;' }}</wikilink>
+          <wikilink :id="statement.parliamentary_group_item">{{ statement.parliamentary_group_name || '&nbsp;' }}</wikilink>
         </td>
         <td style="padding: 1em;">
           <span style="font-size: 0.8em; font-weight: bold; display: block;">Type</span>
-          {{ statement().type }}
+          {{ statement.type }}
         </td>
       </tr>
       <tr>
         <td colspan="4" style="padding: 0.5em 1em; border-bottom: 3px solid #2980b9; background: #e2f0f9;">
           <span v-if="!submitting">
-            <component v-bind:is="currentView()" :statement="statement()" :page="page"></component>
+            <component v-bind:is="currentView" :statement="statement" :page="page"></component>
           </span>
           <span v-else>
             Submitting...

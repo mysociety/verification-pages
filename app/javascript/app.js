@@ -24,14 +24,34 @@ export default template({
   watch: {
     statementIndex: function (newVal) {
       if (newVal < 0) {
-        this.statementIndex = this.currentStatements().length - 1
+        this.statementIndex = this.currentStatements.length - 1
       } else {
-        this.statementIndex = newVal % this.currentStatements().length
+        this.statementIndex = newVal % this.currentStatements.length
       }
       this.$emit('statement-changed')
     }
   },
   computed: {
+    currentView: function () {
+      switch (this.statement.type) {
+        case 'verifiable': return verifiableComponent
+        case 'unverifiable': return unverifiableComponent
+        case 'reconcilable': return reconcilableComponent
+        case 'actionable': return actionableComponent
+        case 'manually_actionable': return manuallyActionableComponent
+        case 'done': return doneComponent
+      }
+    },
+    statement: function () {
+      return this.currentStatements[this.statementIndex]
+    },
+    currentStatements: function () {
+      if (this.displayType !== 'all') {
+        return this.statements.filter(s => s.type === this.displayType)
+      } else {
+        return this.statements
+      }
+    },
     displayIndex: {
       get: function () { return this.statementIndex + 1 },
       set: function (val) { this.statementIndex = val - 1 }
@@ -55,26 +75,6 @@ export default template({
     })
   },
   methods: {
-    currentView () {
-      switch (this.statement().type) {
-        case 'verifiable': return verifiableComponent
-        case 'unverifiable': return unverifiableComponent
-        case 'reconcilable': return reconcilableComponent
-        case 'actionable': return actionableComponent
-        case 'manually_actionable': return manuallyActionableComponent
-        case 'done': return doneComponent
-      }
-    },
-    statement: function () {
-      return this.currentStatements()[this.statementIndex]
-    },
-    currentStatements: function () {
-      if (this.displayType !== 'all') {
-        return this.statements.filter(s => s.type === this.displayType)
-      } else {
-        return this.statements
-      }
-    },
     loadStatements: function () {
       Axios.get(ENV.url + '/statements.json', {
         params: { title: wikidataClient.page }

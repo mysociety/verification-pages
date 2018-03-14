@@ -3,7 +3,14 @@
     No statements
   </div>
   <div v-if="loaded && statements.length > 0">
-    <table style="width: 100%; border: 1px solid #ccc; border-collapse: collapse; table-layout: fixed;">
+    <button v-on:click="prevStatement()" class="mw-ui-button">Previous</button>
+    <button v-on:click="nextStatement()" class="mw-ui-button">Next</button>
+    <span style="float: right;">
+      Statement
+      <input v-model:number="displayIndex" v-on:keyup="goToStatement()" v-on:change="goToStatement()" type="number" style="width: 40px;">
+      of {{ currentStatements().length }}
+    </span>
+    <table style="width: 100%; margin-top: 1em; border: 1px solid #ccc; border-collapse: collapse; table-layout: fixed;">
       <tr>
         <td style="padding: 1em;">
           <span style="font-size: 0.8em; font-weight: bold; display: block;">Subject</span>
@@ -33,14 +40,6 @@
         </td>
       </tr>
     </table>
-    <br>
-    <button v-on:click="prevStatement()" class="mw-ui-button">Previous</button>
-    <button v-on:click="nextStatement()" class="mw-ui-button">Next</button>
-    <span style="float: right;">
-      Statement
-      <input v-model:number="displayIndex" v-on:keyup="goToStatement()" v-on:change="goToStatement()" type="number" style="width: 40px;">
-      of {{ statements.length }}
-    </span>
   </div>
   <div v-if="!loaded">
     Loading...

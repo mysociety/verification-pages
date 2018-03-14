@@ -18,6 +18,7 @@ export default template({
       statements: [],
       statementIndex: 0,
       displayIndex: 1,
+      displayType: 'all',
       page: null
     }
   },
@@ -50,7 +51,14 @@ export default template({
       }
     },
     statement: function () {
-      return this.statements[this.statementIndex]
+      return this.currentStatements()[this.statementIndex]
+    },
+    currentStatements: function () {
+      if (this.displayType !== 'all') {
+        return this.statements.filter(s => s.type === this.displayType)
+      } else {
+        return this.statements
+      }
     },
     loadStatements: function () {
       Axios.get(ENV.url + '/statements.json', {
@@ -69,13 +77,13 @@ export default template({
     },
     nextStatement: function () {
       this.$emit('statement-changed')
-      this.statementIndex = (this.statementIndex + 1) % this.statements.length
+      this.statementIndex = (this.statementIndex + 1) % this.currentStatements().length
       this.displayIndex = this.statementIndex + 1
     },
     goToStatement: function () {
       this.$emit('statement-changed')
       var newIndex = parseInt(this.displayIndex) - 1
-      newIndex = Math.max(Math.min(newIndex, this.statements.length - 1), 0)
+      newIndex = Math.max(Math.min(newIndex, this.currentStatements().length - 1), 0)
       if (!isNaN(newIndex)) {
         this.statementIndex = newIndex
         this.displayIndex = this.statementIndex + 1

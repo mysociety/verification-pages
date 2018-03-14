@@ -1,11 +1,22 @@
 <div id="verification-tool">
-  <div v-if="loaded && statements.length === 0">
+  <div v-if="loaded && currentStatements().length === 0">
     No statements
   </div>
-  <div v-if="loaded && statements.length > 0">
+  <div v-if="loaded && currentStatements().length > 0">
     <button v-on:click="prevStatement()" class="mw-ui-button">Previous</button>
     <button v-on:click="nextStatement()" class="mw-ui-button">Next</button>
     <span style="float: right;">
+      Type
+      <select v-model="displayType">
+        <option value='all'>Show all</option>
+        <option>verifiable</option>
+        <option>unverifiable</option>
+        <option>reconcilable</option>
+        <option>actionable</option>
+        <option>manually_actionable</option>
+        <option>done</option>
+      </select>
+      &nbsp;&nbsp;
       Statement
       <input v-model:number="displayIndex" v-on:keyup="goToStatement()" v-on:change="goToStatement()" type="number" style="width: 40px;">
       of {{ currentStatements().length }}

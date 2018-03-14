@@ -2,6 +2,8 @@
 
 # Statement for verification object
 class Statement < ApplicationRecord
+  scope :original, -> { where(duplicate: false) }
+
   has_many :verifications, dependent: :destroy
   has_many :reconciliations, dependent: :destroy
 

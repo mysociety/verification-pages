@@ -17,9 +17,24 @@ export default template({
       submitting: false,
       statements: [],
       statementIndex: 0,
-      displayIndex: 1,
       displayType: 'all',
       page: null
+    }
+  },
+  watch: {
+    statementIndex: function (newVal) {
+      if (newVal < 0) {
+        this.statementIndex = this.currentStatements().length - 1
+      } else {
+        this.statementIndex = newVal % this.currentStatements().length
+      }
+      this.$emit('statement-changed')
+    }
+  },
+  computed: {
+    displayIndex: {
+      get: function () { return this.statementIndex + 1 },
+      set: function (val) { this.statementIndex = val - 1 }
     }
   },
   created: function () {
@@ -71,23 +86,10 @@ export default template({
       })
     },
     prevStatement: function () {
-      this.$emit('statement-changed')
-      this.statementIndex = Math.max(this.statementIndex - 1, 0)
-      this.displayIndex = this.statementIndex + 1
+      this.statementIndex = this.statementIndex - 1
     },
     nextStatement: function () {
-      this.$emit('statement-changed')
-      this.statementIndex = (this.statementIndex + 1) % this.currentStatements().length
-      this.displayIndex = this.statementIndex + 1
-    },
-    goToStatement: function () {
-      this.$emit('statement-changed')
-      var newIndex = parseInt(this.displayIndex) - 1
-      newIndex = Math.max(Math.min(newIndex, this.currentStatements().length - 1), 0)
-      if (!isNaN(newIndex)) {
-        this.statementIndex = newIndex
-        this.displayIndex = this.statementIndex + 1
-      }
+      this.statementIndex = this.statementIndex + 1
     }
   }
 })

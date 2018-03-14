@@ -43,6 +43,9 @@ export default template({
       }
     },
     statement: function () {
+      const statement = this.currentStatements[this.statementIndex]
+      if (statement) return statement
+      this.statementIndex = this.currentStatements.length - 1
       return this.currentStatements[this.statementIndex]
     },
     currentStatements: function () {

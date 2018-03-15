@@ -11,6 +11,16 @@ class IDMappingStore
     wd[@wikidata_id].set(fb[@facebook_id], comment: comment)
   end
 
+  def wikidata_id
+    # get Wikidata identifier
+    @wikidata_id ||= fb[@facebook_id].get(wd) if @facebook_id
+  end
+
+  def facebook_id
+    # get Facebook identifier
+    @facebook_id ||= wd[@wikidata_id].get(fb) if @wikidata_id
+  end
+
   private
 
   def self.wd

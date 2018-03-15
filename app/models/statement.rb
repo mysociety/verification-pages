@@ -9,7 +9,7 @@ class Statement < ApplicationRecord
 
   validates :transaction_id, presence: true, uniqueness: true
 
-  before_create :detect_duplicate_statements
+  before_create :detect_duplicate_statements, :retrieve_wikidata_id
   after_create :verify_duplicate!, if: :duplicate?
 
   def page
@@ -63,5 +63,13 @@ class Statement < ApplicationRecord
       user: duplicate_verification.user,
       status: duplicate_verification.status
     )
+  end
+
+  def retrieve_wikidata_id
+    self.person_item ||= store.wikidata_id
+  end
+
+  def store
+    IDMappingStore.new(wikidata_id: person_item, facebook_id: fb_identifier)
   end
 end

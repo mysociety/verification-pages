@@ -45,7 +45,11 @@ This should start the Rails server, then you can view the application by
 visiting http://localhost:3000/pages. This gives you the ability to add/edit
 & remove Wikidata pages which will be updated with verification page source.
 
-To load statements from `suggestion-store` into the database run:
+To load statements from `suggestion-store` into the database by running either:
+
+    rails verification_page:load:all
+
+... or for a single page:
 
     rails verification_page:load['User:Graemebp/verification/example']
 

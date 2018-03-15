@@ -8,7 +8,7 @@
   </span>
   <span v-else>
     <label for="name">New name: <input v-model="newName" name="name"></label>
-    <button v-on:click="verifyStatement()" class="mw-ui-button mw-ui-progressive">Verify with new name</button>
+    <button v-on:click="submitStatement(true)" class="mw-ui-button mw-ui-progressive">Verify with new name</button>
     <button v-on:click="cancelChangeName()" class="mw-ui-button">Cancel</button>
   </span>
 </span>

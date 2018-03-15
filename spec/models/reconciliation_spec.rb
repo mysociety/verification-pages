@@ -5,7 +5,7 @@ require 'rails_helper'
 RSpec.describe Reconciliation, type: :model do
   let(:reconciliation) { Reconciliation.new }
 
-  describe 'assoications' do
+  describe 'associations' do
     it 'belong to statement' do
       expect(reconciliation.build_statement).to be_a(Statement)
     end

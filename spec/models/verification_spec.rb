@@ -5,7 +5,7 @@ require 'rails_helper'
 RSpec.describe Verification, type: :model do
   let(:verification) { Verification.new }
 
-  describe 'assoications' do
+  describe 'associations' do
     it 'belong to statement' do
       expect(verification.build_statement).to be_a(Statement)
     end

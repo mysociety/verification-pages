@@ -45,27 +45,27 @@ This should start the Rails server, then you can view the application by
 visiting http://localhost:3000/pages. This gives you the ability to add/edit
 & remove Wikidata pages which will be updated with verification page source.
 
-To load statements from `suggestion-store` into the database call:
+To load statements from `suggestion-store` into the database run:
 
-    `rails verification_page:load['User:Graemebp/verification/example']`
+    rails verification_page:load['User:Graemebp/verification/example']
 
-To generate a new verification page and output to stdout call:
+To generate a new verification page and output to stdout run:
 
-    `rails verification_page:generate['User:Graemebp/verification/example']`
+    rails verification_page:generate['User:Graemebp/verification/example']
 
-To generate and upload a verification page to Wikidata call:
+To generate and upload a verification page to Wikidata run:
 
-    `rails verification_page:update['User:Graemebp/verification/example']`
+    rails verification_page:update['User:Graemebp/verification/example']
 
-There are also some helper tasks to managed templates and JavaScript located on
-Wikidata. These have to be used with care as they will destroy an modifications
-made directly on Wikidata. These can be called by:
+There are also some helper tasks to update templates and JavaScript located on
+Wikidata. __Warning: Running these will destroy any modifications that have been
+made directly on Wikidata__
 
-    `rails verification_page:update:templates`
-    `rails verification_page:update:javascript`
+    rails verification_page:update:templates
+    rails verification_page:update:javascript
 
 ## Testing
 
-The test suite can be run by runing:
+The test suite can run by:
 
     rspec

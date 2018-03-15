@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20180315141820) do
+ActiveRecord::Schema.define(version: 20180315160340) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -49,6 +49,8 @@ ActiveRecord::Schema.define(version: 20180315141820) do
     t.string "electoral_district_name"
     t.string "fb_identifier"
     t.boolean "duplicate", default: false
+    t.bigint "page_id"
+    t.index ["page_id"], name: "index_statements_on_page_id"
   end
 
   create_table "verifications", force: :cascade do |t|
@@ -61,4 +63,5 @@ ActiveRecord::Schema.define(version: 20180315141820) do
   end
 
   add_foreign_key "reconciliations", "statements"
+  add_foreign_key "statements", "pages"
 end

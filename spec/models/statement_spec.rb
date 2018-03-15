@@ -6,6 +6,10 @@ RSpec.describe Statement, type: :model do
   let(:statement) { Statement.new }
 
   describe 'associations' do
+    it 'belongs to a page' do
+      expect(statement.build_page).to be_a(Page)
+    end
+
     it 'has many verifications' do
       expect(statement.verifications.build).to be_a(Verification)
     end

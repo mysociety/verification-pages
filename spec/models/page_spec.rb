@@ -5,6 +5,12 @@ require 'rails_helper'
 RSpec.describe Page, type: :model do
   let(:page) { Page.new }
 
+  describe 'associations' do
+    it 'has many statements' do
+      expect(page.statements.build).to be_a(Statement)
+    end
+  end
+
   describe 'validations' do
     before { page.valid? }
 

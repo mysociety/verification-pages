@@ -16,10 +16,7 @@ RSpec.describe Verification, type: :model do
       expect(UpdateStatementVerification).to receive(:run)
         .with(verification).once
 
-      verification.create_statement!(
-        transaction_id: '123',
-        parliamentary_term_item: 'Q1'
-      )
+      verification.statement = build(:statement)
       verification.user = 'Bilbo'
       verification.save! # create
 

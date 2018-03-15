@@ -22,7 +22,7 @@ RSpec.describe Statement, type: :model do
     end
 
     it 'require unique transaction_id' do
-      Statement.create(transaction_id: '123', parliamentary_term_item: 'Q1')
+      create(:statement, transaction_id: '123')
       statement.transaction_id = '123'
       statement.valid?
       expect(statement.errors).to include(:transaction_id)

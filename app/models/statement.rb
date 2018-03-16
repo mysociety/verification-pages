@@ -4,6 +4,7 @@
 class Statement < ApplicationRecord
   scope :original, -> { where(duplicate: false) }
 
+  belongs_to :page
   has_many :verifications, dependent: :destroy
   has_many :reconciliations, dependent: :destroy
 
@@ -11,10 +12,6 @@ class Statement < ApplicationRecord
 
   before_create :detect_duplicate_statements, :retrieve_wikidata_id
   after_create :verify_duplicate!, if: :duplicate?
-
-  def page
-    Page.find_by(parliamentary_term_item: parliamentary_term_item)
-  end
 
   def latest_verification
     verifications.last

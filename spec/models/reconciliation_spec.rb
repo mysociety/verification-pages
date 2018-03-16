@@ -5,7 +5,7 @@ require 'rails_helper'
 RSpec.describe Reconciliation, type: :model do
   let(:reconciliation) { Reconciliation.new }
 
-  describe 'assoications' do
+  describe 'associations' do
     it 'belong to statement' do
       expect(reconciliation.build_statement).to be_a(Statement)
     end
@@ -20,12 +20,7 @@ RSpec.describe Reconciliation, type: :model do
   end
 
   describe 'after commit callback' do
-    let(:statement) do
-      Statement.create(
-        transaction_id: '123',
-        parliamentary_term_item: 'Q1'
-      )
-    end
+    let(:statement) { create(:statement) }
 
     before do
       allow(reconciliation).to receive(:statement).and_return(statement)

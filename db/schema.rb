@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20180314131941) do
+ActiveRecord::Schema.define(version: 20180315160340) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -18,7 +18,7 @@ ActiveRecord::Schema.define(version: 20180314131941) do
   create_table "pages", force: :cascade do |t|
     t.string "title", null: false
     t.string "position_held_item", null: false
-    t.string "parliamentary_term_item", null: false
+    t.string "parliamentary_term_item"
     t.string "reference_url", null: false
     t.boolean "require_parliamentary_group", default: false
     t.datetime "created_at", null: false
@@ -41,7 +41,7 @@ ActiveRecord::Schema.define(version: 20180314131941) do
     t.string "statement_uuid"
     t.string "parliamentary_group_item"
     t.string "electoral_district_item"
-    t.string "parliamentary_term_item", null: false
+    t.string "parliamentary_term_item"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.string "person_name"
@@ -49,6 +49,8 @@ ActiveRecord::Schema.define(version: 20180314131941) do
     t.string "electoral_district_name"
     t.string "fb_identifier"
     t.boolean "duplicate", default: false
+    t.bigint "page_id"
+    t.index ["page_id"], name: "index_statements_on_page_id"
   end
 
   create_table "verifications", force: :cascade do |t|
@@ -61,4 +63,5 @@ ActiveRecord::Schema.define(version: 20180314131941) do
   end
 
   add_foreign_key "reconciliations", "statements"
+  add_foreign_key "statements", "pages"
 end

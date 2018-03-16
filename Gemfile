@@ -40,6 +40,7 @@ gem 'id-mapper', github: 'mysociety/id-mapper'
 
 group :development, :test do
   gem 'dotenv-rails', '~> 0.7.0'
+  gem 'factory_bot_rails', '~> 4.8.2'
   gem 'foreman', '~> 0.64.0'
   gem 'rails-controller-testing', '~> 1.0.2'
   gem 'rspec-rails', '~> 3.7'

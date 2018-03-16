@@ -1,8 +1,5 @@
 <div id="verification-tool">
-  <div v-if="loaded && currentStatements.length === 0">
-    No statements
-  </div>
-  <div v-if="loaded && currentStatements.length > 0">
+  <div v-if="loaded">
     <button v-on:click="prevStatement()" class="mw-ui-button">Previous</button>
     <button v-on:click="nextStatement()" class="mw-ui-button">Next</button>
     <span style="float: right;">
@@ -21,6 +18,11 @@
       <input v-model:number="displayIndex" type="number" style="width: 40px;">
       of {{ currentStatements.length }}
     </span>
+  </div>
+  <div v-if="loaded && currentStatements.length === 0">
+    No statements
+  </div>
+  <div v-if="loaded && currentStatements.length > 0">
     <table style="width: 100%; margin-top: 1em; border: 1px solid #ccc; border-collapse: collapse; table-layout: fixed;">
       <tr>
         <td style="padding: 1em;">

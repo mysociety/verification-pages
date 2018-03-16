@@ -17,8 +17,47 @@ export default template({
       submitting: false,
       statements: [],
       statementIndex: 0,
-      displayIndex: 1,
+      displayType: 'all',
       page: null
+    }
+  },
+  watch: {
+    statementIndex: function (newVal) {
+      if (newVal < 0) {
+        this.statementIndex = this.currentStatements.length - 1
+      } else {
+        this.statementIndex = newVal % this.currentStatements.length
+      }
+      this.$emit('statement-changed')
+    }
+  },
+  computed: {
+    currentView: function () {
+      switch (this.statement.type) {
+        case 'verifiable': return verifiableComponent
+        case 'unverifiable': return unverifiableComponent
+        case 'reconcilable': return reconcilableComponent
+        case 'actionable': return actionableComponent
+        case 'manually_actionable': return manuallyActionableComponent
+        case 'done': return doneComponent
+      }
+    },
+    statement: function () {
+      const statement = this.currentStatements[this.statementIndex]
+      if (statement) return statement
+      this.statementIndex = this.currentStatements.length - 1
+      return this.currentStatements[this.statementIndex]
+    },
+    currentStatements: function () {
+      if (this.displayType !== 'all') {
+        return this.statements.filter(s => s.type === this.displayType)
+      } else {
+        return this.statements
+      }
+    },
+    displayIndex: {
+      get: function () { return this.statementIndex + 1 },
+      set: function (val) { this.statementIndex = val - 1 }
     }
   },
   created: function () {
@@ -39,19 +78,6 @@ export default template({
     })
   },
   methods: {
-    currentView () {
-      switch (this.statement().type) {
-        case 'verifiable': return verifiableComponent
-        case 'unverifiable': return unverifiableComponent
-        case 'reconcilable': return reconcilableComponent
-        case 'actionable': return actionableComponent
-        case 'manually_actionable': return manuallyActionableComponent
-        case 'done': return doneComponent
-      }
-    },
-    statement: function () {
-      return this.statements[this.statementIndex]
-    },
     loadStatements: function () {
       Axios.get(ENV.url + '/statements.json', {
         params: { title: wikidataClient.page }
@@ -63,23 +89,10 @@ export default template({
       })
     },
     prevStatement: function () {
-      this.$emit('statement-changed')
-      this.statementIndex = Math.max(this.statementIndex - 1, 0)
-      this.displayIndex = this.statementIndex + 1
+      this.statementIndex = this.statementIndex - 1
     },
     nextStatement: function () {
-      this.$emit('statement-changed')
-      this.statementIndex = (this.statementIndex + 1) % this.statements.length
-      this.displayIndex = this.statementIndex + 1
-    },
-    goToStatement: function () {
-      this.$emit('statement-changed')
-      var newIndex = parseInt(this.displayIndex) - 1
-      newIndex = Math.max(Math.min(newIndex, this.statements.length - 1), 0)
-      if (!isNaN(newIndex)) {
-        this.statementIndex = newIndex
-        this.displayIndex = this.statementIndex + 1
-      }
+      this.statementIndex = this.statementIndex + 1
     }
   }
 })

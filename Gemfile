@@ -35,6 +35,8 @@ gem 'webpacker', '~> 3.2'
 gem 'pry'
 # redis for cache store
 gem 'redis-rails'
+# ID Mapper
+gem 'id-mapper', github: 'mysociety/id-mapper'
 
 group :development, :test do
   gem 'dotenv-rails', '~> 0.7.0'

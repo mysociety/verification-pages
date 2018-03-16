@@ -6,7 +6,8 @@ class StatementClassifier
 
   def initialize(page_title, transaction_id = nil)
     @page = Page.find_by!(title: page_title)
-    @statements = page.statements.includes(:verifications)
+    @statements = page.statements.original
+                      .includes(:verifications)
                       .references(:verifications)
                       .order(:id)
     @transaction_id = transaction_id

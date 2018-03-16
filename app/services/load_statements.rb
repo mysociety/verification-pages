@@ -34,7 +34,7 @@ class LoadStatements < ServiceBase
 
   def raw_data
     uri = URI(ENV.fetch('SUGGESTIONS_STORE_URL'))
-    uri.path = "/export/#{params.country}/#{params.position}.json"
+    uri.path = "/export/#{params.country}/#{page.position_held_item}.json"
     RestClient.get(uri.to_s)
   rescue RestClient::Exception => e
     raise "Suggestion store failed: #{e.message}"

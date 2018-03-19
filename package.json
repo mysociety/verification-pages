@@ -2,6 +2,7 @@
   "name": "verification-pages",
   "private": true,
   "devDependencies": {
+    "cypress": "^2.1.0",
     "webpack-dev-server": "^2.11.1"
   },
   "dependencies": {

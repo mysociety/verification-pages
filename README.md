@@ -73,3 +73,13 @@ made directly on Wikidata__
 The test suite can run by:
 
     rspec
+
+## Troubleshooting
+
+If `foreman start` just exits with:
+
+    18:16:08 web.1       | exited with code 1
+    18:16:08 system      | sending SIGTERM to all processes
+    18:16:08 webpacker.1 | terminated by SIGTERM
+
+... try running `rails server` to see the error message.

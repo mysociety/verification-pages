@@ -123,6 +123,7 @@ GEM
     minitest (5.11.3)
     multi_json (1.13.1)
     multipart-post (2.0.0)
+    mysql2 (0.4.10)
     netrc (0.11.0)
     nio4r (2.2.0)
     nokogiri (1.8.2)
@@ -130,7 +131,6 @@ GEM
     parallel (1.12.1)
     parser (2.4.0.2)
       ast (~> 2.3)
-    pg (0.21.0)
     powerpack (0.1.1)
     pry (0.11.3)
       coderay (~> 1.1.0)
@@ -295,7 +295,7 @@ DEPENDENCIES
   jbuilder (~> 2.5)
   listen (>= 3.0.5, < 3.2)
   mediawiki_api
-  pg (~> 0.18)
+  mysql2 (>= 0.3.18, < 0.5)
   pry
   pry-rails
   puma (~> 3.7)

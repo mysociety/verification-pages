@@ -478,14 +478,19 @@ var wikidata = function(spec) {
         }}),
           titles = searchResults.map(function(result) { return result.title });
       allResults.fromWikipedia = searchResults;
-      // Get any Wikidata items associated with those titles from
-      // sitelinks:
-      return that.ajaxAPIBasic({
-        action: 'wbgetentities',
-        props: 'sitelinks',
-        titles: titles.join('|'),
-        sites: site,
-      });
+      if (searchResults.length > 0) {
+        // Get any Wikidata items associated with those titles from
+        // sitelinks:
+        return that.ajaxAPIBasic({
+          action: 'wbgetentities',
+          props: 'sitelinks',
+          titles: titles.join('|'),
+          sites: site,
+        });
+      } else {
+        // Otherwise pass on empty results:
+        return Promise.resolve({entities: []});
+      }
     }).then(function (sitelinksData) {
       var titleToWikidataItem = {};
       checkForError(sitelinksData);

@@ -14,9 +14,7 @@ Follow these steps to clone and install the application:
 
     git clone https://github.com/mysociety/verification-pages.git
     cd verification-pages
-    bundle install
-    rails db:setup
-    yarn install
+    bin/setup
 
 ## Configuration
 

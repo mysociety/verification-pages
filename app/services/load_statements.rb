@@ -14,7 +14,6 @@ class LoadStatements < ServiceBase
       statement.update_attributes(
         page: page,
         person_name: result[:person_name],
-        parliamentary_term_item: page.parliamentary_term_item,
         electoral_district_name: result[:electoral_district_name],
         electoral_district_item: result[:electoral_district_item],
         fb_identifier: result[:fb_identifier]

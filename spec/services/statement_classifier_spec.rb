@@ -39,7 +39,7 @@ RSpec.describe StatementClassifier, type: :service do
   describe 'statement classification' do
     let(:data) do
       { person_item: '',
-        parliamentary_term_item: 'Q2',
+        page: Page.new(parliamentary_term_item: 'Q2'),
         parliamentary_group_item: 'Q3',
         electoral_district_item: 'Q4' }
     end

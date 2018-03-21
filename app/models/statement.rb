@@ -13,6 +13,8 @@ class Statement < ApplicationRecord
   before_create :detect_duplicate_statements, :retrieve_wikidata_id
   after_create :verify_duplicate!, if: :duplicate?
 
+  delegate :parliamentary_term_item, to: :page
+
   def latest_verification
     verifications.last
   end
@@ -45,7 +47,6 @@ class Statement < ApplicationRecord
   def duplicate_statements
     Statement.where(
       person_name: person_name,
-      parliamentary_term_item: parliamentary_term_item,
       electoral_district_name: electoral_district_name,
       electoral_district_item: electoral_district_item,
       fb_identifier: fb_identifier

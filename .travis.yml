@@ -9,6 +9,7 @@ env:
   - RAILS_ENV=test
 before_install:
   - gem update --system
+  - cp config/database.yml.sample config/database.yml
 script:
   - bundle exec rake db:create db:schema:load db:test:prepare
   - bundle exec rspec --color --format documentation

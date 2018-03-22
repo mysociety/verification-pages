@@ -32,4 +32,12 @@ RSpec.describe Statement, type: :model do
       expect(statement.errors).to include(:transaction_id)
     end
   end
+
+  describe 'delegations' do
+    it 'delegates #parliamentary_term_item to page association' do
+      allow(statement).to receive(:page)
+        .and_return(double(:page, parliamentary_term_item: 'Q1'))
+      expect(statement.parliamentary_term_item).to eq('Q1')
+    end
+  end
 end

@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20180315160340) do
+ActiveRecord::Schema.define(version: 20180321173159) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -41,7 +41,6 @@ ActiveRecord::Schema.define(version: 20180315160340) do
     t.string "statement_uuid"
     t.string "parliamentary_group_item"
     t.string "electoral_district_item"
-    t.string "parliamentary_term_item"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.string "person_name"

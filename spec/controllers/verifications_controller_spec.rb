@@ -34,5 +34,16 @@ RSpec.describe VerificationsController, type: :controller do
       post :create, params: valid_attributes
       expect(response).to render_template('statements/index')
     end
+
+    it 'can correct the name of the person if supplied' do
+      valid_attributes_new_name = {
+        id: '456', user: 'ExampleUser', status: 'true', new_name: 'Joseph Bloggs', format: 'json'
+      }
+      expect(Statement).to receive(:find_by!).with(transaction_id: '456')
+      expect(statement).to receive(:update_attributes).with(person_name: 'Joseph Bloggs')
+      post :create, params: valid_attributes_new_name
+      expect(relation).to have_received(:create!)
+        .with('user' => 'ExampleUser', 'status' => 'true', 'new_name' => 'Joseph Bloggs')
+    end
   end
 end

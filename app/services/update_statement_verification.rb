@@ -17,6 +17,7 @@ class UpdateStatementVerification < ServiceBase
   private
 
   def status
-    verification.status? ? 'correct' : 'incorrect'
+    return 'incorrect' unless verification.status?
+    verification.new_name ? 'corrected' : 'correct'
   end
 end

@@ -3,10 +3,11 @@
 require 'rails_helper'
 
 RSpec.describe UpdateStatementVerification, type: :service do
+  let(:new_name) { nil }
   let(:status) { true }
   let(:statement) { double(:statement, transaction_id: '123') }
   let(:verification) do
-    double(:verification, statement: statement, status?: status)
+    double(:verification, statement: statement, status?: status, new_name: new_name)
   end
 
   let(:updater) { UpdateStatementVerification.new(verification) }
@@ -39,6 +40,18 @@ RSpec.describe UpdateStatementVerification, type: :service do
         expect(RestClient).to receive(:post)
           .with('http://example.com/suggestions/123/verifications',
                 status: 'incorrect')
+        updater.run
+      end
+    end
+
+    context 'name has been corrected' do
+      let(:status) { true }
+      let(:new_name) { 'Joseph Bloggs' }
+
+      it 'posts corrected to the suggestions store' do
+        expect(RestClient).to receive(:post)
+          .with('http://example.com/suggestions/123/verifications',
+                status: 'corrected')
         updater.run
       end
     end

@@ -13,6 +13,6 @@ class VerificationsController < FrontendController
   private
 
   def verification_params
-    params.permit(%i[user status])
+    params.permit(%i[user status new_name])
   end
 end

@@ -6,12 +6,12 @@
       Type
       <select v-model="displayType">
         <option value="all">Show all ({{ countStatementsOfType('all') }})</option>
-        <option value="verifiable">Verifiable ({{ countStatementsOfType('verifiable') }})</option>
-        <option value="unverifiable">Unverifiable ({{ countStatementsOfType('unverifiable') }})</option>
-        <option value="reconcilable">Reconcilable ({{ countStatementsOfType('reconcilable') }})</option>
-        <option value="actionable">Actionable ({{ countStatementsOfType('actionable') }})</option>
-        <option value="manually_actionable">Manually actionable ({{ countStatementsOfType('manually_actionable') }})</option>
-        <option value="done">Done ({{ countStatementsOfType('done') }})</option>
+        <option value="verifiable" v-bind:disabled="countStatementsOfType('verifiable') === 0">Verifiable ({{ countStatementsOfType('verifiable') }})</option>
+        <option value="unverifiable" v-bind:disabled="countStatementsOfType('unverifiable') === 0">Unverifiable ({{ countStatementsOfType('unverifiable') }})</option>
+        <option value="reconcilable" v-bind:disabled="countStatementsOfType('reconcilable') === 0">Reconcilable ({{ countStatementsOfType('reconcilable') }})</option>
+        <option value="actionable" v-bind:disabled="countStatementsOfType('actionable') === 0">Actionable ({{ countStatementsOfType('actionable') }})</option>
+        <option value="manually_actionable" v-bind:disabled="countStatementsOfType('manually_actionable') === 0">Manually actionable ({{ countStatementsOfType('manually_actionable') }})</option>
+        <option value="done" v-bind:disabled="countStatementsOfType('done') === 0">Done ({{ countStatementsOfType('done') }})</option>
       </select>
       &nbsp;&nbsp;
       Statement

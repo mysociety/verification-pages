@@ -1,3 +1,14 @@
+$color_mid_blue: #2980b9;
+$color_pale_blue: #e2f0f9;
+$color_mid_orange: #ec920c;
+$color_pale_orange: #f9f3e2;
+$color_mid_red: #b92929;
+$color_pale_red: #f9e2e2;
+$color_mid_green: #50b929;
+$color_pale_green: #e6f9e2;
+$color_mid_grey: #999;
+$color_pale_grey: #eee;
+
 .verification-tool__blank-slate {
     text-align: center;
     margin-top: 1em; // same margin-top as on the table
@@ -33,4 +44,25 @@
   20% {
     transform: scaleY(1.0);
   }
+}
+
+.verification-tool__statement-controls {
+    padding: 0.5em 1em;
+    border-bottom: 3px solid $color_mid_blue;
+    background: $color_pale_blue;
+}
+
+.verification-tool__statement-controls--unverifiable {
+    border-color: $color_mid_red;
+    background-color: $color_pale_red;
+}
+
+.verification-tool__statement-controls--done {
+    border-color: $color_mid_green;
+    background-color: $color_pale_green;
+}
+
+.verification-tool__statement-controls--manually_actionable {
+    border-color: $color_mid_grey;
+    background-color: $color_pale_grey;
 }

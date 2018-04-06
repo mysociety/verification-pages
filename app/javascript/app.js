@@ -1,7 +1,7 @@
 import ENV from './env'
 import Axios from 'axios'
 import wikidataClient from './wikiapi'
-import template from './app.html'
+import template from './app.html?style=./app.css'
 
 import verifiableComponent from './components/verifiable'
 import unverifiableComponent from './components/unverifiable'

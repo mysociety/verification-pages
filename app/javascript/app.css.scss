@@ -1,0 +1,35 @@
+.verification-tool__blank-slate {
+    text-align: center;
+    padding: 3em;
+    border: 1px solid #ccc;
+}
+
+.verification-tool__spinner {
+    display: inline-block;
+    margin: 0 0.5em;
+    height: 1em;
+    vertical-align: -0.1em;
+
+    span {
+        display: inline-block;
+        height: 100%;
+        width: 5px;
+        background: #000;
+        animation: stretchdelay 1s infinite ease-in-out;
+
+        @for $i from 1 through 3 {
+            &:nth-child(#{$i}) {
+                animation-delay: (-1s + ($i / 10));
+            }
+        }
+    }
+}
+
+@keyframes stretchdelay {
+  0%, 40%, 100% {
+    transform: scaleY(0.4);
+  }
+  20% {
+    transform: scaleY(1.0);
+  }
+}

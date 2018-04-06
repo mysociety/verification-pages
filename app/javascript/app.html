@@ -19,7 +19,7 @@
       of {{ currentStatements.length }}
     </span>
   </div>
-  <div v-if="loaded && currentStatements.length === 0">
+  <div v-if="loaded && currentStatements.length === 0" class="verification-tool__blank-slate">
     No statements
   </div>
   <div v-if="loaded && currentStatements.length > 0">
@@ -58,7 +58,12 @@
       </tr>
     </table>
   </div>
-  <div v-if="!loaded">
-    Loading...
+  <div v-if="!loaded" class="verification-tool__blank-slate">
+    <span class="verification-tool__spinner">
+        <span></span>
+        <span></span>
+        <span></span>
+    </span>
+    Loading…
   </div>
 </div>

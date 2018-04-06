@@ -20,7 +20,12 @@
     </span>
   </div>
   <div v-if="loaded && currentStatements.length === 0" class="verification-tool__blank-slate">
-    No statements
+    <div v-if="displayType === 'all'">
+      No statements
+    </div>
+    <div v-else>
+      No “{{ displayType }}” statements – <a v-on:click="displayType = 'all'">Try showing all statements</a>
+    </div>
   </div>
   <div v-if="loaded && currentStatements.length > 0">
     <table style="width: 100%; margin-top: 1em; border: 1px solid #ccc; border-collapse: collapse; table-layout: fixed;">

@@ -5,13 +5,13 @@
     <span style="float: right;">
       Type
       <select v-model="displayType">
-        <option value='all'>Show all</option>
-        <option>verifiable</option>
-        <option>unverifiable</option>
-        <option>reconcilable</option>
-        <option>actionable</option>
-        <option>manually_actionable</option>
-        <option>done</option>
+        <option value="all">Show all ({{ countStatementsOfType('all') }})</option>
+        <option value="verifiable">Verifiable ({{ countStatementsOfType('verifiable') }})</option>
+        <option value="unverifiable">Unverifiable ({{ countStatementsOfType('unverifiable') }})</option>
+        <option value="reconcilable">Reconcilable ({{ countStatementsOfType('reconcilable') }})</option>
+        <option value="actionable">Actionable ({{ countStatementsOfType('actionable') }})</option>
+        <option value="manually_actionable">Manually actionable ({{ countStatementsOfType('manually_actionable') }})</option>
+        <option value="done">Done ({{ countStatementsOfType('done') }})</option>
       </select>
       &nbsp;&nbsp;
       Statement

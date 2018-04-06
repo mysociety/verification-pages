@@ -93,6 +93,13 @@ export default template({
     },
     nextStatement: function () {
       this.statementIndex = this.statementIndex + 1
+    },
+    countStatementsOfType: function (type) {
+      if (type !== 'all') {
+        return this.statements.filter(s => s.type === type).length
+      } else {
+        return this.statements.length
+      }
     }
   }
 })

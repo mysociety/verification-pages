@@ -9,6 +9,20 @@ $color_pale_green: #e6f9e2;
 $color_mid_grey: #999;
 $color_pale_grey: #eee;
 
+@mixin clearfix() {
+    zoom: 1;
+
+    &:before,
+    &:after {
+        content: "";
+        display: table;
+    }
+
+    &:after {
+        clear: both;
+    }
+}
+
 .verification-tool__table,
 .verification-tool__blank-slate {
     margin-top: 1em;
@@ -65,6 +79,22 @@ $color_pale_grey: #eee;
     font-size: 0.8em;
     font-weight: bold;
     display: block;
+}
+
+.verification-tool__controls {
+    @include clearfix();
+    margin: 0 -0.5em -0.5em -0.5em;
+
+    // Compensate for vertical padding on buttons.
+    .mw-ui-button {
+        margin-top: -0.546875em;
+        margin-bottom: -0.546875em;
+    }
+}
+
+.verification-tool__controls__group {
+    float: left;
+    padding: 1em 0.5em;
 }
 
 .verification-tool__statement-controls {

@@ -1,23 +1,38 @@
 <div id="verification-tool">
-  <div v-if="loaded">
-    <button v-on:click="prevStatement()" class="mw-ui-button">Previous</button>
-    <button v-on:click="nextStatement()" class="mw-ui-button">Next</button>
-    <span style="float: right;">
-      Type
-      <select v-model="displayType">
+  <div v-if="loaded" class="verification-tool__controls">
+    <div class="verification-tool__controls__group">
+      <label for="displayType">Type</label>
+      <select v-model="displayType" id="displayType">
         <option value="all">Show all ({{ countStatementsOfType('all') }})</option>
-        <option value="verifiable" v-bind:disabled="countStatementsOfType('verifiable') === 0">Verifiable ({{ countStatementsOfType('verifiable') }})</option>
-        <option value="unverifiable" v-bind:disabled="countStatementsOfType('unverifiable') === 0">Unverifiable ({{ countStatementsOfType('unverifiable') }})</option>
-        <option value="reconcilable" v-bind:disabled="countStatementsOfType('reconcilable') === 0">Reconcilable ({{ countStatementsOfType('reconcilable') }})</option>
-        <option value="actionable" v-bind:disabled="countStatementsOfType('actionable') === 0">Actionable ({{ countStatementsOfType('actionable') }})</option>
-        <option value="manually_actionable" v-bind:disabled="countStatementsOfType('manually_actionable') === 0">Manually actionable ({{ countStatementsOfType('manually_actionable') }})</option>
-        <option value="done" v-bind:disabled="countStatementsOfType('done') === 0">Done ({{ countStatementsOfType('done') }})</option>
+        <option value="verifiable" v-bind:disabled="countStatementsOfType('verifiable') === 0">
+          Verifiable ({{ countStatementsOfType('verifiable') }})
+        </option>
+        <option value="unverifiable" v-bind:disabled="countStatementsOfType('unverifiable') === 0">
+          Unverifiable ({{ countStatementsOfType('unverifiable') }})
+        </option>
+        <option value="reconcilable" v-bind:disabled="countStatementsOfType('reconcilable') === 0">
+          Reconcilable ({{ countStatementsOfType('reconcilable') }})
+        </option>
+        <option value="actionable" v-bind:disabled="countStatementsOfType('actionable') === 0">
+          Actionable ({{ countStatementsOfType('actionable') }})
+        </option>
+        <option value="manually_actionable" v-bind:disabled="countStatementsOfType('manually_actionable') === 0">
+          Manually actionable ({{ countStatementsOfType('manually_actionable') }})
+        </option>
+        <option value="done" v-bind:disabled="countStatementsOfType('done') === 0">
+          Done ({{ countStatementsOfType('done') }})
+        </option>
       </select>
-      &nbsp;&nbsp;
-      Statement
-      <input v-model:number="displayIndex" type="number" style="width: 40px;">
+    </div>
+    <div class="verification-tool__controls__group" style="float: right;">
+      <button v-on:click="prevStatement()" class="mw-ui-button">Previous</button>
+      <button v-on:click="nextStatement()" class="mw-ui-button">Next</button>
+    </div>
+    <div class="verification-tool__controls__group" style="float: right;">
+      <label for="displayIndex">Statement</label>
+      <input v-model:number="displayIndex" type="number" style="width: 4em;" id="displayIndex">
       of {{ currentStatements.length }}
-    </span>
+    </div>
   </div>
   <div v-if="loaded && currentStatements.length === 0" class="verification-tool__blank-slate">
     <div v-if="displayType === 'all'">

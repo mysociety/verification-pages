@@ -28,26 +28,26 @@
     </div>
   </div>
   <div v-if="loaded && currentStatements.length > 0">
-    <table style="width: 100%; margin-top: 1em; border: 1px solid #ccc; border-collapse: collapse; table-layout: fixed;">
+    <table class="verification-tool__table">
       <tr>
-        <td style="padding: 1em;">
-          <span style="font-size: 0.8em; font-weight: bold; display: block;">Subject</span>
+        <td>
+          <span class="verification-tool__table__cell-label">Subject</span>
           <wikilink :id="statement.person_item">{{ statement.person_name }}</wikilink>
         </td>
-        <td style="padding: 1em;">
-          <span style="font-size: 0.8em; font-weight: bold; display: block;">District</span>
+        <td>
+          <span class="verification-tool__table__cell-label">District</span>
           <wikilink :id="statement.electoral_district_item">{{ statement.electoral_district_name || '&nbsp;' }}</wikilink>
         </td>
-        <td style="padding: 1em;">
-          <span style="font-size: 0.8em; font-weight: bold; display: block;">Parliamentary group</span>
+        <td>
+          <span class="verification-tool__table__cell-label">Parliamentary group</span>
           <wikilink :id="statement.parliamentary_group_item">{{ statement.parliamentary_group_name || '&nbsp;' }}</wikilink>
         </td>
-        <td style="padding: 1em;">
-          <span style="font-size: 0.8em; font-weight: bold; display: block;">Type</span>
+        <td>
+          <span class="verification-tool__table__cell-label">Type</span>
           {{ statement.type }}
         </td>
-        <td style="padding: 1em;">
-          <span style="font-size: 0.8em; font-weight: bold; display: block;">Transaction ID</span>
+        <td>
+          <span class="verification-tool__table__cell-label">Transaction ID</span>
           {{ statement.transaction_id }}
         </td>
       </tr>

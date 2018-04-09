@@ -9,11 +9,25 @@ $color_pale_green: #e6f9e2;
 $color_mid_grey: #999;
 $color_pale_grey: #eee;
 
+.verification-tool__table,
+.verification-tool__blank-slate {
+    margin-top: 1em;
+    border: 1px solid #ccc;
+}
+
+.verification-tool__table {
+    width: 100%;
+    border-collapse: collapse;
+    table-layout: fixed;
+
+    td {
+        padding: 1em;
+    }
+}
+
 .verification-tool__blank-slate {
     text-align: center;
-    margin-top: 1em; // same margin-top as on the table
     padding: 3em;
-    border: 1px solid #ccc;
 }
 
 .verification-tool__spinner {
@@ -44,6 +58,12 @@ $color_pale_grey: #eee;
   20% {
     transform: scaleY(1.0);
   }
+}
+
+.verification-tool__table__cell-label {
+    font-size: 0.8em;
+    font-weight: bold;
+    display: block;
 }
 
 .verification-tool__statement-controls {

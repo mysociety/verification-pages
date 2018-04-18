@@ -13,13 +13,15 @@ class UpdateVerificationTemplates < ServiceBase
 
   def run
     templates.each do |template|
-      template_name = "#{page_title}/#{template.basename('.mediawiki.erb')}"
-      print "Updating #{template_name}... "
-      client.create_page(template_name, render(template))
-    rescue MediawikiApi::ApiError => ex
-      puts "error (#{ex.message})"
-    else
-      puts 'done'
+      begin
+        template_name = "#{page_title}/#{template.basename('.mediawiki.erb')}"
+        print "Updating #{template_name}... "
+        client.create_page(template_name, render(template))
+      rescue MediawikiApi::ApiError => ex
+        puts "error (#{ex.message})"
+      else
+        puts 'done'
+      end
     end
   end
 

@@ -37,6 +37,8 @@ gem 'pry'
 gem 'redis-rails'
 # ID Mapper
 gem 'id-mapper', github: 'mysociety/id-mapper'
+# Javascript runtime
+gem 'mini_racer'
 
 group :development, :test do
   gem 'dotenv-rails', '~> 0.7.0'

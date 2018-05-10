@@ -8,6 +8,11 @@ class CreateVerification < ServiceBase
   def run
     statement.verifications.create!(params)
 
+    # Find duplicate statements and update their verifications
+    statement.duplicate_statements.each do |duplicate_statement|
+      duplicate_statement.verifications.create!(params)
+    end
+
     # If there was a correction to the name, save that on the
     # statement so it'll be used for reconciliation and actioning:
     statement.update_attributes(person_name: params[:new_name]) if params[:new_name]

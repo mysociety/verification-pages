@@ -34,6 +34,15 @@ class Statement < ApplicationRecord
     Rails.cache.write(force_type_key, type, expires_in: 5.minutes)
   end
 
+  def duplicate_statements
+    Statement.where(
+      person_name: person_name,
+      electoral_district_name: electoral_district_name,
+      electoral_district_item: electoral_district_item,
+      fb_identifier: fb_identifier
+    ).where.not(id: id).order(created_at: :asc)
+  end
+
   private
 
   def force_type_key
@@ -42,15 +51,6 @@ class Statement < ApplicationRecord
 
   def detect_duplicate_statements
     self.duplicate ||= duplicate_statements.present?
-  end
-
-  def duplicate_statements
-    Statement.where(
-      person_name: person_name,
-      electoral_district_name: electoral_district_name,
-      electoral_district_item: electoral_district_item,
-      fb_identifier: fb_identifier
-    ).where.not(id: id).order(created_at: :asc)
   end
 
   def verify_duplicate!

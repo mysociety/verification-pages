@@ -2,13 +2,7 @@ require 'rails_helper'
 
 RSpec.describe "countries/edit", type: :view do
   before(:each) do
-    @country = assign(:country, Country.create!(
-      :name => "MyString",
-      :code => "MyString",
-      :description_en => "MyString",
-      :label_lang => "MyString",
-      :wikidata_id => "MyString"
-    ))
+    @country = assign(:country, create(:country))
   end
 
   it "renders the edit country form" do

@@ -2,13 +2,7 @@ require 'rails_helper'
 
 RSpec.describe "countries/new", type: :view do
   before(:each) do
-    assign(:country, Country.new(
-      :name => "MyString",
-      :code => "MyString",
-      :description_en => "MyString",
-      :label_lang => "MyString",
-      :wikidata_id => "MyString"
-    ))
+    assign(:country, build(:country))
   end
 
   it "renders new country form" do

@@ -1,9 +1,9 @@
 FactoryBot.define do
   factory :country do
-    name "MyString"
-    code "MyString"
-    description_en "MyString"
-    label_lang "MyString"
-    wikidata_id "MyString"
+    name "Canada"
+    code "ca"
+    description_en "Canadian politician"
+    label_lang "en"
+    wikidata_id "Q16"
   end
 end

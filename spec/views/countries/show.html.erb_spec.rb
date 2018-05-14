@@ -2,21 +2,15 @@ require 'rails_helper'
 
 RSpec.describe "countries/show", type: :view do
   before(:each) do
-    @country = assign(:country, Country.create!(
-      :name => "Name",
-      :code => "Code",
-      :description_en => "Description En",
-      :label_lang => "Label Lang",
-      :wikidata_id => "Wikidata"
-    ))
+    @country = assign(:country, create(:country))
   end
 
   it "renders attributes in <p>" do
     render
-    expect(rendered).to match(/Name/)
-    expect(rendered).to match(/Code/)
-    expect(rendered).to match(/Description En/)
-    expect(rendered).to match(/Label Lang/)
-    expect(rendered).to match(/Wikidata/)
+    expect(rendered).to match(/Canada/)
+    expect(rendered).to match(/ca/)
+    expect(rendered).to match(/Canadian politician/)
+    expect(rendered).to match(/en/)
+    expect(rendered).to match(/Q16/)
   end
 end

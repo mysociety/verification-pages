@@ -29,11 +29,23 @@ RSpec.describe CountriesController, type: :controller do
   # Country. As you add validations to Country, be sure to
   # adjust the attributes here as well.
   let(:valid_attributes) {
-    skip("Add a hash of attributes valid for your model")
+    {
+      name: 'Canada',
+      code: 'ca',
+      description_en: 'Canadian Politican',
+      label_lang: 'en',
+      wikidata_id: 'Q38',
+    }
   }
 
   let(:invalid_attributes) {
-    skip("Add a hash of attributes invalid for your model")
+    {
+      name: '',
+      code: 'werr',
+      description_en: '',
+      label_lang: 'en_us',
+      wikidata_id: '1234',
+    }
   }
 
   # This should return the minimal set of values that should be in the session
@@ -97,14 +109,21 @@ RSpec.describe CountriesController, type: :controller do
   describe "PUT #update" do
     context "with valid params" do
       let(:new_attributes) {
-        skip("Add a hash of attributes valid for your model")
+        {
+          name: 'Canada',
+          code: 'ca',
+          description_en: 'Canadian politican',
+          label_lang: 'en-ca',
+          wikidata_id: 'Q38',
+        }
       }
 
       it "updates the requested country" do
         country = Country.create! valid_attributes
         put :update, params: {id: country.to_param, country: new_attributes}, session: valid_session
         country.reload
-        skip("Add assertions for updated state")
+        expect(country.description_en).to eq('Canadian politican')
+        expect(country.label_lang).to eq('en-ca')
       end
 
       it "redirects to the country" do

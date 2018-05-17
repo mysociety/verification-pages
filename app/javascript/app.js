@@ -84,6 +84,7 @@ export default template({
       }).then(response => {
         this.statements = response.data.statements
         this.page = response.data.page
+        this.country = response.data.country
       }).then(() => {
         this.loaded = true
       })

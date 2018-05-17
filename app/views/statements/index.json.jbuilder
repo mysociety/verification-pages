@@ -14,3 +14,5 @@ json.statements @classifier.to_a,
   :electoral_district_name
 
 json.page @classifier.page, :reference_url, :position_held_item
+
+json.country @classifier.page.country

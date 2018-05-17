@@ -69,7 +69,7 @@
       <tr>
         <td colspan="5" v-bind:class="'verification-tool__statement-controls verification-tool__statement-controls--' + statement.type">
           <span v-if="!submitting">
-            <component v-bind:is="currentView" :statement="statement" :page="page"></component>
+            <component v-bind:is="currentView" :statement="statement" :page="page" :country="country"></component>
           </span>
           <span v-else>
             Submitting...

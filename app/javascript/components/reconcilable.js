@@ -9,7 +9,7 @@ export default template({
     searchResultsLoaded: false,
     searchResults: null,
   } },
-  props: ['statement'],
+  props: ['statement', 'country'],
   created: function () {
     this.$parent.$on('statement-changed', () => {
       this.searchResultsLoading = false
@@ -39,12 +39,12 @@ export default template({
     createPerson: function() {
       wikidataClient.createPerson(
         {
-          lang: 'en',
+          lang: this.country.label_lang,
           value: this.statement.person_name,
         },
         {
           lang: 'en',
-          value: 'Canadian politician',
+          value: this.country.description_en,
         },
       ).then(createdItemData => {
         this.reconcileWithItem(createdItemData.item);

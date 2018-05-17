@@ -3,6 +3,7 @@
 # Verification page object
 class Page < ApplicationRecord
   has_many :statements
+  belongs_to :country
 
   validates :title, presence: true
   validates :position_held_item, presence: true

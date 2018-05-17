@@ -1,6 +1,8 @@
 # frozen_string_literal: true
 
 class Country < ApplicationRecord
+  has_many :pages
+
   validates :name, presence: true
   validates :code, presence: true, length: { in: 2..3 }
   validates :description_en, presence: true

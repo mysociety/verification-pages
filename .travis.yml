@@ -7,6 +7,8 @@ rvm:
   - 2.5.0
 env:
   - RAILS_ENV=test
+before_install:
+  - gem update --system
 script:
   - bundle exec rake db:create db:schema:load db:test:prepare
   - bundle exec rspec --color --format documentation

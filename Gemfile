@@ -49,6 +49,7 @@ group :development, :test do
   # console
   gem 'byebug', platforms: %i[mri mingw x64_mingw]
   gem 'webmock'
+  gem 'pry-rails'
 end
 
 group :development do

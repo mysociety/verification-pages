@@ -74,6 +74,21 @@ The test suite can run by:
 
     rspec
 
+## Console
+
+The Rails console allows you to play with the application's objects from the
+command line. Run the following to start a console:
+
+    rails console
+
+## Debugging
+
+If you need to debug part of the application drop a `binding.pry` call into the
+code, when the code is executed, e.g. by visiting a URL that uses the code in
+a browser, it will pause at the `binding.pry` call and drop you into a console
+where you can inspect the current execution environment. See the [pry
+docs](https://github.com/pry/pry) for more information.
+
 ## Troubleshooting
 
 If `foreman start` just exits with:

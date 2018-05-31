@@ -8,6 +8,10 @@ class StatementsController < FrontendController
     end
   end
 
+  def statistics
+    @country_statements = StatementsStatistics.new.statistics
+  end
+
   def show
     statement = Statement.find_by!(transaction_id: params.fetch(:id))
     statement.force_type!(params[:force_type]) if params[:force_type]

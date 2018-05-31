@@ -1,0 +1,25 @@
+<% @country_statements.each do |country_code, statements| %>
+  <h2><%= country_code %></h2>
+  <table class="wikitable">
+    <thead>
+      <tr>
+        <th>Wikidata position</th>
+        <th>Page exists</th>
+        <th>Unchecked</th>
+        <th>Correct</th>
+        <th>Incorrect</th>
+      </tr>
+    </thead>
+    <tbody>
+      <% statements.each do |statement| %>
+      <tr>
+        <td><%= link_to statement.position, "https://www.wikidata.org/wiki/#{statement.position}" %></td>
+        <td><%= statement.page_exists %></td>
+        <td><%= statement.unchecked %></td>
+        <td><%= statement.correct %></td>
+        <td><%= statement.incorrect %></td>
+      </tr>
+    <% end %>
+    </tbody>
+  </table>
+<% end %>

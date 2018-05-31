@@ -6,7 +6,11 @@ Rails.application.routes.draw do
   resources :pages
 
   # Frontend
-  resources :statements, only: %i[index show]
+  resources :statements, only: %i[index show] do
+    collection do
+      get 'statistics'
+    end
+  end
   resources :verifications, only: %i[create]
   resources :reconciliations, only: %i[create]
 

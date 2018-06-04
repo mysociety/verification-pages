@@ -110,6 +110,8 @@ class StatementClassifier
   end
 
   def position_data_for_statement(statement)
-    position_held_data.detect { |data| data.person == statement.person_item }
+    position_held_data.detect { |data|
+      [data.person, data.merged_then_deleted].include?(statement.person_item)
+    }
   end
 end

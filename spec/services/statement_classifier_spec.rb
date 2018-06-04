@@ -46,6 +46,7 @@ RSpec.describe StatementClassifier, type: :service do
 
     let(:wikidata_data) do
       { person: 'Q1',
+        merged_then_deleted: nil,
         term: 'Q2',
         start_of_term: '2018-01-01',
         start_date: '2018-01-01',
@@ -157,6 +158,33 @@ RSpec.describe StatementClassifier, type: :service do
       it { expect(classifier.actionable).to be_empty }
       it { expect(classifier.manually_actionable).to be_empty }
       it { expect(classifier.done).to be_empty }
+    end
+
+    context 'when the reconciled person has since been merged into someone else' do
+      # Let's assume that Q1 was merged into Q200, so the position
+      # held data (from the SPARQL query in the real situation)
+      # includes person: Q200 but also merged_then_deleted: Q1. That
+      # position data should still be detected as associated with Q1,
+      # so the statement will be in "done".
+      let(:wikidata_data) do
+        { person: 'Q200',
+          merged_then_deleted: 'Q1',
+          term: 'Q2',
+          start_of_term: '2018-01-01',
+          start_date: '2018-01-01',
+          group: 'Q3',
+          district: 'Q4' }
+      end
+      before do
+        statement.verifications.build(status: true)
+        allow(statement).to receive(:person_item).and_return('Q1')
+      end
+      it { expect(classifier.verifiable).to be_empty }
+      it { expect(classifier.unverifiable).to be_empty }
+      it { expect(classifier.reconcilable).to be_empty }
+      it { expect(classifier.actionable).to be_empty }
+      it { expect(classifier.manually_actionable).to be_empty }
+      it { expect(classifier.done).to eq(statements) }
     end
   end
 end

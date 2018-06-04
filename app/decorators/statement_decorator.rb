@@ -14,7 +14,7 @@ class StatementDecorator < SimpleDelegator
 
   def done?
     verified? && reconciled? &&
-      person_item.present? && person_item == data&.person &&
+      person_matches? &&
       electoral_district_item.present? && electoral_district_item == data&.district &&
       parliamentary_term_item.present? && parliamentary_term_item == data&.term &&
       (parliamentary_group_item.blank? || parliamentary_group_item == data&.group)
@@ -40,5 +40,11 @@ class StatementDecorator < SimpleDelegator
 
   def reconciled?
     person_item.present?
+  end
+
+  private
+
+  def person_matches?
+    person_item.present? && [data&.person, data&.merged_then_deleted].include?(person_item)
   end
 end

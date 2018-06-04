@@ -7,8 +7,8 @@ class PositionStatistics
     @existing_positions = existing_positions
   end
 
-  def page_exists
-    existing_positions.include?(position)
+  def pages
+    @pages ||= existing_positions.fetch(position, Set.new).sort
   end
 
   def unchecked

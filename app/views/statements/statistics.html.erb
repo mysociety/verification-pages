@@ -4,7 +4,7 @@
     <thead>
       <tr>
         <th>Wikidata position</th>
-        <th>Page exists</th>
+        <th>Page</th>
         <th>Unchecked</th>
         <th>Correct</th>
         <th>Incorrect</th>
@@ -14,7 +14,11 @@
       <% statements.each do |statement| %>
       <tr>
         <td><%= link_to statement.position, "https://www.wikidata.org/wiki/#{statement.position}" %></td>
-        <td><%= statement.page_exists %></td>
+        <td><% if statement.pages.each do |page_title| %>
+          <a href="https://www.wikidata.org/wiki/<%= page_title %>"><%= page_title %></a>
+          <% end.empty? %>
+          missing
+        <% end %></td>
         <td><%= statement.unchecked %></td>
         <td><%= statement.correct %></td>
         <td><%= statement.incorrect %></td>

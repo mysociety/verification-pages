@@ -27,6 +27,12 @@ class StatementsStatistics
   end
 
   def existing_positions
-    @existing_positions ||= Page.pluck(:position_held_item)
+    return @position_to_page_titles if @position_to_page_titles
+    # Make a Hash mapping from a position to a Set of associated page titles:
+    @position_to_page_titles = Hash.new { |h, k| h[k] = Set.new }
+    Page.pluck(:position_held_item, :title).inject(@position_to_page_titles) do |acc, (position, page_title)|
+      acc[position].add(page_title)
+      acc
+    end
   end
 end

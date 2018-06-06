@@ -58,7 +58,7 @@ export default template({
           )
         })
       }).catch(function (error) {
-        console.log('updating the satement failed...', error);
+        console.log('updating the statement failed...', error);
         that.updating = false;
         that.finished = true;
         that.updateError = error.message;

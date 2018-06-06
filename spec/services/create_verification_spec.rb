@@ -3,11 +3,25 @@
 require 'rails_helper'
 
 RSpec.describe CreateVerification, type: :service do
-  let(:statement_params) { { person_name: 'Alice', electoral_district_name: 'Foo', electoral_district_item: 'Q123', fb_identifier: '444333' } }
+  let(:statement_params) do
+    {
+      person_name: 'Alice',
+      electoral_district_name: 'Foo',
+      electoral_district_item: 'Q123',
+      fb_identifier: '444333'
+    }
+  end
   let(:statement) { create(:statement, statement_params) }
 
   context 'with valid params' do
-    subject { CreateVerification.new(statement: statement, params: { user: 'foo', status: 'true', new_name: 'baz' }) }
+    subject do
+      CreateVerification.new(
+        statement: statement,
+        params: {
+          user: 'foo', status: 'true', new_name: 'baz'
+        }
+      )
+    end
 
     before { allow(UpdateStatementVerification).to receive(:run) }
 
@@ -21,7 +35,10 @@ RSpec.describe CreateVerification, type: :service do
     end
 
     it 'adds verification to duplicate statements' do
-      statement2 = create(:statement, statement_params.merge(transaction_id: '456'))
+      statement2 = create(
+        :statement,
+        statement_params.merge(transaction_id: '456')
+      )
       expect { subject.run }.to change { statement2.verifications.count }.by(1)
     end
   end

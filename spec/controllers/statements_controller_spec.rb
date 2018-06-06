@@ -15,6 +15,11 @@ RSpec.describe StatementsController, type: :controller do
       expect(response).to have_http_status(:success)
     end
 
+    it 'should return a JSON representation of the statement' do
+      get :show, params: show_parameters
+      expect(response.body).not_to be_empty
+    end
+
     it 'does not update the actioned_at time' do
       get :show, params: show_parameters
       expect(statement.actioned_at).to be_nil

@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 class StatementsController < FrontendController
   def index
     page = Page.find_by!(title: params.require(:title))

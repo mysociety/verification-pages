@@ -23,15 +23,16 @@ class Statement < ApplicationRecord
     reconciliations.last
   end
 
-  def force_type
-    Rails.cache.read(force_type_key)
+  def record_actioned!
+    self.actioned_at = DateTime.now
+    save!
   end
 
-  def force_type!(type)
-    # This will generate cached item with key
-    # "force_type/statements/<id>-<updated_at>" so expire automatically if the
-    # statement is updated
-    Rails.cache.write(force_type_key, type, expires_in: 5.minutes)
+  def recently_actioned?
+    # Was this statement actioned in the last 5 minutes?
+    return false unless actioned_at
+    time_difference_in_days = DateTime.now - actioned_at
+    time_difference_in_days * (24 * 60) < 5
   end
 
   def duplicate_statements
@@ -44,10 +45,6 @@ class Statement < ApplicationRecord
   end
 
   private
-
-  def force_type_key
-    [:force_type, self]
-  end
 
   def detect_duplicate_statements
     self.duplicate ||= duplicate_statements.present?

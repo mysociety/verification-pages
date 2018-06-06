@@ -70,8 +70,8 @@ class StatementClassifier
   end
 
   def statement_type(statement)
-    if statement.force_type
-      statement.force_type.to_sym
+    if statement.recently_actioned?
+      :done
     elsif statement.done?
       :done
     elsif statement.reconciled? && (statement.started_before_term? || statement.qualifiers_contradicting?)

@@ -14,7 +14,7 @@ class StatementsController < FrontendController
 
   def show
     statement = Statement.find_by!(transaction_id: params.fetch(:id))
-    statement.force_type!(params[:force_type]) if params[:force_type]
+    statement.record_actioned! if params[:force_type] == 'done'
     respond_with(statement)
   end
 end

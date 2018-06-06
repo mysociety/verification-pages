@@ -2,7 +2,7 @@
 
 # Controller to manage verification pages
 class PagesController < ApplicationController
-  before_action :set_page, only: %i[show edit update destroy]
+  before_action :set_page, only: %i[show edit update destroy load]
 
   # GET /pages
   def index
@@ -44,6 +44,12 @@ class PagesController < ApplicationController
   def destroy
     @page.destroy
     redirect_to pages_url, notice: 'Page was successfully destroyed.'
+  end
+
+  # POST /pages/1/load
+  def load
+    statements = LoadStatements.run(@page.title)
+    redirect_to @page, notice: "#{statements.count} Statements loaded"
   end
 
   private

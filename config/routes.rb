@@ -3,7 +3,11 @@
 Rails.application.routes.draw do
   resources :countries
   # Admin
-  resources :pages
+  resources :pages do
+    member do
+      post :load
+    end
+  end
 
   # Frontend
   resources :statements, only: %i[index show] do

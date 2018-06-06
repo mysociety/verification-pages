@@ -122,4 +122,69 @@ RSpec.describe PagesController, type: :controller do
       expect(response).to redirect_to(pages_url)
     end
   end
+
+  describe 'POST #load' do
+    before do
+      wikidata_response = {
+        head: {
+          vars: %w[position country]
+        },
+        results: {
+          bindings: [
+            {
+              position: {
+                type: 'uri',
+                value: 'http://www.wikidata.org/entity/Q670106'
+              },
+              country: {
+                type: 'literal',
+                value: 'IT'
+              }
+            }
+          ]
+        }
+      }
+
+      stub_request(:get, 'https://query.wikidata.org/sparql')
+        .with(query: hash_including({ 'query' => /.+/ }))
+        .to_return(body: JSON.generate(wikidata_response))
+
+      suggestions_store_response = [
+        {
+          transaction_id: '489434391472318',
+        },
+        {
+          transaction_id: '1656343594481923',
+        }
+      ]
+
+      stub_request(:get, 'https://suggestions-store.mysociety.org/export/IT/Q1.json')
+        .to_return(body: JSON.generate(suggestions_store_response))
+
+      scheme_data = {
+        results: [
+          {
+            id: 1,
+            name: 'wikidata-persons'
+          },
+          {
+            id: 7,
+            name: 'facebook-persons'
+          }
+        ]
+      }
+
+      stub_request(:get, 'https://id-mapping-store.mysociety.org/scheme')
+        .to_return(body: JSON.pretty_generate(scheme_data))
+      stub_request(:get, "https://id-mapping-store.mysociety.org/identifier/7/175419109847284")
+        .to_return(status: 404, body: '')
+    end
+
+    it 'loads statements for the given page' do
+      page = Page.create! valid_attributes
+      expect do
+        post :load, params: { id: page.to_param }, session: valid_session
+      end.to change(page.statements, :count).by(2)
+    end
+  end
 end

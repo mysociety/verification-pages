@@ -22,7 +22,7 @@ class StatementClassifier
   # actionable
   # manually_actionable
   # done(able)
-  #
+  # reverted
 
   def verifiable
     classified_statements.fetch(:verifiable, [])
@@ -46,6 +46,10 @@ class StatementClassifier
 
   def done
     classified_statements.fetch(:done, [])
+  end
+
+  def reverted
+    classified_statements.fetch(:reverted, [])
   end
 
   def to_a
@@ -74,6 +78,8 @@ class StatementClassifier
       :done
     elsif statement.done?
       :done
+    elsif statement.actioned?
+      :reverted
     elsif statement.reconciled? && (statement.started_before_term? || statement.qualifiers_contradicting?)
       :manually_actionable
     elsif statement.reconciled?

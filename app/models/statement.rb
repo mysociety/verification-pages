@@ -24,15 +24,15 @@ class Statement < ApplicationRecord
   end
 
   def record_actioned!
-    self.actioned_at = DateTime.now
+    self.actioned_at = Time.now
     save!
   end
 
   def recently_actioned?
     # Was this statement actioned in the last 5 minutes?
     return false unless actioned_at
-    time_difference_in_days = DateTime.now - actioned_at
-    time_difference_in_days * (24 * 60) < 5
+    time_difference_seconds = Time.now - actioned_at
+    (time_difference_seconds / 60.0) < 5
   end
 
   def duplicate_statements

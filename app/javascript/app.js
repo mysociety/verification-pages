@@ -9,6 +9,7 @@ import reconcilableComponent from './components/reconcilable'
 import actionableComponent from './components/actionable'
 import manuallyActionableComponent from './components/manually_actionable'
 import doneComponent from './components/done'
+import revertedComponent from './components/reverted'
 
 export default template({
   data () {
@@ -40,6 +41,7 @@ export default template({
         case 'actionable': return actionableComponent
         case 'manually_actionable': return manuallyActionableComponent
         case 'done': return doneComponent
+        case 'reverted': return revertedComponent
       }
     },
     statement: function () {

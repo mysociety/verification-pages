@@ -22,6 +22,9 @@
         <option value="done" v-bind:disabled="countStatementsOfType('done') === 0">
           Done ({{ countStatementsOfType('done') }})
         </option>
+        <option value="reverted" v-bind:disabled="countStatementsOfType('reverted') === 0">
+          Reverted ({{ countStatementsOfType('reverted') }})
+        </option>
       </select>
     </div>
     <div class="verification-tool__controls__group" style="float: right;">

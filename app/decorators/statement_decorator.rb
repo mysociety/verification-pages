@@ -42,6 +42,10 @@ class StatementDecorator < SimpleDelegator
     person_item.present?
   end
 
+  def actioned?
+    actioned_at?
+  end
+
   private
 
   def person_matches?

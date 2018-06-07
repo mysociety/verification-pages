@@ -63,6 +63,7 @@ RSpec.describe StatementClassifier, type: :service do
       it { expect(classifier.actionable).to be_empty }
       it { expect(classifier.manually_actionable).to be_empty }
       it { expect(classifier.done).to be_empty }
+      it { expect(classifier.reverted).to be_empty }
     end
 
     context 'when unverifiable' do
@@ -73,6 +74,7 @@ RSpec.describe StatementClassifier, type: :service do
       it { expect(classifier.actionable).to be_empty }
       it { expect(classifier.manually_actionable).to be_empty }
       it { expect(classifier.done).to be_empty }
+      it { expect(classifier.reverted).to be_empty }
     end
 
     context 'when verified' do
@@ -83,6 +85,7 @@ RSpec.describe StatementClassifier, type: :service do
       it { expect(classifier.actionable).to be_empty }
       it { expect(classifier.manually_actionable).to be_empty }
       it { expect(classifier.done).to be_empty }
+      it { expect(classifier.reverted).to be_empty }
     end
 
     context 'when statement is actionable' do
@@ -96,6 +99,7 @@ RSpec.describe StatementClassifier, type: :service do
       it { expect(classifier.actionable).to eq(statements) }
       it { expect(classifier.manually_actionable).to be_empty }
       it { expect(classifier.done).to be_empty }
+      it { expect(classifier.reverted).to be_empty }
     end
 
     context 'when statement is actionable, but has been actioned in the last 5 minutes' do
@@ -107,6 +111,7 @@ RSpec.describe StatementClassifier, type: :service do
         position_held.group = nil
         allow(statement).to receive(:person_item).and_return('Q1')
         allow(statement).to receive(:actioned_at).and_return(supposed_actioned_at_time)
+        allow(statement).to receive(:actioned_at?).and_return(true)
       end
       after do
         travel_back
@@ -117,9 +122,10 @@ RSpec.describe StatementClassifier, type: :service do
       it { expect(classifier.actionable).to be_empty }
       it { expect(classifier.manually_actionable).to be_empty }
       it { expect(classifier.done).to eq(statements) }
+      it { expect(classifier.reverted).to be_empty }
     end
 
-    context 'when statement is actionable, but has been actioned over 5 minutes ago' do
+    context 'when statement would be actionable, but has been actioned over 5 minutes ago' do
       before do
         supposed_current_time = DateTime.new(2018, 6, 6, 15, 1, 1)
         travel_to supposed_current_time
@@ -128,6 +134,7 @@ RSpec.describe StatementClassifier, type: :service do
         position_held.group = nil
         allow(statement).to receive(:person_item).and_return('Q1')
         allow(statement).to receive(:actioned_at).and_return(supposed_actioned_at_time)
+        allow(statement).to receive(:actioned_at?).and_return(true)
       end
       after do
         travel_back
@@ -135,9 +142,10 @@ RSpec.describe StatementClassifier, type: :service do
       it { expect(classifier.verifiable).to be_empty }
       it { expect(classifier.unverifiable).to be_empty }
       it { expect(classifier.reconcilable).to be_empty }
-      it { expect(classifier.actionable).to eq(statements) }
+      it { expect(classifier.actionable).to be_empty }
       it { expect(classifier.manually_actionable).to be_empty }
       it { expect(classifier.done).to be_empty }
+      it { expect(classifier.reverted).to eq(statements) }
     end
 
     context 'when district qualifier contradict' do
@@ -151,6 +159,7 @@ RSpec.describe StatementClassifier, type: :service do
       it { expect(classifier.actionable).to be_empty }
       it { expect(classifier.manually_actionable).to eq(statements) }
       it { expect(classifier.done).to be_empty }
+      it { expect(classifier.reverted).to be_empty }
     end
 
     context 'when group qualifier contradict' do
@@ -164,6 +173,7 @@ RSpec.describe StatementClassifier, type: :service do
       it { expect(classifier.actionable).to be_empty }
       it { expect(classifier.manually_actionable).to eq(statements) }
       it { expect(classifier.done).to be_empty }
+      it { expect(classifier.reverted).to be_empty }
     end
 
     context 'when position start is 2 days before term start' do
@@ -178,6 +188,7 @@ RSpec.describe StatementClassifier, type: :service do
       it { expect(classifier.actionable).to be_empty }
       it { expect(classifier.manually_actionable).to eq(statements) }
       it { expect(classifier.done).to be_empty }
+      it { expect(classifier.reverted).to be_empty }
     end
 
     context 'when the statement has been actioned' do
@@ -191,6 +202,7 @@ RSpec.describe StatementClassifier, type: :service do
       it { expect(classifier.actionable).to be_empty }
       it { expect(classifier.manually_actionable).to be_empty }
       it { expect(classifier.done).to eq(statements) }
+      it { expect(classifier.reverted).to be_empty }
     end
 
 
@@ -202,6 +214,7 @@ RSpec.describe StatementClassifier, type: :service do
       it { expect(classifier.actionable).to be_empty }
       it { expect(classifier.manually_actionable).to be_empty }
       it { expect(classifier.done).to be_empty }
+      it { expect(classifier.reverted).to be_empty }
     end
 
     context 'when the reconciled person has since been merged into someone else' do
@@ -229,6 +242,7 @@ RSpec.describe StatementClassifier, type: :service do
       it { expect(classifier.actionable).to be_empty }
       it { expect(classifier.manually_actionable).to be_empty }
       it { expect(classifier.done).to eq(statements) }
+      it { expect(classifier.reverted).to be_empty }
     end
   end
 end

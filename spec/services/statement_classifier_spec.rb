@@ -3,6 +3,8 @@
 require 'rails_helper'
 
 RSpec.describe StatementClassifier, type: :service do
+  include ActiveSupport::Testing::TimeHelpers
+
   let(:page) do
     double(:page, statements: statement_relation, position_held_item: 'Q2')
   end
@@ -87,6 +89,48 @@ RSpec.describe StatementClassifier, type: :service do
       before do
         position_held.group = nil
         allow(statement).to receive(:person_item).and_return('Q1')
+      end
+      it { expect(classifier.verifiable).to be_empty }
+      it { expect(classifier.unverifiable).to be_empty }
+      it { expect(classifier.reconcilable).to be_empty }
+      it { expect(classifier.actionable).to eq(statements) }
+      it { expect(classifier.manually_actionable).to be_empty }
+      it { expect(classifier.done).to be_empty }
+    end
+
+    context 'when statement is actionable, but has been actioned in the last 5 minutes' do
+      before do
+        supposed_current_time = DateTime.new(2018, 6, 6, 15, 1, 1)
+        travel_to supposed_current_time
+        # 3 minutes before that:
+        supposed_actioned_at_time = supposed_current_time - 3.0 / (24 * 60)
+        position_held.group = nil
+        allow(statement).to receive(:person_item).and_return('Q1')
+        allow(statement).to receive(:actioned_at).and_return(supposed_actioned_at_time)
+      end
+      after do
+        travel_back
+      end
+      it { expect(classifier.verifiable).to be_empty }
+      it { expect(classifier.unverifiable).to be_empty }
+      it { expect(classifier.reconcilable).to be_empty }
+      it { expect(classifier.actionable).to be_empty }
+      it { expect(classifier.manually_actionable).to be_empty }
+      it { expect(classifier.done).to eq(statements) }
+    end
+
+    context 'when statement is actionable, but has been actioned over 5 minutes ago' do
+      before do
+        supposed_current_time = DateTime.new(2018, 6, 6, 15, 1, 1)
+        travel_to supposed_current_time
+        # 10 minutes before that:
+        supposed_actioned_at_time = supposed_current_time - 10.0 / (24 * 60)
+        position_held.group = nil
+        allow(statement).to receive(:person_item).and_return('Q1')
+        allow(statement).to receive(:actioned_at).and_return(supposed_actioned_at_time)
+      end
+      after do
+        travel_back
       end
       it { expect(classifier.verifiable).to be_empty }
       it { expect(classifier.unverifiable).to be_empty }

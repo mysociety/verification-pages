@@ -20,14 +20,26 @@ class StatementDecorator < SimpleDelegator
       (parliamentary_group_item.blank? || parliamentary_group_item == data&.group)
   end
 
-  def started_before_term?
-    data&.start_date && data&.start_of_term &&
-      Date.parse(data.start_date) < Date.parse(data.start_of_term) - 1.day
+  def problems
+    electoral_district_problems +
+      parliamentary_group_problems +
+      start_date_before_term_problems
   end
 
-  def qualifiers_contradicting?
-    data&.district && electoral_district_item != data&.district ||
-      data&.group && parliamentary_group_item != data&.group
+  def start_date_before_term_problems
+    return [] unless data&.start_date && data&.start_of_term &&
+      Date.parse(data.start_date) < Date.parse(data.start_of_term) - 1.day
+    [ "On Wikidata, the position held start date (#{data&.start_date}) was before the term start date (#{data&.start_of_term})" ]
+  end
+
+  def electoral_district_problems
+    return [] unless data&.district && electoral_district_item != data&.district
+    [ "The electoral district is different in the statement (#{electoral_district_item}) and on Wikidata (#{data&.district})" ]
+  end
+
+  def parliamentary_group_problems
+    return [] unless data&.group && parliamentary_group_item != data&.group
+    [ "The parliamentary group (party) is different in the statement (#{parliamentary_group_item}) and on Wikidata (#{data&.group})" ]
   end
 
   def unverifiable?

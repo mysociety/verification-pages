@@ -4,22 +4,30 @@
 module WikiClient
   extend ActiveSupport::Concern
 
-  WIKI_SITE = ENV.fetch('WIKIDATA_SITE')
-  WIKI_USERNAME = ENV.fetch('WIKIDATA_USERNAME')
-  WIKI_PASSWORD = ENV.fetch('WIKIDATA_PASSWORD')
-
   private
 
   def client
     @client ||= begin
-      client = MediawikiApi::Client.new("https://#{WIKI_SITE}/w/api.php")
+      client = MediawikiApi::Client.new("https://#{wiki_site}/w/api.php")
 
-      result = client.log_in(WIKI_USERNAME, WIKI_PASSWORD)
+      result = client.log_in(wiki_username, wiki_password)
       if result['result'] != 'Success'
         abort "MediawikiApi::Client#log_in failed: #{result}"
       end
 
       client
     end
+  end
+
+  def wiki_site
+    ENV.fetch('WIKIDATA_SITE')
+  end
+
+  def wiki_username
+    ENV.fetch('WIKIDATA_USERNAME')
+  end
+
+  def wiki_password
+    ENV.fetch('WIKIDATA_PASSWORD')
   end
 end

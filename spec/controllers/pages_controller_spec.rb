@@ -187,4 +187,27 @@ RSpec.describe PagesController, type: :controller do
       end.to change(page.statements, :count).by(2)
     end
   end
+
+  describe 'POST #create_wikidata' do
+    let(:page) { Page.create! valid_attributes }
+
+    before do
+      allow(UpdateVerificationPage).to receive(:run)
+    end
+
+    it 'runs the UpdateVerificationPage service' do
+      expect(UpdateVerificationPage).to receive(:run).with(page.title)
+      post :create_wikidata, params: { id: page.to_param }, session: valid_session
+    end
+
+    it 'redirects to pages#show' do
+      response = post :create_wikidata, params: { id: page.to_param }, session: valid_session
+      expect(response).to redirect_to(page_path(page))
+    end
+
+    it 'sets a flash notice' do
+      post :create_wikidata, params: { id: page.to_param }, session: valid_session
+      expect(flash[:notice]).to be_present
+    end
+  end
 end

@@ -6,6 +6,7 @@ Rails.application.routes.draw do
   resources :pages do
     member do
       post :load
+      post :create_wikidata
     end
   end
 

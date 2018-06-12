@@ -102,4 +102,5 @@ Rails.application.configure do
   config.active_record.dump_schema_after_migration = false
 
   config.relative_url_root = '/verification-pages'
+  config.public_file_server.enabled = true
 end

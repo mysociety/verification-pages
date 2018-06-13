@@ -1,0 +1,12 @@
+#!/usr/bin/env bash
+
+set -e
+
+# Make sure we're in the correct directory
+cd "$(dirname "$0")/.."
+
+# Setup the environment
+source ./script/toolforge-setup
+
+# Add all the scripts that you want to be run daily here
+bin/rails verification_page:load:all

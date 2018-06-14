@@ -158,7 +158,7 @@ RSpec.describe PagesController, type: :controller do
         }
       ]
 
-      stub_request(:get, 'https://suggestions-store.mysociety.org/export/IT/Q1.json')
+      stub_request(:get, "#{ENV.fetch('SUGGESTIONS_STORE_URL').chomp('/')}/export/IT/Q1.json")
         .to_return(body: JSON.generate(suggestions_store_response))
 
       scheme_data = {

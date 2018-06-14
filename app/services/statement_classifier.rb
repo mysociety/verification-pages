@@ -80,7 +80,7 @@ class StatementClassifier
       :done
     elsif statement.actioned?
       :reverted
-    elsif statement.reconciled? && (statement.started_before_term? || statement.qualifiers_contradicting?)
+    elsif statement.reconciled? && !statement.problems.empty?
       :manually_actionable
     elsif statement.reconciled?
       :actionable

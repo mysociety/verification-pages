@@ -2,14 +2,17 @@
 
 # Decorator with merges statements with up-to-date position held data
 class StatementDecorator < SimpleDelegator
-  attr_reader :data
   attr_accessor :type
 
-  def initialize(statement, position_held_data)
-    @data = position_held_data
+  def initialize(statement, matching_position_held_data)
+    @matching_position_held_data = matching_position_held_data
     statement.person_revision ||= data&.revision
     statement.statement_uuid ||= data&.position
     super(statement)
+  end
+
+  def data
+    matching_position_held_data.first
   end
 
   def done?
@@ -59,6 +62,8 @@ class StatementDecorator < SimpleDelegator
   end
 
   private
+
+  attr_reader :matching_position_held_data
 
   def person_matches?
     person_item.present? && [data&.person, data&.merged_then_deleted].include?(person_item)

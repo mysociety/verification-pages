@@ -160,24 +160,6 @@ RSpec.describe PagesController, type: :controller do
 
       stub_request(:get, "#{ENV.fetch('SUGGESTIONS_STORE_URL').chomp('/')}/export/IT/Q1.json")
         .to_return(body: JSON.generate(suggestions_store_response))
-
-      scheme_data = {
-        results: [
-          {
-            id: 1,
-            name: 'wikidata-persons'
-          },
-          {
-            id: 7,
-            name: 'facebook-persons'
-          }
-        ]
-      }
-
-      stub_request(:get, 'https://id-mapping-store.mysociety.org/scheme')
-        .to_return(body: JSON.pretty_generate(scheme_data))
-      stub_request(:get, "https://id-mapping-store.mysociety.org/identifier/7/175419109847284")
-        .to_return(status: 404, body: '')
     end
 
     it 'loads statements for the given page' do

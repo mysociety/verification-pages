@@ -26,7 +26,8 @@ class StatementDecorator < SimpleDelegator
   def problems
     electoral_district_problems +
       parliamentary_group_problems +
-      start_date_before_term_problems
+      start_date_before_term_problems +
+      multiple_statement_problems
   end
 
   def start_date_before_term_problems
@@ -43,6 +44,11 @@ class StatementDecorator < SimpleDelegator
   def parliamentary_group_problems
     return [] unless data&.group && parliamentary_group_item != data&.group
     [ "The parliamentary group (party) is different in the statement (#{parliamentary_group_item}) and on Wikidata (#{data&.group})" ]
+  end
+
+  def multiple_statement_problems
+    return [] unless matching_position_held_data.length > 1
+    [ "There were #{matching_position_held_data.length} 'position held' (P39) statements on Wikidata that match the verified suggestion - one or of them might be missing an end date or parliamentary term qualifier" ]
   end
 
   def unverifiable?

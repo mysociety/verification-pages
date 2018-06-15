@@ -47,9 +47,12 @@ RSpec.describe CreateVerification, type: :service do
         }
       ]
     }
-    stub_request(:get, 'https://id-mapping-store.mysociety.org/scheme')
+    id_mapping_store_base_url = ENV.fetch(
+      'ID_MAPPING_STORE_BASE_URL', 'https://id-mapping-store.mysociety.org'
+    )
+    stub_request(:get, "#{id_mapping_store_base_url}/scheme")
       .to_return(status: 200, body: JSON.pretty_generate(scheme_data))
-    stub_request(:get, 'https://id-mapping-store.mysociety.org/identifier/7/444333')
+    stub_request(:get, "#{id_mapping_store_base_url}/identifier/7/444333")
       .to_return(status: 404, body: '')
   end
 

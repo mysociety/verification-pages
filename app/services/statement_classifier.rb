@@ -100,7 +100,7 @@ class StatementClassifier
   end
 
   def decorate_statement(statement)
-    StatementDecorator.new(statement, position_data_for_statement(statement))
+    StatementDecorator.new(statement, matching_position_held_data(statement))
   end
 
   def person_item_from_transaction_id
@@ -115,9 +115,9 @@ class StatementClassifier
     )
   end
 
-  def position_data_for_statement(statement)
-    position_held_data.detect { |data|
+  def matching_position_held_data(statement)
+    position_held_data.select do |data|
       [data.person, data.merged_then_deleted].include?(statement.person_item)
-    }
+    end
   end
 end

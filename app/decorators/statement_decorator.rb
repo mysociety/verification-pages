@@ -2,14 +2,17 @@
 
 # Decorator with merges statements with up-to-date position held data
 class StatementDecorator < SimpleDelegator
-  attr_reader :data
   attr_accessor :type
 
-  def initialize(statement, position_held_data)
-    @data = position_held_data
+  def initialize(statement, matching_position_held_data)
+    @matching_position_held_data = matching_position_held_data
     statement.person_revision ||= data&.revision
     statement.statement_uuid ||= data&.position
     super(statement)
+  end
+
+  def data
+    matching_position_held_data.first
   end
 
   def done?
@@ -23,7 +26,8 @@ class StatementDecorator < SimpleDelegator
   def problems
     electoral_district_problems +
       parliamentary_group_problems +
-      start_date_before_term_problems
+      start_date_before_term_problems +
+      multiple_statement_problems
   end
 
   def start_date_before_term_problems
@@ -40,6 +44,11 @@ class StatementDecorator < SimpleDelegator
   def parliamentary_group_problems
     return [] unless data&.group && parliamentary_group_item != data&.group
     [ "The parliamentary group (party) is different in the statement (#{parliamentary_group_item}) and on Wikidata (#{data&.group})" ]
+  end
+
+  def multiple_statement_problems
+    return [] unless matching_position_held_data.length > 1
+    [ "There were #{matching_position_held_data.length} 'position held' (P39) statements on Wikidata that match the verified suggestion - one or of them might be missing an end date or parliamentary term qualifier" ]
   end
 
   def unverifiable?
@@ -59,6 +68,8 @@ class StatementDecorator < SimpleDelegator
   end
 
   private
+
+  attr_reader :matching_position_held_data
 
   def person_matches?
     person_item.present? && [data&.person, data&.merged_then_deleted].include?(person_item)

@@ -17,10 +17,16 @@ function removeInstallPrompt() {
 
 Vue.component('wikilink', wikilink)
 
-window.addEventListener('load', () => {
+function createVueApp() {
   const el = document.getElementById('js-verification-tool')
                      .appendChild(document.createElement('verification-tool'))
 
   const app = new Vue({ el, render: h => h(App) })
   removeInstallPrompt();
-})
+}
+
+if (document.readyState !== 'loading') {
+  createVueApp()
+} else {
+  document.addEventListener('DOMContentLoaded', createVueApp)
+}

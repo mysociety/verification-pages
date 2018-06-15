@@ -32,6 +32,14 @@ The following environment variables will need to set and configured:
 In development this can be achieved by adding these to a `.env` file in the
 project root.
 
+### Optional basic auth for admin interface
+
+If you want to protect the admin interface for creating countries and pages
+then set the `ADMIN_USERNAME` and `ADMIN_PASSWORD` environment variables to
+a username and password respectively. This will then require basic
+authentication before the user can log in. This is *highly recommended*
+for any public deployment.
+
 ## Running
 
 To run this application follow the steps to install above, then you can start

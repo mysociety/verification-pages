@@ -122,7 +122,7 @@ RSpec.describe StatementDecorator, type: :decorator do
     end
   end
 
-  context 'when all know problems happen for the same data' do
+  context 'when all known problems happen for the same data' do
     let(:object) do
       Statement.new(
         person_item: 'Q1',

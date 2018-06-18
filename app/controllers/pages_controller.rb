@@ -2,6 +2,8 @@
 
 # Controller to manage verification pages
 class PagesController < ApplicationController
+  include AdminAuthentication
+
   before_action :set_page, only: %i[show edit update destroy load create_wikidata]
 
   # GET /pages

@@ -1,8 +1,8 @@
 # frozen_string_literal: true
 
 Rails.application.routes.draw do
-  resources :countries
   # Admin
+  resources :countries
   resources :pages do
     member do
       post :load

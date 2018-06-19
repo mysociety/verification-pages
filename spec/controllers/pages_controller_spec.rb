@@ -125,30 +125,6 @@ RSpec.describe PagesController, type: :controller do
 
   describe 'POST #load' do
     before do
-      wikidata_response = {
-        head: {
-          vars: %w[position country]
-        },
-        results: {
-          bindings: [
-            {
-              position: {
-                type: 'uri',
-                value: 'http://www.wikidata.org/entity/Q670106'
-              },
-              country: {
-                type: 'literal',
-                value: 'IT'
-              }
-            }
-          ]
-        }
-      }
-
-      stub_request(:get, 'https://query.wikidata.org/sparql')
-        .with(query: hash_including({ 'query' => /.+/ }))
-        .to_return(body: JSON.generate(wikidata_response))
-
       suggestions_store_response = [
         {
           transaction_id: '489434391472318',
@@ -158,7 +134,7 @@ RSpec.describe PagesController, type: :controller do
         }
       ]
 
-      stub_request(:get, "#{ENV.fetch('SUGGESTIONS_STORE_URL').chomp('/')}/export/IT/Q1.json")
+      stub_request(:get, "#{ENV.fetch('SUGGESTIONS_STORE_URL').chomp('/')}/export/CA/Q1.json")
         .to_return(body: JSON.generate(suggestions_store_response))
     end
 

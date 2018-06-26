@@ -1,3 +1,5 @@
+require 'csv'
+
 class LoadStatements < ServiceBase
   attr_reader :page
 
@@ -6,12 +8,12 @@ class LoadStatements < ServiceBase
   end
 
   def run
-    json.map do |result|
+    csv.map do |result|
       statement = Statement.find_or_initialize_by(
         transaction_id: result[:transaction_id]
       )
 
-      statement.update_attributes(
+      statement.update_attributes!(
         page: page,
         person_name: result[:person_name],
         electoral_district_name: result[:electoral_district_name],
@@ -23,14 +25,13 @@ class LoadStatements < ServiceBase
 
   private
 
-  def json
-    @json ||= JSON.parse(raw_data, symbolize_names: true)
+  def csv
+    @csv ||= CSV.parse(raw_data, headers: true, header_converters: :symbol,
+                                 converters: nil)
   end
 
   def raw_data
-    uri = URI(ENV.fetch('SUGGESTIONS_STORE_URL'))
-    uri.path = "/export/#{page.country.code.upcase}/#{page.position_held_item}.json"
-    RestClient.get(uri.to_s)
+    RestClient.get(page.csv_source_url).body
   rescue RestClient::Exception => e
     raise "Suggestion store failed: #{e.message}"
   end

@@ -39,4 +39,5 @@ en:
         position_held_item: Position
         parliamentary_term_item: Term
         reference_url: Reference URL
+        csv_source_url: CSV source URL
         require_parliamentary_group: Party required

@@ -72,6 +72,7 @@ class PagesController < ApplicationController
   def page_params
     params.require(:page).permit(:title, :position_held_item,
                                  :parliamentary_term_item, :reference_url,
-                                 :require_parliamentary_group, :country_id)
+                                 :require_parliamentary_group, :country_id,
+                                 :csv_source_url)
   end
 end

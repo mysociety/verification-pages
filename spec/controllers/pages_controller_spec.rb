@@ -1,6 +1,7 @@
 # frozen_string_literal: true
 
 require 'rails_helper'
+require 'csv'
 
 RSpec.describe PagesController, type: :controller do
   # This should return the minimal set of attributes required to create a valid
@@ -8,7 +9,8 @@ RSpec.describe PagesController, type: :controller do
   # adjust the attributes here as well.
   let(:valid_attributes) do
     { title: 'Page title', position_held_item: 'Q1',
-      parliamentary_term_item: 'Q2', reference_url: 'http://example.com', country_id: country.id }
+      parliamentary_term_item: 'Q2', reference_url: 'http://example.com',
+      country_id: country.id, csv_source_url: 'http://example.com/export.csv' }
   end
 
   let(:invalid_attributes) do
@@ -126,16 +128,13 @@ RSpec.describe PagesController, type: :controller do
   describe 'POST #load' do
     before do
       suggestions_store_response = [
-        {
-          transaction_id: '489434391472318',
-        },
-        {
-          transaction_id: '1656343594481923',
-        }
-      ]
+        %w[transaction_id],
+        %w[489434391472318],
+        %w[1656343594481923]
+      ].map(&:to_csv).join
 
-      stub_request(:get, "#{ENV.fetch('SUGGESTIONS_STORE_URL').chomp('/')}/export/CA/Q1.json")
-        .to_return(body: JSON.generate(suggestions_store_response))
+      stub_request(:get, 'http://example.com/export.csv')
+        .to_return(status: 200, body: suggestions_store_response, headers: {})
     end
 
     it 'loads statements for the given page' do

@@ -44,6 +44,10 @@ class Statement < ApplicationRecord
     ).where.not(id: id).order(created_at: :asc)
   end
 
+  def from_suggestions_store?
+    /^#{Regexp.escape(ENV.fetch('SUGGESTIONS_STORE_URL'))}/.match?(page.csv_source_url)
+  end
+
   private
 
   def detect_duplicate_statements

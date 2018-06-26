@@ -13,7 +13,7 @@ class LoadStatements < ServiceBase
         transaction_id: result[:transaction_id]
       )
 
-      statement.update_attributes(
+      statement.update_attributes!(
         page: page,
         person_name: result[:person_name],
         electoral_district_name: result[:electoral_district_name],

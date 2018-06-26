@@ -1,6 +1,7 @@
 require 'rails_helper'
 
 RSpec.describe LoadStatements do
+  include_context 'id-mapping-store default setup'
   context '#run' do
     before do
       suggestions_store_response = [
@@ -9,46 +10,7 @@ RSpec.describe LoadStatements do
         %w[1656343594481923 Bob Bambridge Q4321 10987654322],
       ].map(&:to_csv).join
 
-      scheme_data = {
-        'results' => [
-          {
-            'id' => 1,
-            'name' => 'wikidata-persons'
-          },
-          {
-            'id' => 2,
-            'name' => 'wikidata-memberships'
-          },
-          {
-            'id' => 3,
-            'name' => 'wikidata-organizations'
-          },
-          {
-            'id' => 4,
-            'name' => 'ms-uuid-persons'
-          },
-          {
-            'id' => 5,
-            'name' => 'ms-uuid-memberships'
-          },
-          {
-            'id' => 6,
-            'name' => 'ms-uuid-organizations'
-          },
-          {
-            'id' => 7,
-            'name' => 'facebook-persons'
-          }
-        ]
-      }
-      id_mapping_store_base_url = ENV.fetch(
-        'ID_MAPPING_STORE_BASE_URL', 'https://id-mapping-store.mysociety.org'
-      )
-
-      stub_request(:get, "#{id_mapping_store_base_url}/scheme")
-        .to_return(status: 200, body: JSON.pretty_generate(scheme_data))
-      stub_request(:get, "#{id_mapping_store_base_url}/identifier/7/10987654322")
-        .to_return(status: 404, body: '')
+      stub_id_mapping_store(scheme_id: '7', identifier: '10987654322')
 
       stub_request(:get, 'http://example.com/export.csv')
         .to_return(status: 200, body: suggestions_store_response, headers: {})

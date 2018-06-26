@@ -46,23 +46,24 @@ RSpec.describe LoadStatements do
     context 'CSV file not from suggestions-store' do
       before do
         suggestions_store_response = [
-          %w[person_name electoral_district_name electoral_district_item],
-          %w[Alice Ambridge Q1234],
-          %w[Bob Bambridge Q4321]
+          %w[person_name person_item electoral_district_name electoral_district_item],
+          %w[Alice Q987 Ambridge Q1234],
+          %w[Bob Q876 Bambridge Q4321]
         ].map(&:to_csv).join
 
         stub_request(:get, 'http://example.com/export.csv')
           .to_return(status: 200, body: suggestions_store_response, headers: {})
         @page = create(:page, csv_source_url: 'http://example.com/export.csv')
-        @existing_statement = create(:statement, transaction_id: 'md5:81b73149372fc66217f12623f03a31c7', person_name: 'Arthur', page: @page)
+        @existing_statement = create(:statement, transaction_id: 'md5:d693e9beb0d9af365bb267982a479980', person_name: 'Arthur', page: @page)
       end
 
       it 'creates a missing statement' do
         load_statements = LoadStatements.new(@page.title)
         expect { load_statements.run }.to change(Statement, :count).by(1)
         last_statement = Statement.last
-        expect(last_statement.transaction_id).to eq('md5:1ef9fd22abf2fc52d7eecf52fb105a53')
+        expect(last_statement.transaction_id).to eq('md5:9a72129f7da4bf1d61e8e508cc5ef485')
         expect(last_statement.person_name).to eq('Bob')
+        expect(last_statement.person_item).to eq('Q876')
         expect(last_statement.electoral_district_name).to eq('Bambridge')
         expect(last_statement.electoral_district_item).to eq('Q4321')
       end
@@ -71,8 +72,9 @@ RSpec.describe LoadStatements do
         load_statements = LoadStatements.new(@page.title)
         load_statements.run
         @existing_statement.reload
-        expect(@existing_statement.transaction_id).to eq('md5:81b73149372fc66217f12623f03a31c7')
+        expect(@existing_statement.transaction_id).to eq('md5:d693e9beb0d9af365bb267982a479980')
         expect(@existing_statement.person_name).to eq('Alice')
+        expect(@existing_statement.person_item).to eq('Q987')
         expect(@existing_statement.electoral_district_name).to eq('Ambridge')
         expect(@existing_statement.electoral_district_item).to eq('Q1234')
       end

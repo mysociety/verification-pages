@@ -11,6 +11,6 @@ class Verification < ApplicationRecord
   private
 
   def send_to_suggestions_store
-    UpdateStatementVerification.run(self)
+    UpdateStatementVerification.run(self) if statement.from_suggestions_store?
   end
 end

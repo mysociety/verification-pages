@@ -40,4 +40,23 @@ RSpec.describe Statement, type: :model do
       expect(statement.parliamentary_term_item).to eq('Q1')
     end
   end
+
+  it 'can create instance without person_item and fb_identifier' do
+    expect(create(:statement, transaction_id: '123', person_item: nil, fb_identifier: nil)).to be_a Statement
+    expect(create(:statement, transaction_id: '456', person_item: '', fb_identifier: '')).to be_a Statement
+  end
+
+  describe '#from_suggestions_store?' do
+    it 'knows that it came from suggestions-store' do
+      page = create(:page, csv_source_url: "#{ENV.fetch('SUGGESTIONS_STORE_URL')}/export/blah.csv")
+      statement = create(:statement, page: page)
+      expect(statement.from_suggestions_store?).to eq(true)
+    end
+
+    it 'know that it didn\'t come from suggestions-store' do
+      page = create(:page)
+      statement = create(:statement, page: page)
+      expect(statement.from_suggestions_store?).to eq(false)
+    end
+  end
 end

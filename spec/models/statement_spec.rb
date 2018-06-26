@@ -40,4 +40,9 @@ RSpec.describe Statement, type: :model do
       expect(statement.parliamentary_term_item).to eq('Q1')
     end
   end
+
+  it 'can create instance without person_item and fb_identifier' do
+    expect(create(:statement, transaction_id: '123', person_item: nil, fb_identifier: nil)).to be_a Statement
+    expect(create(:statement, transaction_id: '456', person_item: '', fb_identifier: '')).to be_a Statement
+  end
 end

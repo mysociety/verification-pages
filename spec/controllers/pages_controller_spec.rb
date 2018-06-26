@@ -44,6 +44,20 @@ RSpec.describe PagesController, type: :controller do
       get :new, params: {}, session: valid_session
       expect(response).to be_success
     end
+
+    context 'with querystring parameters' do
+      it 'uses them to populate new Page instance' do
+        get :new, params: {
+          title: 'Test title',
+          position_held_item: 'Q123321',
+          csv_source_url: 'https://example.com/export.csv'
+        }, session: valid_session
+        page = @controller.view_assigns['page']
+        expect(page.title).to eq('Test title')
+        expect(page.position_held_item).to eq('Q123321')
+        expect(page.csv_source_url).to eq('https://example.com/export.csv')
+      end
+    end
   end
 
   describe 'GET #edit' do

@@ -12,19 +12,40 @@ RSpec.describe Verification, type: :model do
   end
 
   describe 'after commit callback' do
-    it 'sends suggestion to suggestions store' do
-      expect(UpdateStatementVerification).to receive(:run)
+    context 'the page is from suggestions-store' do
+      it 'sends verification to suggestions-store' do
+        expect(UpdateStatementVerification).to receive(:run)
         .with(verification).once
 
-      verification.statement = build(:statement)
-      verification.user = 'Bilbo'
-      verification.save! # create
+        page = build(
+          :page,
+          csv_source_url: "#{ENV.fetch('SUGGESTIONS_STORE_URL')}/export/blah.csv"
+        )
+        verification.statement = build(:statement, page: page)
+        verification.user = 'Bilbo'
+        verification.save! # create
 
-      expect(UpdateStatementVerification).to receive(:run)
-        .with(verification).once
+        expect(UpdateStatementVerification).to receive(:run)
+                                               .with(verification).once
 
-      verification.user = 'Frodo'
-      verification.save! # update
+        verification.user = 'Frodo'
+        verification.save! # update
+      end
+    end
+
+    context 'the page is not from suggestions-store' do
+      it 'should not send verification to suggestions-store' do
+        expect(UpdateStatementVerification).to_not receive(:run)
+
+        verification.statement = build(:statement)
+        verification.user = 'Bilbo'
+        verification.save! # create
+
+        expect(UpdateStatementVerification).to_not receive(:run)
+
+        verification.user = 'Frodo'
+        verification.save! # update
+      end
     end
   end
 end

@@ -22,6 +22,8 @@ class LoadStatements < ServiceBase
         person_item: result[:person_item],
         electoral_district_name: result[:electoral_district_name],
         electoral_district_item: result[:electoral_district_item],
+        parliamentary_group_name: result[:parliamentary_group_name],
+        parliamentary_group_item: result[:parliamentary_group_item],
         fb_identifier: result[:fb_identifier]
       )
     end

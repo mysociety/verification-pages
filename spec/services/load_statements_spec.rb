@@ -65,15 +65,16 @@ RSpec.describe LoadStatements do
           %w[
             person_name person_item
             electoral_district_name electoral_district_item
+            parliamentary_group_name parliamentary_group_item
           ],
-          %w[Alice Q987 Ambridge Q1234],
-          %w[Bob Q876 Bambridge Q4321]
+          %w[Alice Q987 Ambridge Q1234 Aparty Q555],
+          %w[Bob Q876 Bambridge Q4321 Bparty Q666]
         ].map(&:to_csv).join
       end
 
       let!(:existing_statement) do
         create(:statement,
-               transaction_id: 'md5:d693e9beb0d9af365bb267982a479980',
+               transaction_id: 'md5:9e2547c61ebf3d08dc7bb67dc69a8d22',
                person_name: 'Arthur', page: page)
       end
 
@@ -82,12 +83,14 @@ RSpec.describe LoadStatements do
         expect { load_statements.run }.to change(Statement, :count).by(1)
         last_statement = Statement.last
         expect(last_statement.transaction_id).to(
-          eq 'md5:9a72129f7da4bf1d61e8e508cc5ef485'
+          eq 'md5:0d30667ad6f4d72a9a47b54cb054975b'
         )
         expect(last_statement.person_name).to eq('Bob')
         expect(last_statement.person_item).to eq('Q876')
         expect(last_statement.electoral_district_name).to eq('Bambridge')
         expect(last_statement.electoral_district_item).to eq('Q4321')
+        expect(last_statement.parliamentary_group_name).to eq('Bparty')
+        expect(last_statement.parliamentary_group_item).to eq('Q666')
       end
 
       it 'updates existing statements' do
@@ -95,12 +98,14 @@ RSpec.describe LoadStatements do
         load_statements.run
         existing_statement.reload
         expect(existing_statement.transaction_id).to(
-          eq 'md5:d693e9beb0d9af365bb267982a479980'
+          eq 'md5:9e2547c61ebf3d08dc7bb67dc69a8d22'
         )
         expect(existing_statement.person_name).to eq('Alice')
         expect(existing_statement.person_item).to eq('Q987')
         expect(existing_statement.electoral_district_name).to eq('Ambridge')
         expect(existing_statement.electoral_district_item).to eq('Q1234')
+        expect(existing_statement.parliamentary_group_name).to eq('Aparty')
+        expect(existing_statement.parliamentary_group_item).to eq('Q555')
       end
     end
   end

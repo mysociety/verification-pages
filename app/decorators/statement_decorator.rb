@@ -60,11 +60,20 @@ class StatementDecorator < SimpleDelegator
   end
 
   def reconciled?
-    person_item.present?
+    reconciliations.empty?
   end
 
   def actioned?
     actioned_at?
+  end
+
+  def reconciliations
+    person_reconciliations
+  end
+
+  def person_reconciliations
+    return [] if person_item.present?
+    [ 'person' ]
   end
 
   private

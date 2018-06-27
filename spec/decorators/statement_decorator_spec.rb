@@ -170,4 +170,21 @@ RSpec.describe StatementDecorator, type: :decorator do
       end
     end
   end
+
+  describe '#reconciliations' do
+    let(:page) { build(:page) }
+    let(:object) { build(:statement, person_item: 'Q1', page: page) }
+
+    subject { statement.reconciliations }
+
+    context 'when person has been reconciled' do
+      before { statement.person_item = 'Q1' }
+      it { is_expected.to match_array([]) }
+    end
+
+    context 'when person hasn\'t been reconciled' do
+      before { statement.person_item = nil }
+      it { is_expected.to match_array(%w[person]) }
+    end
+  end
 end

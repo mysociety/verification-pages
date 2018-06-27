@@ -30,16 +30,36 @@ RSpec.describe Reconciliation, type: :model do
       allow(reconciliation).to receive(:statement).and_return(statement)
     end
 
-    it 'updates statement person item' do
-      expect(statement).to receive(:update_attributes)
-        .with(person_item: 'Q2').once
-      reconciliation.item = 'Q2'
-      reconciliation.save! # create
+    context 'person resource_type' do
+      before { reconciliation.resource_type = 'person' }
 
-      expect(statement).to receive(:update_attributes)
-        .with(person_item: 'Q3').once
-      reconciliation.item = 'Q3'
-      reconciliation.save! # update
+      it 'updates statement person item' do
+        expect(statement).to receive(:update_attributes)
+          .with(person_item: 'Q2').once
+        reconciliation.item = 'Q2'
+        reconciliation.save! # create
+
+        expect(statement).to receive(:update_attributes)
+          .with(person_item: 'Q3').once
+        reconciliation.item = 'Q3'
+        reconciliation.save! # update
+      end
+    end
+
+    context 'party resource_type' do
+      before { reconciliation.resource_type = 'party' }
+
+      it 'updates statement parlimentary group item' do
+        expect(statement).to receive(:update_attributes)
+          .with(parliamentary_group_item: 'Q2').once
+        reconciliation.item = 'Q2'
+        reconciliation.save! # create
+
+        expect(statement).to receive(:update_attributes)
+          .with(parliamentary_group_item: 'Q3').once
+        reconciliation.item = 'Q3'
+        reconciliation.save! # update
+      end
     end
   end
 end

@@ -13,7 +13,12 @@ class Reconciliation < ApplicationRecord
   private
 
   def update_statement
-    statement.update_attributes(person_item: item)
+    case resource_type
+    when 'person'
+      statement.update_attributes(person_item: item)
+    when 'party'
+      statement.update_attributes(parliamentary_group_item: item)
+    end
   end
 
   def create_equivalence_claim

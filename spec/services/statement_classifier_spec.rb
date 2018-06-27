@@ -5,13 +5,10 @@ require 'rails_helper'
 RSpec.describe StatementClassifier, type: :service do
   include ActiveSupport::Testing::TimeHelpers
 
-  let(:page) do
-    double(:page, statements: statement_relation,
-                  position_held_item: 'Q2', parliamentary_term_item: 'Q3')
-  end
+  let(:page) { build(:page, parliamentary_term_item: 'Q2') }
 
   let(:data) { { person_item: 'Q1' } }
-  let(:statement) { Statement.new(data) }
+  let(:statement) { build(:statement, data.merge(page: page)) }
   let(:statements) { [statement].compact }
   let(:statement_relation) { double(:relation, to_a: statements) }
 
@@ -27,6 +24,8 @@ RSpec.describe StatementClassifier, type: :service do
     allow(Page).to receive(:find_by!)
       .with(title: 'page_title')
       .and_return(page)
+    allow(page).to receive(:statements).
+      and_return(statement_relation)
     allow(RetrievePositionData).to receive(:run)
       .with(page.position_held_item, page.parliamentary_term_item, nil)
       .and_return(position_held_data)
@@ -42,7 +41,6 @@ RSpec.describe StatementClassifier, type: :service do
   describe 'statement classification' do
     let(:data) do
       { person_item: '',
-        page: Page.new(parliamentary_term_item: 'Q2'),
         parliamentary_group_item: 'Q3',
         electoral_district_item: 'Q4' }
     end

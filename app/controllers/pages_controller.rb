@@ -16,7 +16,7 @@ class PagesController < ApplicationController
 
   # GET /pages/new
   def new
-    @page = Page.new
+    @page = Page.new(new_page_params)
   end
 
   # GET /pages/1/edit
@@ -74,5 +74,9 @@ class PagesController < ApplicationController
                                  :parliamentary_term_item, :reference_url,
                                  :require_parliamentary_group, :country_id,
                                  :csv_source_url)
+  end
+
+  def new_page_params
+    params.permit(:title, :position_held_item, :csv_source_url, :country_id)
   end
 end

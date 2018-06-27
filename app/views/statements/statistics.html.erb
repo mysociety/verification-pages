@@ -17,7 +17,12 @@
         <td><% if statement.pages.each do |page_title| %>
           <a href="https://www.wikidata.org/wiki/<%= page_title %>"><%= page_title %></a>
           <% end.empty? %>
-          missing
+          missing (<%= link_to 'Create page', new_page_path(
+            title: "User:Verification_pages_bot/verification/#{country_code.downcase}/",
+            position_held_item: statement.position,
+            csv_source_url: "#{ENV['SUGGESTIONS_STORE_URL']}export/#{country_code.downcase}/#{statement.position}.csv",
+            country_id: Country.find_by(code: country_code.downcase)
+          ) %>)
         <% end %></td>
         <td><%= statement.unchecked %></td>
         <td><%= statement.correct %></td>

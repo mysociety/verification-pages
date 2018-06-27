@@ -91,6 +91,7 @@ RSpec.describe StatementClassifier, type: :service do
     context 'when statement is actionable' do
       before do
         position_held.group = nil
+        statement.verifications.build(status: true)
         allow(statement).to receive(:person_item).and_return('Q1')
       end
       it { expect(classifier.verifiable).to be_empty }

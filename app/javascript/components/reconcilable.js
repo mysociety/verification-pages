@@ -20,9 +20,15 @@ export default template({
   methods: {
     searchForName: function () {
       this.searchResourceType = 'person'
+      this.search(this.statement.person_name)
+    },
+    searchForParty: function () {
+      this.searchResourceType = 'party'
+      this.search(this.statement.parliamentary_group_name)
+    },
+    search: function (searchTerm) {
       this.searchResultsLoading = true;
-      const name = this.statement.person_name
-      wikidataClient.search(name, 'en', 'en').then(data => {
+      wikidataClient.search(searchTerm, 'en', 'en').then(data => {
         console.log(data);
         this.searchResults = data;
         this.searchResultsLoaded = true;

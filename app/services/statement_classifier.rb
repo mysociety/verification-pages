@@ -82,7 +82,7 @@ class StatementClassifier
       :reverted
     elsif statement.reconciled? && !statement.problems.empty?
       :manually_actionable
-    elsif statement.reconciled?
+    elsif statement.verified? && statement.reconciled?
       :actionable
     elsif statement.verified?
       :reconcilable

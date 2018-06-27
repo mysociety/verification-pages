@@ -245,5 +245,18 @@ RSpec.describe StatementClassifier, type: :service do
       it { expect(classifier.done).to eq(statements) }
       it { expect(classifier.reverted).to be_empty }
     end
+
+    context 'when the statements are reconciled but not verified' do
+      before do
+        allow(statement).to receive(:person_item).and_return('Q1')
+      end
+      it { expect(classifier.verifiable).to eq(statements) }
+      it { expect(classifier.unverifiable).to be_empty }
+      it { expect(classifier.reconcilable).to be_empty }
+      it { expect(classifier.actionable).to be_empty }
+      it { expect(classifier.manually_actionable).to be_empty }
+      it { expect(classifier.done).to be_empty }
+      it { expect(classifier.reverted).to be_empty }
+    end
   end
 end

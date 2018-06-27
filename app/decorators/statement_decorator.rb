@@ -68,12 +68,18 @@ class StatementDecorator < SimpleDelegator
   end
 
   def reconciliations
-    person_reconciliations
+    person_reconciliations + party_reconciliations
   end
 
   def person_reconciliations
     return [] if person_item.present?
     [ 'person' ]
+  end
+
+  def party_reconciliations
+    return [] if !page.require_parliamentary_group? ||
+      parliamentary_group_item.present?
+    [ 'party' ]
   end
 
   private

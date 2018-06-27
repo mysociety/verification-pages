@@ -52,7 +52,8 @@ class StatementDecorator < SimpleDelegator
   end
 
   def unverifiable?
-    latest_verification && latest_verification.status == false
+    unverifiable_due_to_party? ||
+      latest_verification && latest_verification.status == false
   end
 
   def verified?
@@ -85,6 +86,10 @@ class StatementDecorator < SimpleDelegator
   private
 
   attr_reader :matching_position_held_data
+
+  def unverifiable_due_to_party?
+    page.require_parliamentary_group? && parliamentary_group_name.blank? && parliamentary_group_item.blank?
+  end
 
   def person_matches?
     person_item.present? && [data&.person, data&.merged_then_deleted].include?(person_item)

@@ -17,6 +17,10 @@ RSpec.describe Reconciliation, type: :model do
     it 'requires item' do
       expect(reconciliation.errors).to include(:item)
     end
+
+    it 'requires resource_type' do
+      expect(reconciliation.errors).to include(:resource_type)
+    end
   end
 
   describe 'after commit callback' do

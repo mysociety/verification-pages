@@ -8,6 +8,7 @@ export default template({
     searchResultsLoading: false,
     searchResultsLoaded: false,
     searchResults: null,
+    searchResourceType: null
   } },
   props: ['statement', 'country'],
   created: function () {
@@ -18,6 +19,7 @@ export default template({
   },
   methods: {
     searchForName: function () {
+      this.searchResourceType = 'person'
       this.searchResultsLoading = true;
       const name = this.statement.person_name
       wikidataClient.search(name, 'en', 'en').then(data => {
@@ -32,7 +34,8 @@ export default template({
         return Axios.post(ENV.url + '/reconciliations.json', {
           id: this.statement.transaction_id,
           user: wikidataClient.user,
-          item: itemID
+          item: itemID,
+          resource_type: this.searchResourceType
         })
       })
     },

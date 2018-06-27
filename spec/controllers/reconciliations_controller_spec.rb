@@ -8,7 +8,8 @@ RSpec.describe ReconciliationsController, type: :controller do
   let(:classifier) { double(:classifier) }
 
   let(:valid_attributes) do
-    { id: '123', user: 'ExampleUser', item: 'Q1', format: 'json' }
+    { id: '123', user: 'ExampleUser', item: 'Q1', resource_type: 'person',
+      format: 'json' }
   end
 
   describe 'POST #create' do
@@ -22,7 +23,8 @@ RSpec.describe ReconciliationsController, type: :controller do
       expect(Statement).to receive(:find_by!).with(transaction_id: '123')
       post :create, params: valid_attributes
       expect(relation).to have_received(:create!)
-        .with('user' => 'ExampleUser', 'item' => 'Q1')
+        .with('user' => 'ExampleUser', 'item' => 'Q1',
+              'resource_type' => 'person')
     end
 
     it 'assigns classifier' do

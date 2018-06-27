@@ -4,7 +4,7 @@
 class Reconciliation < ApplicationRecord
   belongs_to :statement
 
-  validates :item, presence: true
+  validates :item, :resource_type, presence: true
 
   default_scope -> { order(updated_at: :asc) }
 

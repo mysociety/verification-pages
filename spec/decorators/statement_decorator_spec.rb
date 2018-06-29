@@ -28,7 +28,7 @@ RSpec.describe StatementDecorator, type: :decorator do
       ]
     end
     let(:expected_error) do
-      'There were 2 \'position held\' (P39) statements on Wikidata that match the verified suggestion - one or of them might be missing an end date or parliamentary term qualifier'
+      'There were 2 \'position held\' (P39) statements on Wikidata that match the verified suggestion - one or more of them might be missing an end date or parliamentary term qualifier'
     end
     it 'should find a problem with there being multiple matching statements' do
       expect(statement.multiple_statement_problems).to eq([ expected_error ])
@@ -163,7 +163,7 @@ RSpec.describe StatementDecorator, type: :decorator do
         "The electoral district is different in the statement (Q789) and on Wikidata (Q345)",
         "The parliamentary group (party) is different in the statement (Q123) and on Wikidata (Q234)",
         "On Wikidata, the position held start date (2014-01-06) was before the term start date (2014-01-31)",
-        'There were 2 \'position held\' (P39) statements on Wikidata that match the verified suggestion - one or of them might be missing an end date or parliamentary term qualifier'
+        'There were 2 \'position held\' (P39) statements on Wikidata that match the verified suggestion - one or more of them might be missing an end date or parliamentary term qualifier'
       ]
       expect(statement.problems).to eq(expected_errors)
     end

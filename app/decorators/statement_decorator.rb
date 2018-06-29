@@ -48,7 +48,7 @@ class StatementDecorator < SimpleDelegator
 
   def multiple_statement_problems
     return [] unless matching_position_held_data.length > 1
-    [ "There were #{matching_position_held_data.length} 'position held' (P39) statements on Wikidata that match the verified suggestion - one or of them might be missing an end date or parliamentary term qualifier" ]
+    [ "There were #{matching_position_held_data.length} 'position held' (P39) statements on Wikidata that match the verified suggestion - one or more of them might be missing an end date or parliamentary term qualifier" ]
   end
 
   def unverifiable?

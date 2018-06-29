@@ -4,10 +4,11 @@
 class RetrievePositionData < ServiceBase
   include SparqlQuery
 
-  attr_reader :position_held_item, :person_item
+  attr_reader :position_held_item, :parliamentary_term_item, :person_item
 
-  def initialize(position_held_item, person_item = nil)
+  def initialize(position_held_item, parliamentary_term_item = nil, person_item = nil)
     @position_held_item = position_held_item
+    @parliamentary_term_item = parliamentary_term_item
     @person_item = person_item
   end
 

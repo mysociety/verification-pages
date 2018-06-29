@@ -6,7 +6,8 @@ RSpec.describe StatementClassifier, type: :service do
   include ActiveSupport::Testing::TimeHelpers
 
   let(:page) do
-    double(:page, statements: statement_relation, position_held_item: 'Q2')
+    double(:page, statements: statement_relation,
+                  position_held_item: 'Q2', parliamentary_term_item: 'Q3')
   end
 
   let(:data) { { person_item: 'Q1' } }
@@ -27,7 +28,7 @@ RSpec.describe StatementClassifier, type: :service do
       .with(title: 'page_title')
       .and_return(page)
     allow(RetrievePositionData).to receive(:run)
-      .with(page.position_held_item, nil)
+      .with(page.position_held_item, page.parliamentary_term_item, nil)
       .and_return(position_held_data)
   end
 

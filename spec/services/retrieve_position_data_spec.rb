@@ -3,11 +3,15 @@
 require 'rails_helper'
 
 RSpec.describe RetrievePositionData, type: :service do
-  let(:service) { RetrievePositionData.new('Q1', 'Q3') }
+  let(:service) { RetrievePositionData.new('Q1', 'Q2', 'Q3') }
 
   describe 'initialisation' do
     it 'assigns position_held_item instance variable' do
       expect(service.position_held_item).to eq 'Q1'
+    end
+
+    it 'assigns parliamentary_term_item instance variable' do
+      expect(service.parliamentary_term_item).to eq 'Q2'
     end
 
     it 'assigns person_item instance variable' do

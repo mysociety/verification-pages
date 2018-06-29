@@ -1,0 +1,25 @@
+#!/usr/bin/env bash
+#
+# Manage local backups of the MySQL database on Toolforge
+#
+
+cd "$(dirname "$0")/.."
+
+if [ ! -f environment_variables.sh ]; then
+  echo "No environment variables found." >2
+  exit 1
+fi
+
+# Get our environment
+source environment_variables.sh
+
+# Run mysqldump
+/usr/bin/mysqldump \
+  --defaults-file=${HOME}/replica.my.cnf \
+  -h tools.db.svc.eqiad.wmflabs \
+  --single-transaction \
+  s${UID}__verification-pages-${RAILS_ENV} \
+  | /bin/bzip2 >${HOME}/db/verification-pages-${RAILS_ENV}-$(/bin/date +%F-%H%M%S).sql.bz2
+
+# Remove files older than 7 full days.
+/usr/bin/find ${HOME}/db -name '*.bz2' -mtime +7 -exec rm {} \;

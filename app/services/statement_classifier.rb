@@ -111,6 +111,7 @@ class StatementClassifier
   def position_held_data
     @position_held_data ||= RetrievePositionData.run(
       page.position_held_item,
+      page.parliamentary_term_item,
       person_item_from_transaction_id
     )
   end

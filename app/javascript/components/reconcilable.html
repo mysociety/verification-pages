@@ -1,13 +1,16 @@
 <span>
   <span v-if="!searchResultsLoading && !searchResultsLoaded">
-    <button v-on:click="searchForName()" class="mw-ui-button mw-ui-progressive">Search</button>
+    <button v-if="statement.reconciliations.indexOf('person') != -1" v-on:click="searchForName()" class="mw-ui-button mw-ui-progressive">Search for person</button>
+    <button v-if="statement.reconciliations.indexOf('party') != -1" v-on:click="searchForParty()" class="mw-ui-button mw-ui-progressive">Search for party</button>
   </span>
   <span v-if="searchResultsLoading">
     Loading search results...
   </span>
   <span v-if="searchResultsLoaded">
-    <h3>Create a new item</h3>
-    <button v-on:click="createPerson()">Create {{ statement.person_name }}</button>
+    <span v-if="this.searchResourceType === 'person'">
+      <h3>Create a new item</h3>
+      <button v-on:click="createPerson()">Create {{ statement.person_name }}</button>
+    </span>
     <h3>Wikidata search results</h3>
     <ul class="wd-search-results">
       <li v-for="wdResult in searchResults.fromWikidata">

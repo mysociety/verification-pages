@@ -13,6 +13,6 @@ class ReconciliationsController < FrontendController
   private
 
   def reconciliation_params
-    params.permit(%i[user item])
+    params.permit(%i[user item resource_type])
   end
 end

@@ -8,6 +8,7 @@ export default template({
     searchResultsLoading: false,
     searchResultsLoaded: false,
     searchResults: null,
+    searchResourceType: null
   } },
   props: ['statement', 'country'],
   created: function () {
@@ -18,9 +19,16 @@ export default template({
   },
   methods: {
     searchForName: function () {
+      this.searchResourceType = 'person'
+      this.search(this.statement.person_name)
+    },
+    searchForParty: function () {
+      this.searchResourceType = 'party'
+      this.search(this.statement.parliamentary_group_name)
+    },
+    search: function (searchTerm) {
       this.searchResultsLoading = true;
-      const name = this.statement.person_name
-      wikidataClient.search(name, 'en', 'en').then(data => {
+      wikidataClient.search(searchTerm, 'en', 'en').then(data => {
         console.log(data);
         this.searchResults = data;
         this.searchResultsLoaded = true;
@@ -32,7 +40,8 @@ export default template({
         return Axios.post(ENV.url + '/reconciliations.json', {
           id: this.statement.transaction_id,
           user: wikidataClient.user,
-          item: itemID
+          item: itemID,
+          resource_type: this.searchResourceType
         })
       })
     },

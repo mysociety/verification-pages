@@ -4,7 +4,7 @@
 class Reconciliation < ApplicationRecord
   belongs_to :statement
 
-  validates :item, presence: true
+  validates :item, :resource_type, presence: true
 
   default_scope -> { order(updated_at: :asc) }
 
@@ -13,10 +13,16 @@ class Reconciliation < ApplicationRecord
   private
 
   def update_statement
-    statement.update_attributes(person_item: item)
+    case resource_type
+    when 'person'
+      statement.update_attributes(person_item: item)
+    when 'party'
+      statement.update_attributes(parliamentary_group_item: item)
+    end
   end
 
   def create_equivalence_claim
+    return if resource_type != 'person' || !item_changed?
     store.create_equivalence_claim("Added FB ID for #{statement.person_name}")
   end
 

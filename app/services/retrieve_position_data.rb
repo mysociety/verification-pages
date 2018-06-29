@@ -23,7 +23,7 @@ class RetrievePositionData < ServiceBase
 
   def query
     <<~SPARQL
-      SELECT DISTINCT ?person ?merged_then_deleted ?revision ?position ?start_of_term ?start_date ?term ?group ?district
+      SELECT DISTINCT ?person (GROUP_CONCAT(?merged_then_deleted) AS ?merged_then_deleted) ?revision ?position ?start_of_term ?start_date ?term ?group ?district
       WHERE {
         %<person_bind>s
         ?position ps:P39 wd:%<position_held_item>s .
@@ -38,6 +38,7 @@ class RetrievePositionData < ServiceBase
         OPTIONAL { ?position pq:P580 ?start_date . }
         OPTIONAL { ?merged_then_deleted owl:sameAs ?person }
       }
+      GROUP BY ?person ?revision ?position ?start_of_term ?start_date ?term ?group ?district
     SPARQL
   end
 

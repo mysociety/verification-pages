@@ -218,4 +218,13 @@ RSpec.describe StatementDecorator, type: :decorator do
       end
     end
   end
+
+  describe '#person_matches?' do
+    let(:matching_position_held_data) { [] }
+    context 'with no matching position held data' do
+      it 'returns false' do
+        expect(statement.send(:person_matches?)).to be false
+      end
+    end
+  end
 end

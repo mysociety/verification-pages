@@ -30,7 +30,7 @@ class RetrievePositionData < ServiceBase
   def query_format
     <<~SPARQL
       SELECT DISTINCT
-        ?person ?merged_then_deleted ?revision
+        ?person (GROUP_CONCAT(?merged_then_deleted) AS ?merged_then_deleted) ?revision
         ?position ?position_start
         ?term ?term_start
         ?group ?district
@@ -61,6 +61,7 @@ class RetrievePositionData < ServiceBase
           (?position_start_precision = 11 && ?days_before_term_start < 28)
         )
       }
+      GROUP BY ?person ?revision ?position ?position_start ?term ?term_start ?group ?district
     SPARQL
   end
 

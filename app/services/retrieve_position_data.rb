@@ -16,6 +16,7 @@ class RetrievePositionData < ServiceBase
     run_query(format(
       query,
       position_held_item: position_held_item,
+      parliamentary_term_item: parliamentary_term_item,
       person_bind: person_bind
     ))
   end

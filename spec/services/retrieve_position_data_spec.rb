@@ -26,6 +26,12 @@ RSpec.describe RetrievePositionData, type: :service do
       service.run
     end
 
+    it 'calls run_query with substituted parliamentary_term_item' do
+      allow(service).to receive(:query).and_return('%<parliamentary_term_item>s')
+      expect(service).to receive(:run_query).with('Q2')
+      service.run
+    end
+
     context 'with person_item' do
       it 'calls run_query with substituted person_bind' do
         allow(service).to receive(:query).and_return('%<person_bind>s')

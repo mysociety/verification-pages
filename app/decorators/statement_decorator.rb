@@ -71,7 +71,11 @@ class StatementDecorator < SimpleDelegator
 
   attr_reader :matching_position_held_data
 
+  def merged_then_deleted
+    data&.merged_then_deleted.split.map { |item| item.split('/').last }
+  end
+
   def person_matches?
-    person_item.present? && [data&.person, data&.merged_then_deleted].include?(person_item)
+    person_item.present? && ([data&.person] + merged_then_deleted).include?(person_item)
   end
 end

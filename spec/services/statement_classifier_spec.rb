@@ -48,7 +48,7 @@ RSpec.describe StatementClassifier, type: :service do
 
     let(:wikidata_data) do
       { person: 'Q1',
-        merged_then_deleted: nil,
+        merged_then_deleted: '',
         term: 'Q2',
         start_of_term: '2018-01-01',
         start_date: '2018-01-01',
@@ -226,7 +226,7 @@ RSpec.describe StatementClassifier, type: :service do
       # so the statement will be in "done".
       let(:wikidata_data) do
         { person: 'Q200',
-          merged_then_deleted: 'Q1',
+          merged_then_deleted: 'http://www.wikidata.org/entity/Q1',
           term: 'Q2',
           start_of_term: '2018-01-01',
           start_date: '2018-01-01',

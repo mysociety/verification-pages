@@ -6,7 +6,7 @@ RSpec.describe RetrievePositionData, type: :service do
   let(:service) { RetrievePositionData.new('Q1') }
 
   describe 'initialisation' do
-    it 'assigns positioni_held_item instance variable' do
+    it 'assigns position_held_item instance variable' do
       expect(service.position_held_item).to eq 'Q1'
     end
   end

@@ -116,13 +116,9 @@ class StatementClassifier
     )
   end
 
-  def merged_then_deleted(data)
-    data.merged_then_deleted.split.map { |item| item.split('/').last }
-  end
-
   def matching_position_held_data(statement)
     position_held_data.select do |data|
-      ([data.person] + merged_then_deleted(data)).include?(statement.person_item)
+      [data.person, data.merged_then_deleted].include?(statement.person_item)
     end
   end
 end

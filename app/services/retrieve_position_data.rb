@@ -28,7 +28,7 @@ class RetrievePositionData < ServiceBase
       SELECT DISTINCT ?person ?merged_then_deleted ?revision ?position ?start_of_term ?start_date ?term ?group ?district
       WHERE {
         %<person_bind>s
-        BIND(wd:#{parliamentary_term_item} AS ?page_term)
+        BIND(wd:%<parliamentary_term_item>s AS ?page_term)
         ?position ps:P39 wd:%<position_held_item>s .
         ?person wdt:P31 wd:Q5 ; p:P39 ?position .
         ?person schema:version ?revision .
@@ -43,7 +43,7 @@ class RetrievePositionData < ServiceBase
         OPTIONAL { ?merged_then_deleted owl:sameAs ?person }
         FILTER (
           !bound(?start_of_page_term) || !bound(?start_date) ||
-          ?start_of_page_term < ?start_date
+          ?start_of_page_term <= ?start_date
         )
       }
     SPARQL

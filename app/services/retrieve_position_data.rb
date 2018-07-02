@@ -43,7 +43,7 @@ class RetrievePositionData < ServiceBase
         OPTIONAL { ?merged_then_deleted owl:sameAs ?person }
         FILTER (
           !bound(?start_of_page_term) || !bound(?start_date) ||
-          ?start_of_page_term < ?start_date
+          ?start_of_page_term <= ?start_date
         )
       }
     SPARQL

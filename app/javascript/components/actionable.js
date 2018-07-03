@@ -14,11 +14,13 @@ export default template({
     updatePositionHeld: function () {
       var personItem = this.statement.person_item,
           item = wikidataClient.item(personItem),
+          references = {},
           qualifiers = {},
           updateData = {
             property: wikidataClient.getPropertyID('position held'),
             object: this.page.position_held_item,
             referenceURL: this.page.reference_url,
+            references: references,
             qualifiers: qualifiers,
           }, that = this;
 
@@ -28,6 +30,10 @@ export default template({
         // Make sure there's a $ in the claim ID separating the item
         // ID from the UUID, otherwise we get invalid GUID errors.
         updateData.statement = this.statement.statement_uuid.replace(/^(Q\d+)[^\d]/, '$1$');
+      }
+
+      references[wikidataClient.getPropertyID('reference URL')] = {
+        value: this.page.reference_url, type: 'string'
       }
 
       if (this.statement.parliamentary_group_item) {

@@ -83,6 +83,10 @@ class StatementDecorator < SimpleDelegator
     [ 'party' ]
   end
 
+  def verified_on
+    latest_verification.try(:created_at).try(:to_date)
+  end
+
   private
 
   attr_reader :matching_position_held_data

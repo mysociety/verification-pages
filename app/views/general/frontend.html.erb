@@ -4,6 +4,7 @@
     <meta charset="UTF-8">
     <title>Verification Pages</title>
     <%= javascript_tag "CURRENT_PAGE_TITLE = '#{@page.title}'" %>
+    <%= javascript_tag "WIKIDATA_SITE = '#{ENV['WIKIDATA_SITE']}'" %>
     <%= javascript_pack_tag 'verification_tool' %>
     <%= stylesheet_link_tag 'wikidata_styles' %>
   </head>

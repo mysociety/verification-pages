@@ -13,17 +13,21 @@ class RetrievePositionData < ServiceBase
   end
 
   def run
-    run_query(format(
-      query,
+    run_query(query)
+  end
+
+  def query
+    format(
+      query_format,
       position_held_item: position_held_item,
       parliamentary_term_item: parliamentary_term_item,
       person_bind: person_bind
-    ))
+    )
   end
 
   private
 
-  def query
+  def query_format
     <<~SPARQL
       SELECT DISTINCT ?person ?merged_then_deleted ?revision ?position ?start_of_term ?start_date ?term ?group ?district
       WHERE {

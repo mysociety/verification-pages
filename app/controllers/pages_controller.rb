@@ -12,7 +12,12 @@ class PagesController < ApplicationController
   end
 
   # GET /pages/1
-  def show; end
+  def show
+    @query = RetrievePositionData.new(
+      @page.position_held_item,
+      @page.parliamentary_term_item
+    ).query
+  end
 
   # GET /pages/new
   def new

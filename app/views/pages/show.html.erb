@@ -38,3 +38,7 @@
 
 <%= link_to 'Load statements', load_page_path(@page), method: :post, class: 'btn btn-default' %>
 <%= link_to 'Create or update verification page on Wikidata', create_wikidata_page_path(@page), method: :post, class: 'btn btn-default' %>
+
+<p id="wqs-link-container">
+  <a href="https://query.wikidata.org/#<%= ERB::Util.url_encode(@query) %>">Find current positions from Wikidata</a>
+</p>

@@ -39,6 +39,7 @@ class MediaWikiApiController < ApplicationController
     'wbsetreference' => true,
     'wbsetqualifier' => true,
     'wbcreateclaim' => true,
+    'wbeditentity' => true
   }
 
   def api_data_for_action(action)

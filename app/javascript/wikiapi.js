@@ -385,6 +385,7 @@ var wikidata = function(spec) {
     return {
       'www.wikidata.org': {
         'reference URL': 'P854',
+        'reference retrieved': 'P813',
         'occupation': 'P106',
         'parliamentary group': 'P4100',
         'electoral district': 'P768',
@@ -393,6 +394,7 @@ var wikidata = function(spec) {
       },
       'test.wikidata.org': {
         'reference URL': 'P43659',
+        'reference retrieved': 'P388',
         'occupation': 'P70554',
         'parliamentary group': 'P70557',
         'electoral district': 'P70558',
@@ -405,6 +407,7 @@ var wikidata = function(spec) {
         // server for this information, since it must know which server
         // it's proxying to..)
         'reference URL': 'P43659',
+        'reference retrieved': 'P388',
         'occupation': 'P70554',
         'parliamentary group': 'P70557',
         'electoral district': 'P70558',

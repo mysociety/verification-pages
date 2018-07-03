@@ -35,6 +35,10 @@ export default template({
         value: this.page.reference_url, type: 'string'
       }
 
+      references[wikidataClient.getPropertyID('reference retrieved')] = {
+        value: this.statement.verified_on, type: 'time'
+      }
+
       if (this.statement.parliamentary_group_item) {
         qualifiers[wikidataClient.getPropertyID('parliamentary group')] =
           this.statement.parliamentary_group_item;

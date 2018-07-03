@@ -24,6 +24,24 @@ function getQualifiersFromAPIClaims(apiClaims, property) {
   return apiClaims[property][0].qualifiers;
 }
 
+function getReferencesFromAPIClaims(apiClaims, property) {
+  if (!apiClaims[property]) {
+    return [];
+  }
+  return apiClaims[property][0].references;
+}
+
+function getReferenceForURLFromAPIClaims (references, referenceURLProp, referenceURL) {
+  if (!references || !referenceURL) return
+  return references.find(function (r) {
+    var snak = r.snaks[referenceURLProp].find(function (s) {
+      return s.datatype === 'url' && s.datavalue.value === referenceURL.value
+    })
+    console.log(snak)
+    return typeof snak !== 'undefined'
+  })
+}
+
 function checkForError(data) {
   // Weirdly, errors like bad CSRF tokens still return success
   // rather than going to the fail handlers, so we use this even
@@ -36,19 +54,18 @@ function checkForError(data) {
   }
 }
 
-function getReferenceSnaks(referenceURLProp, referenceURL) {
-  var snaks = {};
-  snaks[referenceURLProp] = [
-    {
+function buildReferenceSnaks (references) {
+  var snaks = {}
+
+  Object.keys(references).forEach(function (property) {
+    snaks[property] = [{
       snaktype: 'value',
-      property: referenceURLProp,
-      datavalue: {
-        type: 'string',
-        value: referenceURL,
-      }
-    }
-  ];
-  return JSON.stringify(snaks);
+      property: property,
+      datavalue: references[property]
+    }]
+  })
+
+  return JSON.stringify(snaks)
 }
 
 function getNewQualifiers(qualifiersFromAPI, wantedQualifiers) {
@@ -96,21 +113,6 @@ function getNewQualifiers(qualifiersFromAPI, wantedQualifiers) {
 var wikidataItem = function(spec) {
   var that = {}, wikidata = spec.wikidata, item = spec.item, lastRevisionID = null,
       my = {};
-
-  my.alreadyHasReferenceURL = function(referencesFromAPI, wantedReference) {
-    var i, j, values, referenceFromAPI;
-    referencesFromAPI = referencesFromAPI || [];
-    for (i = 0; i < referencesFromAPI.length; ++i) {
-      referenceFromAPI = referencesFromAPI[i];
-      values = referenceFromAPI.snaks[wikidata.getPropertyID('reference URL')] || [];
-      for (j = 0; j < values.length; ++j) {
-        if (values[j].datatype == 'string' && values[j].datavalue.value == wantedReference) {
-          return true;
-        }
-      }
-    }
-    return false;
-  };
 
   my.ajaxSetQualifier = function(qualifierDetails) {
     return wikidata.ajaxAPI(true, 'wbsetqualifier', {
@@ -162,6 +164,36 @@ var wikidataItem = function(spec) {
     }
   };
 
+  my.createReferences = function (claims, data) {
+    var referenceURLProp = wikidata.getPropertyID('reference URL')
+    var referenceURL = data.references[referenceURLProp]
+
+    var currentReference = getReferenceForURLFromAPIClaims(
+      getReferencesFromAPIClaims(claims, data.property),
+      referenceURLProp,
+      referenceURL
+    )
+
+    console.log('There are ' + Object.keys(data.references).length + ' references to create....');
+
+    if (Object.keys(data.references).length > 0) {
+      var data = {
+        statement: data.statement,
+        snaks: buildReferenceSnaks(data.references),
+        baserevid: lastRevisionID,
+        summary: wikidata.summary()
+      }
+
+      if (currentReference) {
+        data['reference'] = currentReference.hash
+      }
+
+      return wikidata.ajaxAPI(true, 'wbsetreference', data)
+    } else {
+      return Promise.resolve(null)
+    }
+  }
+
   my.createBareClaimDeferred = function(claimData) {
     // TODO the data we've been passed (indicating there wasn't an
     // existing statement to update) might be quite stale,
@@ -206,28 +238,13 @@ var wikidataItem = function(spec) {
           );
         }
 
-      console.log('Looks good to update these qualifiers:', newQualifiers);
-      return my.createQualifiers(newClaim, newQualifiers).then(function() {
-        // Set a reference URL:
-        if (my.alreadyHasReferenceURL(
-          data.claims[newClaim.property][0].references,
-          newClaim.referenceURL)) {
-          return Promise.resolve(null);
-        } else {
-          // We should set the referenceURL:
-          return wikidata.ajaxAPI(true, 'wbsetreference', {
-            statement: newClaim.statement,
-            snaks: getReferenceSnaks(
-              wikidata.getPropertyID('reference URL'),
-              newClaim.referenceURL
-            ),
-            baserevid: lastRevisionID,
-            summary: wikidata.summary()
-          });
-        }
-      });
-    });
-  };
+      console.log('Looks good to update these qualifiers:', newQualifiers)
+
+      return my.createQualifiers(newClaim, newQualifiers).then(function (foo) {
+        return my.createReferences(data.claims, newClaim)
+      })
+    })
+  }
 
   that.updateOrCreateClaim = function(baseRevisionID, claimData) {
     lastRevisionID = baseRevisionID;

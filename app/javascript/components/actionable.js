@@ -19,7 +19,6 @@ export default template({
           updateData = {
             property: wikidataClient.getPropertyID('position held'),
             object: this.page.position_held_item,
-            referenceURL: this.page.reference_url,
             references: references,
             qualifiers: qualifiers,
           }, that = this;

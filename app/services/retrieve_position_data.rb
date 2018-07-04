@@ -29,7 +29,7 @@ class RetrievePositionData < ServiceBase
 
   def query_format
     <<~SPARQL
-      SELECT DISTINCT ?person ?merged_then_deleted ?revision ?position ?term_start ?start_date ?term ?group ?district
+      SELECT DISTINCT ?person ?merged_then_deleted ?revision ?position ?term_start ?position_start ?term ?group ?district
       WHERE {
         %<person_bind>s
         BIND(wd:%<parliamentary_term_item>s AS ?page_term)
@@ -43,11 +43,11 @@ class RetrievePositionData < ServiceBase
         OPTIONAL { ?page_term (wdt:P571|wdt:P580) ?start_of_page_term . }
         OPTIONAL { ?position pq:P4100 ?group . }
         OPTIONAL { ?position pq:P768 ?district . }
-        OPTIONAL { ?position pq:P580 ?start_date . }
+        OPTIONAL { ?position pq:P580 ?position_start . }
         OPTIONAL { ?merged_then_deleted owl:sameAs ?person }
         FILTER (
-          !bound(?start_of_page_term) || !bound(?start_date) ||
-          ?start_of_page_term <= ?start_date
+          !bound(?start_of_page_term) || !bound(?position_start) ||
+          ?start_of_page_term <= ?position_start
         )
       }
     SPARQL

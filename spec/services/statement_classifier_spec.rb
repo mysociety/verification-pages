@@ -50,7 +50,7 @@ RSpec.describe StatementClassifier, type: :service do
         merged_then_deleted: nil,
         term: 'Q2',
         term_start: '2018-01-01',
-        start_date: '2018-01-01',
+        position_start: '2018-01-01',
         group: 'Q3',
         district: 'Q4' }
     end
@@ -211,7 +211,7 @@ RSpec.describe StatementClassifier, type: :service do
     context 'when position start is 2 days before term start' do
       before do
         position_held.group = nil
-        position_held.start_date = '2017-12-30'
+        position_held.position_start = '2017-12-30'
         allow(statement).to receive(:person_item).and_return('Q1')
       end
       it { expect(classifier.verifiable).to be_empty }
@@ -260,7 +260,7 @@ RSpec.describe StatementClassifier, type: :service do
           merged_then_deleted: 'Q1',
           term: 'Q2',
           term_start: '2018-01-01',
-          start_date: '2018-01-01',
+          position_start: '2018-01-01',
           group: 'Q3',
           district: 'Q4' }
       end

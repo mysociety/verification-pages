@@ -25,5 +25,9 @@ RSpec.describe Page, type: :model do
     it 'requires reference_url' do
       expect(page.errors).to include(:reference_url)
     end
+
+    it 'requires csv_source_url' do
+      expect(page.errors).to include(:csv_source_url)
+    end
   end
 end

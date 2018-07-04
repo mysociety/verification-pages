@@ -9,4 +9,5 @@ class Page < ApplicationRecord
   validates :position_held_item, presence: true
   validates :parliamentary_term_item, uniqueness: { allow_blank: true }
   validates :reference_url, presence: true
+  validates :csv_source_url, presence: true
 end

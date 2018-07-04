@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20180627135538) do
+ActiveRecord::Schema.define(version: 20180704093403) do
 
   create_table "countries", force: :cascade, options: "ENGINE=InnoDB DEFAULT CHARSET=utf8" do |t|
     t.string "name"
@@ -31,7 +31,7 @@ ActiveRecord::Schema.define(version: 20180627135538) do
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.bigint "country_id", null: false
-    t.string "csv_source_url", limit: 2000, default: "", null: false
+    t.string "csv_source_url", limit: 2000, null: false
     t.index ["country_id"], name: "index_pages_on_country_id"
   end
 

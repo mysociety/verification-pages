@@ -42,15 +42,15 @@ class RetrievePositionData < ServiceBase
         ?person wdt:P31 wd:Q5 ; p:P39 ?position .
         ?person schema:version ?revision .
         OPTIONAL { ?position pq:P2937 ?term . }
-        OPTIONAL { ?page_term (wdt:P571|wdt:P580) ?page_term_start . }
+        OPTIONAL { ?page_term (wdt:P571|wdt:P580) ?term_start . }
         OPTIONAL { ?position pq:P4100 ?group . }
         OPTIONAL { ?position pq:P768 ?district . }
         OPTIONAL { ?position pq:P580 ?position_start . }
         OPTIONAL { ?merged_then_deleted owl:sameAs ?person }
         FILTER (!bound(?term) || ?term = ?page_term)
         FILTER (
-          !bound(?page_term_start) || !bound(?position_start) ||
-          ?page_term_start <= ?position_start
+          !bound(?term_start) || !bound(?position_start) ||
+          ?term_start <= ?position_start
         )
       }
     SPARQL

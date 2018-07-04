@@ -45,7 +45,7 @@ class RetrievePositionData < ServiceBase
         OPTIONAL { ?page_term (wdt:P571|wdt:P580) ?term_start . }
         OPTIONAL { ?position pq:P4100 ?group . }
         OPTIONAL { ?position pq:P768 ?district . }
-        OPTIONAL { ?position pq:P580 ?position_start . }
+        OPTIONAL { ?position pqv:P580 [wikibase:timeValue ?position_start; wikibase:timePrecision ?position_start_precision] . }
         OPTIONAL { ?merged_then_deleted owl:sameAs ?person }
         FILTER (!bound(?term) || ?term = ?page_term)
         FILTER (

@@ -40,14 +40,14 @@ class RetrievePositionData < ServiceBase
           ?position pq:P2937 ?term .
           OPTIONAL { ?term (wdt:P571|wdt:P580) ?term_start . }
         }
-        OPTIONAL { ?page_term (wdt:P571|wdt:P580) ?start_of_page_term . }
+        OPTIONAL { ?page_term (wdt:P571|wdt:P580) ?page_term_start . }
         OPTIONAL { ?position pq:P4100 ?group . }
         OPTIONAL { ?position pq:P768 ?district . }
         OPTIONAL { ?position pq:P580 ?position_start . }
         OPTIONAL { ?merged_then_deleted owl:sameAs ?person }
         FILTER (
-          !bound(?start_of_page_term) || !bound(?position_start) ||
-          ?start_of_page_term <= ?position_start
+          !bound(?page_term_start) || !bound(?position_start) ||
+          ?page_term_start <= ?position_start
         )
       }
     SPARQL

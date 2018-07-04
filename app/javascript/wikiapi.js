@@ -58,10 +58,24 @@ function buildReferenceSnaks (references) {
   var snaks = {}
 
   Object.keys(references).forEach(function (property) {
+    var datavalue = references[property]
+    if (!datavalue.value) return
+
+    if (datavalue.type === 'time') {
+      datavalue.value = {
+        after: 0,
+        before: 0,
+        calendarmodel: 'http://www.wikidata.org/entity/Q1985727',
+        precision: 11,
+        time: datavalue.value,
+        timezone: 0
+      }
+    }
+
     snaks[property] = [{
       snaktype: 'value',
       property: property,
-      datavalue: references[property]
+      datavalue: datavalue
     }]
   })
 

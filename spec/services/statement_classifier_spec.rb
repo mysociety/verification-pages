@@ -49,7 +49,7 @@ RSpec.describe StatementClassifier, type: :service do
       { person: 'Q1',
         merged_then_deleted: nil,
         term: 'Q2',
-        start_of_term: '2018-01-01',
+        term_start: '2018-01-01',
         start_date: '2018-01-01',
         group: 'Q3',
         district: 'Q4' }
@@ -259,7 +259,7 @@ RSpec.describe StatementClassifier, type: :service do
         { person: 'Q200',
           merged_then_deleted: 'Q1',
           term: 'Q2',
-          start_of_term: '2018-01-01',
+          term_start: '2018-01-01',
           start_date: '2018-01-01',
           group: 'Q3',
           district: 'Q4' }

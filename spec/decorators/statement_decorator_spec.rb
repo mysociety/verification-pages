@@ -85,7 +85,7 @@ RSpec.describe StatementDecorator, type: :decorator do
             revision: '123',
             position: 'UUID',
             start_date: '2014-01-06',
-            start_of_term: '2014-01-31'
+            term_start: '2014-01-31'
           )
         ]
       end
@@ -107,7 +107,7 @@ RSpec.describe StatementDecorator, type: :decorator do
             revision: '123',
             position: 'UUID',
             start_date: '2014-01-06',
-            start_of_term: '2014-01-07'
+            term_start: '2014-01-07'
           )
         ]
       end
@@ -126,7 +126,7 @@ RSpec.describe StatementDecorator, type: :decorator do
             revision: '123',
             position: 'UUID',
             start_date: '2014-01-06',
-            start_of_term: '2014-01-04'
+            term_start: '2014-01-04'
           )
         ]
       end
@@ -152,7 +152,7 @@ RSpec.describe StatementDecorator, type: :decorator do
             revision: '123',
             position: 'UUID',
             start_date: '2014-01-06',
-            start_of_term: '2014-01-31',
+            term_start: '2014-01-31',
             district: 'Q345',
             group: 'Q234'
           ),

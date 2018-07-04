@@ -29,7 +29,11 @@ class RetrievePositionData < ServiceBase
 
   def query_format
     <<~SPARQL
-      SELECT DISTINCT ?person ?merged_then_deleted ?revision ?position ?term_start ?position_start ?term ?group ?district
+      SELECT DISTINCT
+        ?person ?merged_then_deleted ?revision
+        ?position ?position_start
+        ?term ?term_start
+        ?group ?district
       WHERE {
         %<person_bind>s
         BIND(wd:%<parliamentary_term_item>s AS ?page_term)

@@ -41,10 +41,7 @@ class RetrievePositionData < ServiceBase
         ?position ps:P39 ?position_held .
         ?person wdt:P31 wd:Q5 ; p:P39 ?position .
         ?person schema:version ?revision .
-        OPTIONAL {
-          ?position pq:P2937 ?term .
-          OPTIONAL { ?term (wdt:P571|wdt:P580) ?term_start . }
-        }
+        OPTIONAL { ?position pq:P2937 ?term . }
         OPTIONAL { ?page_term (wdt:P571|wdt:P580) ?page_term_start . }
         OPTIONAL { ?position pq:P4100 ?group . }
         OPTIONAL { ?position pq:P768 ?district . }

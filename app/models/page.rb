@@ -2,7 +2,7 @@
 
 # Verification page object
 class Page < ApplicationRecord
-  has_many :statements
+  has_many :statements, dependent: :destroy
   belongs_to :country
 
   validates :title, presence: true

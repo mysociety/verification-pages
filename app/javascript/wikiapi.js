@@ -119,6 +119,7 @@ var wikidataItem = function(spec) {
             value: getItemValueString(qualifierDetails.value),
             baseRevisionID: lastRevisionID,
             snaktype: 'value',
+            summary: wikidata.summary()
     }).then(function(data) {
       checkForError(data);
       lastRevisionID = data.pageinfo.lastrevid;
@@ -172,6 +173,7 @@ var wikidataItem = function(spec) {
       property: claimData.property,
       value: getItemValueString(claimData.object),
       baserevid: lastRevisionID,
+      summary: wikidata.summary()
     }).then(function(data) {
         checkForError(data);
         lastRevisionID = data.pageinfo.lastrevid;
@@ -220,6 +222,7 @@ var wikidataItem = function(spec) {
               newClaim.referenceURL
             ),
             baserevid: lastRevisionID,
+            summary: wikidata.summary()
           });
         }
       });
@@ -434,7 +437,8 @@ var wikidata = function(spec) {
   that.createPerson = function(personLabel, personDescription) {
     return that.ajaxAPI(true, 'wbeditentity', {
       new: 'item',
-      data: getPersonCreateData(personLabel, personDescription)
+      data: getPersonCreateData(personLabel, personDescription),
+      summary: this.summary()
     }).then(function (result) {
       return {
         item: result.entity.id,
@@ -513,6 +517,10 @@ var wikidata = function(spec) {
       return allResults;
     });
   });
+
+  that.summary = function() {
+    return 'Edited with Verification Pages (' + this.page + ')'
+  }
 
   return that;
 };

@@ -50,15 +50,15 @@ class MediaWikiApiController < ApplicationController
     elsif action == 'query'
       params.permit(:prop, :titles)
     elsif action == 'wbsetreference'
-      params.permit(:statement, :snaks, :baserevid)
+      params.permit(:statement, :snaks, :baserevid, :summary)
     elsif action == 'wbsetqualifier'
-      params.permit(:claim, :property, :value, :baserevisionid, :snaktype)
+      params.permit(:claim, :property, :value, :baserevisionid, :snaktype, :summary)
     elsif action == 'wbcreateclaim'
-      params.permit(:entity, :snaktype, :property, :value, :baserevid)
+      params.permit(:entity, :snaktype, :property, :value, :baserevid, :summary)
     elsif action == 'wbgetclaims'
       params.permit(:entity, :claim)
     elsif action == 'wbeditentity'
-      params.permit(:new, :data)
+      params.permit(:new, :data, :summary)
     else
       raise "Unknown action: #{action}"
     end.to_h

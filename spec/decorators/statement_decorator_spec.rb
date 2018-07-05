@@ -84,8 +84,8 @@ RSpec.describe StatementDecorator, type: :decorator do
           OpenStruct.new(
             revision: '123',
             position: 'UUID',
-            start_date: '2014-01-06',
-            start_of_term: '2014-01-31'
+            position_start: '2014-01-06',
+            term_start: '2014-01-31'
           )
         ]
       end
@@ -106,8 +106,8 @@ RSpec.describe StatementDecorator, type: :decorator do
           OpenStruct.new(
             revision: '123',
             position: 'UUID',
-            start_date: '2014-01-06',
-            start_of_term: '2014-01-07'
+            position_start: '2014-01-06',
+            term_start: '2014-01-07'
           )
         ]
       end
@@ -125,8 +125,8 @@ RSpec.describe StatementDecorator, type: :decorator do
           OpenStruct.new(
             revision: '123',
             position: 'UUID',
-            start_date: '2014-01-06',
-            start_of_term: '2014-01-04'
+            position_start: '2014-01-06',
+            term_start: '2014-01-04'
           )
         ]
       end
@@ -151,8 +151,8 @@ RSpec.describe StatementDecorator, type: :decorator do
           OpenStruct.new(
             revision: '123',
             position: 'UUID',
-            start_date: '2014-01-06',
-            start_of_term: '2014-01-31',
+            position_start: '2014-01-06',
+            term_start: '2014-01-31',
             district: 'Q345',
             group: 'Q234'
           ),

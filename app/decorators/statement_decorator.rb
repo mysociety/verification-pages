@@ -31,9 +31,9 @@ class StatementDecorator < SimpleDelegator
   end
 
   def start_date_before_term_problems
-    return [] unless data&.start_date && data&.start_of_term &&
-      Date.parse(data.start_date) < Date.parse(data.start_of_term) - 1.day
-    [ "On Wikidata, the position held start date (#{data&.start_date}) was before the term start date (#{data&.start_of_term})" ]
+    return [] unless data&.position_start && data&.term_start &&
+      Date.parse(data.position_start) < Date.parse(data.term_start) - 1.day
+    [ "On Wikidata, the position held start date (#{data&.position_start}) was before the term start date (#{data&.term_start})" ]
   end
 
   def electoral_district_problems

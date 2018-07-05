@@ -45,12 +45,19 @@ class RetrievePositionData < ServiceBase
         OPTIONAL { ?page_term (wdt:P571|wdt:P580) ?term_start . }
         OPTIONAL { ?position pq:P4100 ?group . }
         OPTIONAL { ?position pq:P768 ?district . }
-        OPTIONAL { ?position pq:P580 ?position_start . }
+        OPTIONAL { ?position pqv:P580 [wikibase:timeValue ?position_start; wikibase:timePrecision ?position_start_precision] . }
         OPTIONAL { ?merged_then_deleted owl:sameAs ?person }
+        BIND(ceil((year(?term_start) - year(?position_start)) * 365.2425 +
+                  (month(?term_start) - month(?position_start)) * 30.4375 +
+                  (day(?term_start) - day(?position_start))) AS ?days_before_term_start)
         FILTER (!bound(?term) || ?term = ?page_term)
         FILTER (
           !bound(?term_start) || !bound(?position_start) ||
-          ?term_start <= ?position_start
+          (?position_start_precision = 9 && year(?term_start) <= year(?position_start)) ||
+          (?position_start_precision = 10 && year(?term_start) <= year(?position_start) || (
+            year(?term_start) = year(?position_start) && month(?term_start) <= month(?position_start)
+          ) ||
+          (?position_start_precision = 11 && ?days_before_term_start < 28)
         )
       }
     SPARQL

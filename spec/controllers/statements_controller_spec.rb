@@ -12,7 +12,7 @@ RSpec.describe StatementsController, type: :controller do
   describe "GET #show" do{id: '123', format: 'json'}
     it 'returns http success for a transaction that exists' do
       get :show, params: show_parameters
-      expect(response).to have_http_status(:success)
+      expect(response).to be_successful
     end
 
     it 'does not update the actioned_at time' do

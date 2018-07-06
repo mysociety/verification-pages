@@ -14,28 +14,11 @@ export default template({
       loaded: false,
       submitting: false,
       statements: [],
-      statementIndex: 0,
       displayType: 'all',
       page: null
     }
   },
-  watch: {
-    statementIndex: function (newVal) {
-      if (newVal < 0) {
-        this.statementIndex = this.currentStatements.length - 1
-      } else {
-        this.statementIndex = newVal % this.currentStatements.length
-      }
-      this.$emit('statement-changed')
-    }
-  },
   computed: {
-    statement: function () {
-      const statement = this.currentStatements[this.statementIndex]
-      if (statement) return statement
-      this.statementIndex = this.currentStatements.length - 1
-      return this.currentStatements[this.statementIndex]
-    },
     currentStatements: function () {
       if (this.displayType !== 'all') {
         return this.statements.filter(s => s.type === this.displayType)
@@ -43,10 +26,6 @@ export default template({
         return this.statements
       }
     },
-    displayIndex: {
-      get: function () { return this.statementIndex + 1 },
-      set: function (val) { this.statementIndex = val - 1 }
-    }
   },
   created: function () {
     this.loadStatements()
@@ -76,12 +55,6 @@ export default template({
       }).then(() => {
         this.loaded = true
       })
-    },
-    prevStatement: function () {
-      this.statementIndex = this.statementIndex - 1
-    },
-    nextStatement: function () {
-      this.statementIndex = this.statementIndex + 1
     },
     countStatementsOfType: function (type) {
       if (type !== 'all') {

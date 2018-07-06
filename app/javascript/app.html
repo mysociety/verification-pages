@@ -47,6 +47,7 @@
   </div>
   <div v-if="loaded && currentStatements.length > 0">
     <table class="verification-tool__table">
+      <tbody v-for="statement in currentStatements">
       <tr>
         <td>
           <span class="verification-tool__table__cell-label">Subject</span>
@@ -72,13 +73,14 @@
       <tr>
         <td colspan="5" v-bind:class="'verification-tool__statement-controls verification-tool__statement-controls--' + statement.type">
           <span v-if="!submitting">
-            <component v-bind:is="currentView" :statement="statement" :page="page" :country="country"></component>
+            <ActionWrapper :statement="statement" :page="page" :country="country"></ActionWrapper>
           </span>
           <span v-else>
             Submitting...
           </span>
         </td>
       </tr>
+      </tbody>
     </table>
   </div>
   <div v-if="!loaded" class="verification-tool__blank-slate">

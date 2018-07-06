@@ -1,15 +1,12 @@
+import Vue from 'vue'
 import ENV from './env'
 import Axios from 'axios'
 import wikidataClient from './wikiapi'
 import template from './app.html?style=./app.css'
 
-import verifiableComponent from './components/verifiable'
-import unverifiableComponent from './components/unverifiable'
-import reconcilableComponent from './components/reconcilable'
-import actionableComponent from './components/actionable'
-import manuallyActionableComponent from './components/manually_actionable'
-import doneComponent from './components/done'
-import revertedComponent from './components/reverted'
+import actionWrapper from './components/action_wrapper'
+
+Vue.component('ActionWrapper', actionWrapper)
 
 export default template({
   data () {
@@ -33,17 +30,6 @@ export default template({
     }
   },
   computed: {
-    currentView: function () {
-      switch (this.statement.type) {
-        case 'verifiable': return verifiableComponent
-        case 'unverifiable': return unverifiableComponent
-        case 'reconcilable': return reconcilableComponent
-        case 'actionable': return actionableComponent
-        case 'manually_actionable': return manuallyActionableComponent
-        case 'done': return doneComponent
-        case 'reverted': return revertedComponent
-      }
-    },
     statement: function () {
       const statement = this.currentStatements[this.statementIndex]
       if (statement) return statement

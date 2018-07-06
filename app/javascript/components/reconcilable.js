@@ -10,7 +10,7 @@ export default template({
     searchResults: null,
     searchResourceType: null
   } },
-  props: ['statement', 'country'],
+  props: ['statement', 'page', 'country'],
   created: function () {
     this.$parent.$on('statement-changed', () => {
       this.searchResultsLoading = false

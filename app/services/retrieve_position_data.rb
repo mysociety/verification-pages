@@ -42,7 +42,30 @@ class RetrievePositionData < ServiceBase
         ?person wdt:P31 wd:Q5 ; p:P39 ?position .
         ?person schema:version ?revision .
         OPTIONAL { ?position pq:P2937 ?term . }
-        OPTIONAL { ?page_term (wdt:P571|wdt:P580) ?term_start . }
+        # We want a unique value for the start of the term, which
+        # might be with P571 (inception) or P580 (start time), so
+        # prefer more precision to less, and inception to start time
+        # using COALESCE:
+        OPTIONAL { ?page_term p:P571 ?inception_s
+          OPTIONAL { ?inception_s psv:P571 [wikibase:timeValue ?term_inception_day_precision; wikibase:timePrecision 11] }
+          OPTIONAL { ?inception_s psv:P571 [wikibase:timeValue ?term_inception_month_precision; wikibase:timePrecision 10] }
+          OPTIONAL { ?inception_s psv:P571 [wikibase:timeValue ?term_inception_year_precision; wikibase:timePrecision 9] }
+        }
+        OPTIONAL { ?page_term p:P580 ?start_time_s
+          OPTIONAL { ?start_time_s psv:P580 [wikibase:timeValue ?term_start_time_day_precision; wikibase:timePrecision 11] }
+          OPTIONAL { ?start_time_s psv:P580 [wikibase:timeValue ?term_start_time_month_precision; wikibase:timePrecision 10] }
+          OPTIONAL { ?start_time_s psv:P580 [wikibase:timeValue ?term_start_time_year_precision; wikibase:timePrecision 9] }
+        }
+        BIND(
+          COALESCE(
+            ?term_inception_day_precision,
+            ?term_start_time_day_precision,
+            ?term_inception_month_precision,
+            ?term_start_time_month_precision,
+            ?term_inception_year_precision,
+            ?term_start_time_year_precision
+          ) AS ?term_start
+        )
         OPTIONAL { ?position pq:P4100 ?group . }
         OPTIONAL { ?position pq:P768 ?district . }
         OPTIONAL { ?position pqv:P580 [wikibase:timeValue ?position_start; wikibase:timePrecision ?position_start_precision] . }

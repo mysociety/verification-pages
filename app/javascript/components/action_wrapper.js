@@ -9,7 +9,11 @@ import doneComponent from './done'
 import revertedComponent from './reverted'
 
 export default template({
-  data () { return { } },
+  data () {
+    return {
+      submitting: false,
+    }
+  },
   props: ['statement', 'page', 'country'],
   computed: {
     currentView: function () {
@@ -26,7 +30,10 @@ export default template({
   },
   created: function () {
     this.$on('statement-update', requestFunction => {
-      this.$parent.$emit('statement-update', requestFunction)
+      this.submitting = true
+      this.$parent.$emit('statement-update', requestFunction, () => {
+        this.submitting = false
+      })
     })
   }
 })

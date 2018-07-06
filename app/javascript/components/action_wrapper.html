@@ -1,1 +1,6 @@
-<span v-bind:is="currentView" :statement="statement" :page="page" :country="country"></span>
+<span v-if="!submitting">
+  <span v-bind:is="currentView" :statement="statement" :page="page" :country="country"></span>
+</span>
+<span v-else>
+  Submitting...
+</span>

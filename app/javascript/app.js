@@ -12,7 +12,6 @@ export default template({
   data () {
     return {
       loaded: false,
-      submitting: false,
       statements: [],
       displayType: 'all',
       page: null
@@ -29,8 +28,7 @@ export default template({
   },
   created: function () {
     this.loadStatements()
-    this.$on('statement-update', requestFunction => {
-      this.submitting = true
+    this.$on('statement-update', (requestFunction, cb) => {
       requestFunction().then(response => {
         if (response.data.statements.length > 1) {
           throw 'Response has too many statements. We don\'t know which one to update'
@@ -40,8 +38,7 @@ export default template({
           return s.transaction_id === newStatement.transaction_id
         })
         this.statements.splice(index, 1, newStatement)
-        this.submitting = false
-      })
+      }).then(cb)
     })
   },
   methods: {

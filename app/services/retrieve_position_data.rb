@@ -54,9 +54,10 @@ class RetrievePositionData < ServiceBase
         FILTER (
           !bound(?term_start) || !bound(?position_start) ||
           (?position_start_precision = 9 && year(?term_start) <= year(?position_start)) ||
-          (?position_start_precision = 10 && year(?term_start) <= year(?position_start) || (
-            year(?term_start) = year(?position_start) && month(?term_start) <= month(?position_start)
-          ) ||
+          (?position_start_precision = 10 && (
+            year(?term_start) <= year(?position_start) ||
+            (year(?term_start) = year(?position_start) && month(?term_start) <= month(?position_start))
+          )) ||
           (?position_start_precision = 11 && ?days_before_term_start < 28)
         )
       }

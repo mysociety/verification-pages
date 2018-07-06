@@ -23,5 +23,10 @@ export default template({
         case 'reverted': return revertedComponent
       }
     }
+  },
+  created: function () {
+    this.$on('statement-update', requestFunction => {
+      this.$parent.$emit('statement-update', requestFunction)
+    })
   }
 })

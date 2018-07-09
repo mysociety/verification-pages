@@ -19,7 +19,7 @@ json.statements @classifier.to_a do |statement|
   )
 
   if statement.verified_on
-    json.verified_on "+#{statement.verified_on.iso8601}"
+    json.verified_on "+#{statement.verified_on.iso8601}T00:00:00Z"
   else
     json.verified_on nil
   end

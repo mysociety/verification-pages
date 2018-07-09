@@ -10,6 +10,11 @@ export default template({
     updateError: null,
   } },
   props: ['statement', 'page', 'country'],
+  created: function () {
+    if (['verifiable', 'reconcilable'].indexOf(this.statement.previousType) !== -1) {
+      this.updatePositionHeld()
+    }
+  },
   methods: {
     updatePositionHeld: function () {
       var personItem = this.statement.person_item,

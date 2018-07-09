@@ -219,6 +219,28 @@ RSpec.describe StatementDecorator, type: :decorator do
     end
   end
 
+  describe '#verified_on' do
+    subject { statement.verified_on }
+
+    context 'with verification' do
+      let(:time) { Time.utc(2018, 1, 1, 13, 45) }
+      before do
+        allow(statement).to receive(:latest_verification).and_return(
+          Verification.new(created_at: time)
+        )
+      end
+
+      it { is_expected.to eq Date.new(2018, 1, 1) }
+    end
+
+    context 'without verification' do
+      before do
+        allow(statement).to receive(:latest_verification).and_return(nil)
+      end
+      it { is_expected.to be_nil }
+    end
+  end
+
   describe '#person_matches?' do
     let(:matching_position_held_data) { [] }
     context 'with no matching position held data' do

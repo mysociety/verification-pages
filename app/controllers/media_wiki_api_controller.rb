@@ -50,7 +50,7 @@ class MediaWikiApiController < ApplicationController
     elsif action == 'query'
       params.permit(:prop, :titles)
     elsif action == 'wbsetreference'
-      params.permit(:statement, :snaks, :baserevid, :summary)
+      params.permit(:statement, :snaks, :baserevid, :reference, :summary)
     elsif action == 'wbsetqualifier'
       params.permit(:claim, :property, :value, :baserevisionid, :snaktype, :summary)
     elsif action == 'wbcreateclaim'

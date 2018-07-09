@@ -1,0 +1,25 @@
+<ul>
+  <li v-if="statement.parliamentary_group_item">'parliamentary group' qualifier:
+    <wikilink :id="statement.parliamentary_group_item">
+      {{ statement.parliamentary_group_name }}
+      ({{ statement.parliamentary_group_item }})
+    </wikilink>
+  </li>
+  <li v-if="statement.electoral_district_item">'electoral district' qualifier:
+    <wikilink :id="statement.electoral_district_item">
+      {{ statement.electoral_district_name }}
+      ({{ statement.electoral_district_item }})
+    </wikilink>
+  </li>
+  <li>'parliamentary term' qualifier:
+    <wikilink :id="statement.parliamentary_term_item">
+      {{ statement.parliamentary_term_item }}
+    </wikilink>
+  </li>
+  <li>'reference URL' qualifier:
+    <a target="_blank" rel="noopener nofollow" class="external free" :href="page.reference_url">{{ page.reference_url }}</a>
+  </li>
+  <li>'reference retrieved' qualifier:
+    {{ statement.verified_on }}
+  </li>
+</ul>

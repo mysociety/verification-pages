@@ -1,7 +1,11 @@
+import Vue from 'vue'
 import ENV from '../env'
 import Axios from 'axios'
 import wikidataClient from '../wikiapi'
 import template from './actionable.html'
+import StatementChangeSummary from './statement_change_summary'
+
+Vue.component('StatementChangeSummary', StatementChangeSummary)
 
 export default template({
   data () { return {

@@ -1,41 +1,27 @@
 <div>
-  <p>
-    You can set the following 'position held' information for statement for
-    <wikilink :id="statement.person_item">{{ statement.person_name }}</wikilink>
-    now:
-  </p>
-
-  <ul>
-    <li v-if="statement.parliamentary_group_item">'parliamentary group' qualifier:
-      <wikilink :id="statement.parliamentary_group_item">
-        {{ statement.parliamentary_group_name }}
-        ({{ statement.parliamentary_group_item }})
-      </wikilink>
-    </li>
-    <li v-if="statement.electoral_district_item">'electoral district' qualifier:
-      <wikilink :id="statement.electoral_district_item">
-        {{ statement.electoral_district_name }}
-        ({{ statement.electoral_district_item }})
-      </wikilink>
-    </li>
-    <li>'parliamentary term' qualifier:
-      <wikilink :id="statement.parliamentary_term_item">
-        {{ statement.parliamentary_term_item }}
-      </wikilink>
-    </li>
-    <li>'reference URL' qualifier:
-      <a target="_blank" rel="noopener nofollow" class="external free" :href="page.reference_url">{{ page.reference_url }}</a>
-    </li>
-  </ul>
-
   <div v-if="!updating && !finished">
-    <button v-on:click="updatePositionHeld()">Create or update 'position held'</button>
+    <p>
+      You can update Wikidata with the following 'position held' information for statement for
+      <wikilink :id="statement.person_item">{{ statement.person_name }}</wikilink>
+      now:
+    </p>
+
+    <StatementChangeSummary :statement="statement" :page="page"></StatementChangeSummary>
+
+    <p>
+      <button v-on:click="updatePositionHeld()" class="mw-ui-button mw-ui-progressive">Create or update 'position held'</button>
+    </p>
   </div>
   <div v-else-if="updating">
     Updating...
   </div>
   <div v-else-if="!updating && finished && updateError">
     There was an error when updating: {{ updateError }}
+
+    <details>
+      <summary>Changes we attempted</summary>
+      <StatementChangeSummary :statement="statement" :page="page"></StatementChangeSummary>
+    </details>
   </div>
   <div v-else>
     Successfully updated!

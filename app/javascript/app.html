@@ -27,6 +27,14 @@
         </option>
       </select>
     </div>
+    <div class="verification-tool__controls__group">
+      <label for="sortBy">Sort by</label>
+      <select v-model="sortBy" id="sortBy">
+        <option value="lastName">Last name</option>
+        <option value="parliamentaryGroup">Parliamentary group</option>
+        <option value="district">District</option>
+      </select>
+    </div>
   </div>
   <div v-if="loaded && currentStatements.length === 0" class="verification-tool__blank-slate">
     <div v-if="displayType === 'all'">

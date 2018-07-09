@@ -15,6 +15,7 @@ export default template({
       loaded: false,
       statements: [],
       displayType: 'all',
+      sortBy: 'lastName',
       page: null
     }
   },
@@ -65,9 +66,16 @@ export default template({
       }
     },
     sortStatements: function (statements) {
+      var prefix
+
+      switch (this.sortBy) {
+        case 'parliamentaryGroup': prefix = 'parliamentary_group_name'; break
+        case 'district': prefix = 'electoral_district_name'; break
+      }
+
       return statements.sort(function (a, b) {
-        const nameA = parseFullName(a.person_name).last
-        const nameB = parseFullName(b.person_name).last
+        const nameA = (a[prefix] || '') + parseFullName(a.person_name).last
+        const nameB = (b[prefix] || '') + parseFullName(b.person_name).last
         return nameA.localeCompare(nameB)
       })
     }

@@ -15,7 +15,7 @@ export default template({
   } },
   props: ['statement', 'page', 'country'],
   created: function () {
-    if (['verifiable', 'reconcilable'].indexOf(this.statement.previousType) !== -1) {
+    if (['verifiable', 'reconcilable', 'manually_actionable'].indexOf(this.statement.previousType) !== -1) {
       this.updatePositionHeld()
     }
   },

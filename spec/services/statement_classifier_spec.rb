@@ -223,6 +223,21 @@ RSpec.describe StatementClassifier, type: :service do
       it { expect(classifier.reverted).to be_empty }
     end
 
+    context 'when statement has been reported' do
+      before do
+        allow(statement).to receive(:error_reported).and_return('Error!')
+        allow(statement).to receive(:reported_at).and_return(Time.zone.now)
+        allow(statement).to receive(:person_item).and_return('Q1')
+      end
+      it { expect(classifier.verifiable).to be_empty }
+      it { expect(classifier.unverifiable).to be_empty }
+      it { expect(classifier.reconcilable).to be_empty }
+      it { expect(classifier.actionable).to be_empty }
+      it { expect(classifier.manually_actionable).to eq(statements) }
+      it { expect(classifier.done).to be_empty }
+      it { expect(classifier.reverted).to be_empty }
+    end
+
     context 'when the statement has been actioned' do
       before do
         statement.verifications.build(status: true)

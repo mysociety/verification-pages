@@ -80,6 +80,7 @@ export default template({
         that.updating = false;
         that.finished = true;
         that.updateError = error.message;
+        that.$parent.$emit('statement-error')
       });
     }
   }

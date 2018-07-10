@@ -103,6 +103,7 @@ $color_pale_grey: #eee;
     background: $color_pale_blue;
 }
 
+.verification-tool__statement-controls--error,
 .verification-tool__statement-controls--unverifiable {
     border-color: $color_mid_red;
     background-color: $color_pale_red;

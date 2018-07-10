@@ -70,9 +70,7 @@
         </td>
       </tr>
       <tr>
-        <td colspan="5" v-bind:class="'verification-tool__statement-controls verification-tool__statement-controls--' + statement.type">
-          <ActionWrapper :statement="statement" :page="page" :country="country"></ActionWrapper>
-        </td>
+        <ActionWrapper :statement="statement" :page="page" :country="country"></ActionWrapper>
       </tr>
       </tbody>
     </table>

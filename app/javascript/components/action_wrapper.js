@@ -12,6 +12,7 @@ export default template({
   data () {
     return {
       submitting: false,
+      error: false
     }
   },
   props: ['statement', 'page', 'country'],
@@ -26,9 +27,17 @@ export default template({
         case 'done': return doneComponent
         case 'reverted': return revertedComponent
       }
+    },
+    stylingClass: function () {
+      if (this.error) { return 'error' }
+      return this.statement.type
     }
   },
   created: function () {
+    this.$on('statement-error', () => {
+      this.error = true
+    })
+
     this.$on('statement-update', requestFunction => {
       this.submitting = true
       this.$parent.$emit('statement-update', requestFunction, () => {

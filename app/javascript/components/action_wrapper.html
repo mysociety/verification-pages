@@ -1,6 +1,8 @@
-<span v-if="!submitting">
-  <span v-bind:is="currentView" :statement="statement" :page="page" :country="country"></span>
-</span>
-<span v-else>
-  Submitting...
-</span>
+<td colspan="5" v-bind:class="'verification-tool__statement-controls verification-tool__statement-controls--' + stylingClass">
+  <span v-if="!submitting">
+    <span v-bind:is="currentView" :statement="statement" :page="page" :country="country"></span>
+  </span>
+  <span v-else>
+    Submitting...
+  </span>
+</td>

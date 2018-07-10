@@ -61,6 +61,8 @@ export default template({
           this.statement.parliamentary_term_item;
       }
 
+      this.$parent.$emit('statement-error', false)
+
       item.latestRevision().then(function(lastRevisionID) {
         return item.updateOrCreateClaim(lastRevisionID, updateData);
       }).then(function (result) {
@@ -80,7 +82,7 @@ export default template({
         that.updating = false;
         that.finished = true;
         that.updateError = error.message;
-        that.$parent.$emit('statement-error')
+        that.$parent.$emit('statement-error', true)
       });
     }
   }

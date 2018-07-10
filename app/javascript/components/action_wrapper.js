@@ -34,8 +34,8 @@ export default template({
     }
   },
   created: function () {
-    this.$on('statement-error', () => {
-      this.error = true
+    this.$on('statement-error', (state) => {
+      this.error = state
     })
 
     this.$on('statement-update', requestFunction => {

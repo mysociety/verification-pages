@@ -16,12 +16,18 @@
     Updating...
   </div>
   <div v-else-if="!updating && finished && updateError">
-    There was an error when updating: {{ updateError }}
+    <p>
+      Oops we couldn’t make that change right now: {{ updateError }}
+    </p>
 
     <details>
       <summary>Changes we attempted</summary>
       <StatementChangeSummary :statement="statement" :page="page"></StatementChangeSummary>
     </details>
+
+    <p>
+      <button v-on:click="updatePositionHeld()" class="mw-ui-button">Retry</button>
+    </p>
   </div>
   <div v-else>
     Successfully updated!

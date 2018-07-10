@@ -73,4 +73,20 @@ RSpec.describe Statement, type: :model do
       )
     end
   end
+
+  describe '#report_error!' do
+    before { freeze_time }
+
+    it 'assigns reported_at' do
+      expect { statement.report_error!('Error') }.to(
+        change(statement, :reported_at).from(nil).to(Time.zone.now)
+      )
+    end
+
+    it 'assigns error_reported' do
+      expect { statement.report_error!('Error') }.to(
+        change(statement, :error_reported).from(nil).to('Error')
+      )
+    end
+  end
 end

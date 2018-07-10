@@ -24,7 +24,13 @@ class Statement < ApplicationRecord
   end
 
   def record_actioned!
-    self.actioned_at = Time.now
+    self.actioned_at = Time.zone.now
+    save!
+  end
+
+  def report_error!(error_message)
+    self.error_reported = error_message
+    self.reported_at = Time.zone.now
     save!
   end
 

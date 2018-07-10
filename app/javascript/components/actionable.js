@@ -84,6 +84,18 @@ export default template({
         that.updateError = error.message;
         that.$parent.$emit('statement-error', true)
       });
+    },
+    reportStatementError: function () {
+      this.$parent.$emit('statement-error', false)
+      this.$parent.$emit('statement-update', () => {
+        return Axios.get(
+          ENV.url + '/statements/' + this.statement.transaction_id + '.json',
+          { params: {
+            force_type: 'manually_actionable',
+            error_message: this.updateError
+          } }
+        )
+      })
     }
   }
 })

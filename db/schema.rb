@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20180704093403) do
+ActiveRecord::Schema.define(version: 20180710103915) do
 
   create_table "countries", force: :cascade, options: "ENGINE=InnoDB DEFAULT CHARSET=utf8" do |t|
     t.string "name"
@@ -61,6 +61,8 @@ ActiveRecord::Schema.define(version: 20180704093403) do
     t.boolean "duplicate", default: false
     t.bigint "page_id"
     t.datetime "actioned_at"
+    t.string "error_reported"
+    t.timestamp "reported_at"
     t.index ["page_id"], name: "index_statements_on_page_id"
   end
 

@@ -33,5 +33,17 @@ RSpec.describe StatementsController, type: :controller do
         get :show, params: show_parameters
       end
     end
+
+    context 'when force_type: manually_actionable is provided' do
+      let(:show_parameters) do
+        { id: '123', format: 'json', force_type: 'manually_actionable',
+          error_message: 'Error' }
+      end
+
+      it 'should call report_error!! on statement' do
+        expect(statement).to receive(:report_error!).with('Error')
+        get :show, params: show_parameters
+      end
+    end
   end
 end

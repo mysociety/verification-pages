@@ -34,6 +34,12 @@ class Statement < ApplicationRecord
     save!
   end
 
+  def clear_error!
+    self.error_reported = nil
+    self.reported_at = nil
+    save!
+  end
+
   def recently_actioned?
     # Was this statement actioned in the last 5 minutes?
     return false unless actioned_at

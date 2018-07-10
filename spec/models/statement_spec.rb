@@ -89,4 +89,22 @@ RSpec.describe Statement, type: :model do
       )
     end
   end
+
+  describe '#clear_error!' do
+    let(:statement) do
+      build(:statement, reported_at: Time.zone.now, error_reported: 'Error')
+    end
+
+    it 'unassigns reported_at' do
+      expect { statement.clear_error! }.to(
+        change(statement, :reported_at).to(nil)
+      )
+    end
+
+    it 'unassigns error_reported' do
+      expect { statement.clear_error! }.to(
+        change(statement, :error_reported).to(nil)
+      )
+    end
+  end
 end

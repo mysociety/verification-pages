@@ -22,6 +22,8 @@ class StatementsController < FrontendController
       statement.record_actioned!
     when 'manually_actionable'
       statement.report_error!(params[:error_message])
+    when 'actionable'
+      statement.clear_error!
     end
 
     respond_with(statement)

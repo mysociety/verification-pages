@@ -45,5 +45,16 @@ RSpec.describe StatementsController, type: :controller do
         get :show, params: show_parameters
       end
     end
+
+    context 'when force_type: actionable is provided' do
+      let(:show_parameters) do
+        { id: '123', format: 'json', force_type: 'actionable' }
+      end
+
+      it 'should call clear_error! on statement' do
+        expect(statement).to receive(:clear_error!)
+        get :show, params: show_parameters
+      end
+    end
   end
 end

@@ -1,9 +1,22 @@
 <span>
-  This statement can't be actioned automatically and will need to be done manually.
-  The problems were:
+  <p>
+    There
+    <span v-if="statement.problems.length == 1">was a problem</span>
+    <span v-else>were problems</span>
+    updating this statement in Wikidata:
+  </p>
   <ul>
     <li v-for="problem in statement.problems">
       {{ problem }}
     </li>
   </ul>
+  <p v-if="statement['problem_reported?']">
+    Once the
+    <span v-if="statement.problems.length == 1">problem is</span>
+    <span v-else>problems are</span>
+    fixed you can <button v-on:click="makeStatementActionable()" class="mw-ui-button mw-ui-progressive">Retry updating the statement</button>
+  </p>
+  <p v-else>
+    You'll need to update this manually on Wikidata.
+  </p>
 </span>

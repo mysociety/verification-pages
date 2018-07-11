@@ -31,16 +31,14 @@ export default template({
     this.loadStatements()
     this.$on('statement-update', (requestFunction, cb) => {
       requestFunction().then(response => {
-        if (response.data.statements.length > 1) {
-          throw 'Response has too many statements. We don\'t know which one to update'
-        }
-        var newStatement = response.data.statements[0]
-        const index = this.statements.findIndex(s => {
-          return s.transaction_id === newStatement.transaction_id
-        })
-        const previousType = this.statements[index].type
-        newStatement.previousType = previousType
-        this.statements.splice(index, 1, newStatement)
+        response.data.statements.forEach(function (newStatement) {
+          var index = this.statements.findIndex(s => {
+            return s.transaction_id === newStatement.transaction_id
+          })
+          var previousType = this.statements[index].type
+          newStatement.previousType = previousType
+          this.statements.splice(index, 1, newStatement)
+        }, this)
       }).then(cb)
     })
     this.$on('statements-loaded', () => {

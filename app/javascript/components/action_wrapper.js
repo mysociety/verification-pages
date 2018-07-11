@@ -1,5 +1,6 @@
 import template from './action_wrapper.html'
 
+import loadingComponent from './loading'
 import verifiableComponent from './verifiable'
 import unverifiableComponent from './unverifiable'
 import reconcilableComponent from './reconcilable'
@@ -18,6 +19,7 @@ export default template({
   props: ['statement', 'page', 'country'],
   computed: {
     currentView: function () {
+      if (this.submitting) { return loadingComponent }
       switch (this.statement.type) {
         case 'verifiable': return verifiableComponent
         case 'unverifiable': return unverifiableComponent

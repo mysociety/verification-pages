@@ -5,9 +5,14 @@
 class FrontendController < ApplicationController
   skip_before_action :verify_authenticity_token
 
-  def respond_with(statement)
+  def respond_with(statement, statements = nil)
     page = statement.page
-    @classifier = StatementClassifier.new(page.title, statement.transaction_id)
+    statements ||= [statement]
+
+    @classifier = StatementClassifier.new(
+      page.title,
+      statements.map(&:transaction_id)
+    )
 
     respond_to do |format|
       format.json { render file: 'statements/index' }

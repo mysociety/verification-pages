@@ -36,8 +36,14 @@ export default template({
     }
   },
   created: function () {
-    this.$on('statement-error', (state) => {
-      this.error = state
+    this.$on('loading', () => {
+      this.submitting = true
+      this.error = false
+    })
+
+    this.$on('error', () => {
+      this.submitting = false
+      this.error = true
     })
 
     this.$on('statement-update', requestFunction => {

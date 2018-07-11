@@ -27,15 +27,6 @@
         </option>
       </select>
     </div>
-    <div class="verification-tool__controls__group" style="float: right;">
-      <button v-on:click="prevStatement()" class="mw-ui-button">Previous</button>
-      <button v-on:click="nextStatement()" class="mw-ui-button">Next</button>
-    </div>
-    <div class="verification-tool__controls__group" style="float: right;">
-      <label for="displayIndex">Statement</label>
-      <input v-model:number="displayIndex" type="number" style="width: 4em;" id="displayIndex">
-      of {{ currentStatements.length }}
-    </div>
   </div>
   <div v-if="loaded && currentStatements.length === 0" class="verification-tool__blank-slate">
     <div v-if="displayType === 'all'">
@@ -47,6 +38,7 @@
   </div>
   <div v-if="loaded && currentStatements.length > 0">
     <table class="verification-tool__table">
+      <tbody v-for="statement in currentStatements">
       <tr>
         <td>
           <span class="verification-tool__table__cell-label">Subject</span>
@@ -71,14 +63,10 @@
       </tr>
       <tr>
         <td colspan="5" v-bind:class="'verification-tool__statement-controls verification-tool__statement-controls--' + statement.type">
-          <span v-if="!submitting">
-            <component v-bind:is="currentView" :statement="statement" :page="page" :country="country"></component>
-          </span>
-          <span v-else>
-            Submitting...
-          </span>
+          <ActionWrapper :statement="statement" :page="page" :country="country"></ActionWrapper>
         </td>
       </tr>
+      </tbody>
     </table>
   </div>
   <div v-if="!loaded" class="verification-tool__blank-slate">

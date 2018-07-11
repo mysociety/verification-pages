@@ -9,7 +9,7 @@ export default template({
     changingName: false,
     newName: null
   } },
-  props: ['statement', 'page'],
+  props: ['statement', 'page', 'country'],
   methods: {
     submitStatement: function (status) {
       if (this.newName && Levenshtein(this.newName, this.statement.person_name) > 5) {

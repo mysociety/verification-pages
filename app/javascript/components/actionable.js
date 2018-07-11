@@ -9,7 +9,7 @@ export default template({
     finished: false,
     updateError: null,
   } },
-  props: ['statement', 'page'],
+  props: ['statement', 'page', 'country'],
   methods: {
     updatePositionHeld: function () {
       var personItem = this.statement.person_item,

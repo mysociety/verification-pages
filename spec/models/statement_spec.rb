@@ -3,7 +3,9 @@
 require 'rails_helper'
 
 RSpec.describe Statement, type: :model do
-  let(:statement) { Statement.new }
+  include ActiveSupport::Testing::TimeHelpers
+
+  let(:statement) { build(:statement) }
 
   describe 'associations' do
     it 'belongs to a page' do
@@ -20,6 +22,8 @@ RSpec.describe Statement, type: :model do
   end
 
   describe 'validations' do
+    let(:statement) { Statement.new }
+
     it 'requires transaction_id' do
       statement.valid?
       expect(statement.errors).to include(:transaction_id)
@@ -57,6 +61,16 @@ RSpec.describe Statement, type: :model do
       page = create(:page)
       statement = create(:statement, page: page)
       expect(statement.from_suggestions_store?).to eq(false)
+    end
+  end
+
+  describe '#record_actioned!' do
+    before { freeze_time }
+
+    it 'assigns actioned_at' do
+      expect { statement.record_actioned! }.to(
+        change(statement, :actioned_at).from(nil).to(Time.zone.now)
+      )
     end
   end
 end

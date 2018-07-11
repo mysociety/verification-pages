@@ -1,15 +1,18 @@
 require 'rails_helper'
 
 RSpec.describe StatementsController, type: :controller do
-  include ActiveSupport::Testing::TimeHelpers
-
-  let!(:statement) { create(:statement) }
+  let!(:statement) { build(:statement) }
 
   let(:show_parameters) do
     { id: '123', format: 'json' }
   end
 
-  describe "GET #show" do{id: '123', format: 'json'}
+  before do
+    allow(Statement).to receive(:find_by!).with(transaction_id: '123').
+      and_return(statement)
+  end
+
+  describe 'GET #show' do
     it 'returns http success for a transaction that exists' do
       get :show, params: show_parameters
       expect(response).to be_successful
@@ -21,16 +24,13 @@ RSpec.describe StatementsController, type: :controller do
     end
 
     context 'when force_type: done is provided' do
-      let!(:show_parameters) do
+      let(:show_parameters) do
         { id: '123', format: 'json', force_type: 'done' }
       end
 
-      it 'should set actioned_at to a current timestamp' do
-        travel_to Time.zone.local(2017, 11, 24, 01, 04, 44) do
-          get :show, params: show_parameters
-          statement.reload
-          expect(statement.actioned_at).to eq(DateTime.new(2017, 11, 24, 01, 04, 44))
-        end
+      it 'should call record_actioned! on statement' do
+        expect(statement).to receive(:record_actioned!)
+        get :show, params: show_parameters
       end
     end
   end

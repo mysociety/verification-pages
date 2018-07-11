@@ -19,9 +19,12 @@ export default template({
     }
   },
   methods: {
+    logger: function (data) {
+      this.$parent.$emit('log', data)
+    },
     updatePositionHeld: function () {
       var personItem = this.statement.person_item,
-          item = wikidataClient.item(personItem),
+          item = wikidataClient.setLogger(this.logger).item(personItem),
           references = {},
           qualifiers = {},
           updateData = {

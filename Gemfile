@@ -43,7 +43,7 @@ gem 'id-mapper', github: 'mysociety/id-mapper'
 gem 'mini_racer'
 
 group :development, :test do
-  gem 'dotenv-rails', '~> 0.7.0'
+  gem 'dotenv-rails', '~> 2.5.0'
   gem 'factory_bot_rails', '~> 4.8.2'
   gem 'foreman', '~> 0.85.0'
   gem 'rails-controller-testing', '~> 1.0.2'

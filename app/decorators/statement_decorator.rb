@@ -53,8 +53,12 @@ class StatementDecorator < SimpleDelegator
   end
 
   def reported_problems
-    return [] unless reported_at
+    return [] unless problem_reported?
     [ error_reported ]
+  end
+
+  def problem_reported?
+    reported_at.present?
   end
 
   def unverifiable?

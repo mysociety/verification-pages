@@ -5,6 +5,15 @@ namespace :verification_page do
     puts GenerateVerificationPage.run(args.page_title)
   end
 
+  namespace :generate do
+    desc 'Create or update all verification pages'
+    task all: :environment do
+      Page.find_each do |page|
+        puts GenerateVerificationPage.run(page.title)
+      end
+    end
+  end
+
   desc 'Update verification page for the page_title given'
   task :update, %i[page_title] => %i[environment] do |_, args|
     begin

@@ -447,7 +447,7 @@ var wikidata = function(spec) {
       language: label.lang,
       value: label.value,
     };
-    data.descriptions[label.lang] = {
+    data.descriptions[description.lang] = {
       language: description.lang,
       value: description.value,
     };

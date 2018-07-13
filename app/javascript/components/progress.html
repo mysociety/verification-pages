@@ -1,0 +1,20 @@
+<div class="verification-tool__progress">
+  <div class="verification-tool__progress__summary">
+    <div class="done">{{ counts['done'] }} Done</div>
+    <div class="reverted">{{ counts['reverted'] }} Reverted</div>
+    <div class="manually_actionable">{{ counts['manually_actionable'] }} Manually actionable</div>
+    <div class="actionable">{{ counts['actionable'] }} Actionable</div>
+    <div class="reconcilable">{{ counts['reconcilable'] }} Reconcilable</div>
+    <div class="verifiable">{{ counts['verifiable'] }} Verifiable</div>
+    <div class="unverifiable">{{ counts['unverifiable'] }} Unverifiable</div>
+  </div>
+  <div class="verification-tool__progress__bar">
+    <div :style="styleForType('done')" class="done"></div>
+    <div :style="styleForType('reverted')" class="reverted"></div>
+    <div :style="styleForType('manually_actionable')" class="manually_actionable"></div>
+    <div :style="styleForType('actionable')" class="actionable"></div>
+    <div :style="styleForType('reconcilable')" class="reconcilable"></div>
+    <div :style="styleForType('verifiable')" class="verifiable"></div>
+    <div :style="styleForType('unverifiable')" class="unverifiable"></div>
+  </div>
+</div>

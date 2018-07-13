@@ -1,3 +1,4 @@
+import Vue from 'vue'
 import ENV from './env'
 import Axios from 'axios'
 import wikidataClient from './wikiapi'
@@ -10,6 +11,9 @@ import actionableComponent from './components/actionable'
 import manuallyActionableComponent from './components/manually_actionable'
 import doneComponent from './components/done'
 import revertedComponent from './components/reverted'
+import progressComponent from './components/progress'
+
+Vue.component('Progress', progressComponent)
 
 export default template({
   data () {

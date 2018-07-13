@@ -104,16 +104,97 @@ $color_pale_grey: #eee;
 }
 
 .verification-tool__statement-controls--unverifiable {
-    border-color: $color_mid_red;
-    background-color: $color_pale_red;
+    border-color: $color_mid_grey;
+    background-color: $color_pale_grey;
 }
 
-.verification-tool__statement-controls--done {
+.verification-tool__statement-controls--done,
+.verification-tool__statement-controls--reverted {
     border-color: $color_mid_green;
     background-color: $color_pale_green;
 }
 
 .verification-tool__statement-controls--manually_actionable {
-    border-color: $color_mid_grey;
-    background-color: $color_pale_grey;
+    border-color: $color_mid_red;
+    background-color: $color_pale_red;
+}
+
+.verification-tool__progress {
+    margin: 1.5em 0 1em;
+}
+
+.verification-tool__progress__bar {
+    margin-top: 0.5em;
+    background: $color_pale_grey;
+    height: 1em;
+    overflow: auto;
+
+    & > * {
+        float: left;
+        height: 1em;
+    }
+
+    .actionable,
+    .verifiable,
+    .reconcilable {
+        background: $color_mid_blue;
+    }
+
+    .done,
+    .reverted {
+        background: $color_mid_green;
+    }
+
+    .unverifiable {
+        background: $color_pale_grey;
+    }
+
+    .manually_actionable {
+        background: $color_mid_red;
+    }
+}
+
+.verification-tool__progress__summary {
+    display: flex;
+    justify-content: space-between;
+
+    div {
+        color: $color_mid_grey;
+
+        &:before {
+            content: "";
+            display: inline-block;
+            width: 10px;
+            height: 10px;
+            border-radius: 10px;
+            margin-right: 0.4em;
+        }
+    }
+
+    .actionable,
+    .verifiable,
+    .reconcilable {
+        &:before {
+            background: $color_mid_blue;
+        }
+    }
+
+    .done,
+    .reverted {
+        &:before {
+            background: $color_mid_green;
+        }
+    }
+
+    .unverifiable {
+        &:before {
+            background: $color_pale_grey;
+        }
+    }
+
+    .manually_actionable {
+        &:before {
+            background: $color_mid_red;
+        }
+    }
 }

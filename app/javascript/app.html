@@ -1,4 +1,16 @@
 <div id="verification-tool">
+  <div v-if="loaded">
+      <Progress :counts="{
+        all: 333,
+        verifiable: 150,
+        unverifiable: 40,
+        reconcilable: 10,
+        actionable: 0,
+        manually_actionable: 30,
+        done: 90,
+        reverted: 13
+      }" />
+  </div>
   <div v-if="loaded" class="verification-tool__controls">
     <div class="verification-tool__controls__group">
       <label for="displayType">Type</label>

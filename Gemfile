@@ -22,7 +22,7 @@ gem 'sass-rails', '~> 5.0'
 # Use Uglifier as compressor for JavaScript assets
 gem 'uglifier', '>= 1.3.0'
 # Code linting
-gem 'rubocop', '~> 0.57.2', require: false
+gem 'rubocop', '~> 0.58.1', require: false
 # Bootstrap styling
 gem 'twitter-bootstrap-rails'
 # For configuring CORS headers
@@ -43,8 +43,8 @@ gem 'id-mapper', github: 'mysociety/id-mapper'
 gem 'mini_racer'
 
 group :development, :test do
-  gem 'dotenv-rails', '~> 0.7.0'
-  gem 'factory_bot_rails', '~> 4.8.2'
+  gem 'dotenv-rails', '~> 2.5.0'
+  gem 'factory_bot_rails', '~> 4.10.0'
   gem 'foreman', '~> 0.85.0'
   gem 'rails-controller-testing', '~> 1.0.2'
   gem 'rspec-rails', '~> 3.7'

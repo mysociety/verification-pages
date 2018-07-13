@@ -13,7 +13,8 @@ export default template({
   data () {
     return {
       submitting: false,
-      error: false
+      error: false,
+      loadingText: null
     }
   },
   props: ['statement', 'page', 'country'],
@@ -36,7 +37,8 @@ export default template({
     }
   },
   created: function () {
-    this.$on('loading', () => {
+    this.$on('loading', text => {
+      this.loadingText = text
       this.submitting = true
       this.error = false
     })

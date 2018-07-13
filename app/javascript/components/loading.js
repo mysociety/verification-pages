@@ -9,5 +9,10 @@ export default template({
     this.$parent.$on('log', data => {
       this.message = data
     })
+  },
+  computed: {
+    text: function () {
+      return this.$parent.loadingText || 'Loading'
+    }
   }
 })

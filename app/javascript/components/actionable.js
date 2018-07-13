@@ -61,7 +61,7 @@ export default template({
           this.statement.parliamentary_term_item;
       }
 
-      this.$parent.$emit('loading')
+      this.$parent.$emit('loading', 'Saving')
 
       item.latestRevision().then(function(lastRevisionID) {
         return item.updateOrCreateClaim(lastRevisionID, updateData);

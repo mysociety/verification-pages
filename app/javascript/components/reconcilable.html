@@ -19,7 +19,7 @@
         <a target="_blank" rel="noopener nofollow" class="external free" :href="wdResult.url">{{ wdResult.label }} ({{ wdResult.description }})</a>
       </li>
     </ul>
-    <h3><input v-if="languageChooserActive" v-model="languageCode" class="language-chooser"><span v-else>{{ languageCode }}</span>.wikipedia.org search results <button v-on:click="toggleLanguageChooser()" v-if="!languageChooserActive" class="mw-ui-button">Choose a different Wikipedia</button><button v-else v-on:click="changeLanguage()" class="mw-ui-button mw-ui-progressive">Save &amp; Search</button></h3>
+    <h3><input v-if="languageChooserActive" v-model="languageCode" class="language-chooser"><span v-else>{{ languageCode }}</span>.wikipedia.org search results <button v-on:click="toggleLanguageChooser()" v-if="!languageChooserActive" class="mw-ui-button">Choose a different Wikipedia</button><button v-else v-on:click="changeLanguage()" class="mw-ui-button mw-ui-progressive">Update results</button></h3>
     <ul class="wp-search-results">
       <li v-for="wpResult in searchResults.fromWikipedia">
         <button v-on:click="reconcileWithItem(wpResult.item)" class="mw-ui-button">Use this</button>

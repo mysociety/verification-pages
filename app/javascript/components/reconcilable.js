@@ -44,6 +44,8 @@ export default template({
           resource_type: this.searchResourceType
         })
       })
+      this.searchResults = null
+      this.searchResourceType = null
     },
     createPerson: function() {
       wikidataClient.createPerson(

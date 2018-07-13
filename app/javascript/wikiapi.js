@@ -481,58 +481,84 @@ var wikidata = function(spec) {
     });
   }
 
-  that.search = (function(name, wikipediaToSearch, language) {
-    var allResults = {}, site = wikipediaToSearch + 'wiki';
-    return that.ajaxAPIBasic({
-      action: 'wbsearchentities',
-      search: name,
-      language: language,
-      limit: 20,
-      type: 'item'
-    }).then(function (data) {
-      checkForError(data);
-      allResults.fromWikidata = data.search.map(function(searchResult) {
-        return {
-          item: searchResult.id,
-          label: searchResult.label,
-          url: 'https://' + that.serverName + '/wiki/' + searchResult.id,
-          description: searchResult.description,
-        }
-      });
-      return jsonpPromise(
+  // Returns a Promise that is resolved with an array of search results.
+  // eg: wikiapi.search(n, w, l).then(function(allResults){ ... })
+  that.search = function(name, wikipediaToSearch, language) {
+    var allResults = {}
+    var site = wikipediaToSearch + 'wiki'
+
+    var searchWikidata = new Promise(function(resolve, reject){
+      that.ajaxAPIBasic({
+        action: 'wbsearchentities',
+        search: name,
+        language: language,
+        limit: 20,
+        type: 'item'
+      }).then(function(data){
+        checkForError(data)
+        allResults.fromWikidata = transformWikidataResults(data.search)
+        resolve()
+      })
+    })
+
+    var searchWikipedia = new Promise(function(resolve, reject) {
+      jsonpPromise(
         'https://' + wikipediaToSearch + '.wikipedia.org/w/api.php?' +
-          encodeURIParams({
-            action: 'query', list: 'search', format: 'json', srsearch: name
+        encodeURIParams({
+          action: 'query',
+          list: 'search',
+          format: 'json',
+          srsearch: name
+        })
+      ).then(function(data){
+        allResults.fromWikipedia = transformWikipediaResults(data.query.search)
+
+        var titles = allResults.fromWikipedia.map(function(result) { return result.title })
+        if (allResults.fromWikipedia.length > 0) {
+          // Get any Wikidata items associated with those titles from
+          // sitelinks:
+          that.ajaxAPIBasic({
+            action: 'wbgetentities',
+            props: 'sitelinks',
+            titles: titles.join('|'),
+            sites: site,
+          }).then(function(sitelinks){
+            checkForError(sitelinks)
+            addWikidataItemsToWikipediaResults(sitelinks)
+            resolve()
           })
-      );
-    }).then(function(data) {
-      var searchResults = data.query.search.map(function(result) {
+        } else {
+          resolve()
+        }
+      })
+    })
+
+    var transformWikidataResults = function(results) {
+      return results.map(function(result) {
+        return {
+          item: result.id,
+          label: result.label,
+          url: 'https://' + that.serverName + '/wiki/' + result.id,
+          description: result.description,
+        }
+      })
+    }
+
+    var transformWikipediaResults = function(results) {
+      return results.map(function(result) {
         return {
           title: result.title,
           item: null,
           snippetHTML: result.snippet,
           wpURL: 'https://' + wikipediaToSearch + '.wikipedia.org/wiki/' +
             encodeURIComponent(result.title.replace(/ /, '_')),
-        }}),
-          titles = searchResults.map(function(result) { return result.title });
-      allResults.fromWikipedia = searchResults;
-      if (searchResults.length > 0) {
-        // Get any Wikidata items associated with those titles from
-        // sitelinks:
-        return that.ajaxAPIBasic({
-          action: 'wbgetentities',
-          props: 'sitelinks',
-          titles: titles.join('|'),
-          sites: site,
-        });
-      } else {
-        // Otherwise pass on empty results:
-        return Promise.resolve({entities: []});
-      }
-    }).then(function (sitelinksData) {
-      var titleToWikidataItem = {};
-      checkForError(sitelinksData);
-      for (let [wikidataItem, sitelinkData] of Object.entries(sitelinksData.entities)) {
+        }
+      })
+    }
+
+    var addWikidataItemsToWikipediaResults = function(sitelinks) {
+      var titleToWikidataItem = {}
+      for (let [wikidataItem, sitelinkData] of Object.entries(sitelinks.entities)) {
         // For titles that can't be found, you get back a string of
         // a negative number as the key. If it can be found, the key
         // is an Wikidata item ID.
@@ -548,9 +574,17 @@ var wikidata = function(spec) {
           data.wdURL = 'https://' + that.serverName + '/wiki/' + item;
         }
       })
+    }
+
+    // Search wikidata and wikipedia in parallel, formatting the results and
+    // storing them in allResults, to be returned when the Promise resolves.
+    return Promise.all([
+      searchWikidata,
+      searchWikipedia
+    ]).then(function(){
       return allResults;
     });
-  });
+  }
 
   that.summary = function() {
     return 'Edited with Verification Pages (' + this.page + ')'

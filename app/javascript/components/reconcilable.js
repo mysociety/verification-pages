@@ -8,7 +8,9 @@ export default template({
     searchResultsLoading: false,
     searchResultsLoaded: false,
     searchResults: null,
-    searchResourceType: null
+    searchResourceType: null,
+    languageCode: 'en',
+    languageChooserActive: false
   } },
   props: ['statement', 'page', 'country'],
   created: function () {
@@ -27,8 +29,9 @@ export default template({
       this.search(this.statement.parliamentary_group_name)
     },
     search: function (searchTerm) {
+      this.searchResultsLoaded = false;
       this.searchResultsLoading = true;
-      wikidataClient.search(searchTerm, 'en', 'en').then(data => {
+      wikidataClient.search(searchTerm, this.languageCode, 'en').then(data => {
         console.log(data);
         this.searchResults = data;
         this.searchResultsLoaded = true;
@@ -59,5 +62,16 @@ export default template({
         this.reconcileWithItem(createdItemData.item);
       })
     },
+    toggleLanguageChooser: function () {
+      this.languageChooserActive = !this.languageChooserActive;
+    },
+    changeLanguage: function () {
+      this.languageChooserActive = false;
+      if (this.searchResourceType == 'person') {
+        this.search(this.statement.person_name);
+      } else if (this.searchResourceType == 'party') {
+        this.search(this.statement.parliamentary_group_name)
+      }
+    }
   }
 })

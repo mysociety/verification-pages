@@ -43,6 +43,11 @@ export default template({
       this.error = false
     })
 
+    this.$on('loaded', () => {
+      this.submitting = false
+      this.error = false
+    })
+
     this.$on('error', () => {
       this.submitting = false
       this.error = true

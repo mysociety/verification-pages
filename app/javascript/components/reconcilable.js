@@ -5,8 +5,6 @@ import template from './reconcilable.html'
 
 export default template({
   data () { return {
-    searchResultsLoading: false,
-    searchResultsLoaded: false,
     searchResults: null,
     searchResourceType: null,
     languageCode: 'en',
@@ -14,10 +12,6 @@ export default template({
   } },
   props: ['statement', 'page', 'country'],
   created: function () {
-    this.$parent.$on('statement-changed', () => {
-      this.searchResultsLoading = false
-      this.searchResultsLoaded = false
-    })
     this.languageCode = this.getLanguageCode();
   },
   methods: {
@@ -34,13 +28,11 @@ export default template({
       this.search(this.statement.electoral_district_name)
     },
     search: function (searchTerm) {
-      this.searchResultsLoaded = false;
-      this.searchResultsLoading = true;
+      this.$parent.$emit('loading', 'Loading search results')
       wikidataClient.search(searchTerm, this.getLanguageCode(), 'en').then(data => {
         console.log(data);
         this.searchResults = data;
-        this.searchResultsLoaded = true;
-        this.searchResultsLoading = false;
+        this.$parent.$emit('loaded')
       })
     },
     reconcileWithItem: function(itemID) {

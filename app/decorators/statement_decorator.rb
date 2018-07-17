@@ -123,6 +123,7 @@ class StatementDecorator < SimpleDelegator
   end
 
   def electoral_district_matches?
+    return true if page.executive_position?
     electoral_district_item.present? && electoral_district_item == data&.district
   end
 

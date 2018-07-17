@@ -26,6 +26,6 @@ json.statements @classifier.to_a do |statement|
   end
 end
 
-json.page @classifier.page, :reference_url, :position_held_item
+json.page @classifier.page, :reference_url, :position_held_item, :executive_position
 
 json.country @classifier.page.country

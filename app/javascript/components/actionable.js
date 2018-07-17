@@ -52,7 +52,7 @@ export default template({
         qualifiers[wikidataClient.getPropertyID('parliamentary group')] =
           this.statement.parliamentary_group_item;
       }
-      if (this.statement.electoral_district_item) {
+      if (!this.page.executive_position && this.statement.electoral_district_item) {
         qualifiers[wikidataClient.getPropertyID('electoral district')] =
           this.statement.electoral_district_item;
       }

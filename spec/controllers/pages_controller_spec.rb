@@ -10,7 +10,7 @@ RSpec.describe PagesController, type: :controller do
   let(:valid_attributes) do
     { title: 'Page title', position_held_item: 'Q1',
       parliamentary_term_item: 'Q2', reference_url: 'http://example.com',
-      country_id: country.id, csv_source_url: 'http://example.com/export.csv' }
+      country_id: country.id, csv_source_url: 'http://example.com/export.csv', executive_position: false }
   end
 
   let(:invalid_attributes) do

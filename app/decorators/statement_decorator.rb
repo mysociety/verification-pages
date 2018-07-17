@@ -132,6 +132,7 @@ class StatementDecorator < SimpleDelegator
   end
 
   def parliamentary_group_matches?
+    return true if page.executive_position?
     parliamentary_group_item.blank? || parliamentary_group_item == data&.group
   end
 end

@@ -364,5 +364,30 @@ RSpec.describe StatementClassifier, type: :service do
       it { expect(classifier.done).to eq(statements) }
       it { expect(classifier.reverted).to be_empty }
     end
+
+    context "when the Wikidata item has no group and the statement's page has executive_position = true set" do
+      let(:page) do
+        build(:page, parliamentary_term_item: 'Q2', executive_position: true)
+      end
+      let(:wikidata_data) do
+        { person: 'Q1',
+          merged_then_deleted: '',
+          term: 'Q2',
+          term_start: '2018-01-01',
+          position_start: '2018-01-01',
+          group: nil,
+          district: 'Q4' }
+      end
+      before do
+        allow(statement).to receive(:person_item).and_return('Q1')
+      end
+      it { expect(classifier.verifiable).to be_empty }
+      it { expect(classifier.unverifiable).to be_empty }
+      it { expect(classifier.reconcilable).to be_empty }
+      it { expect(classifier.actionable).to be_empty }
+      it { expect(classifier.manually_actionable).to be_empty }
+      it { expect(classifier.done).to eq(statements) }
+      it { expect(classifier.reverted).to be_empty }
+    end
   end
 end

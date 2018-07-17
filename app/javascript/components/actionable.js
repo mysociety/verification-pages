@@ -48,7 +48,7 @@ export default template({
         value: this.statement.verified_on, type: 'time'
       }
 
-      if (this.statement.parliamentary_group_item) {
+      if (!this.page.executive_position && this.statement.parliamentary_group_item) {
         qualifiers[wikidataClient.getPropertyID('parliamentary group')] =
           this.statement.parliamentary_group_item;
       }

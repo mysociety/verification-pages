@@ -88,6 +88,8 @@ class StatementClassifier
       :reconcilable
     elsif statement.unverifiable?
       :unverifiable
+    elsif !statement.from_suggestions_store? && statement.matches_but_not_checked?
+      :done
     else
       :verifiable
     end

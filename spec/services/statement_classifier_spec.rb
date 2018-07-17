@@ -5,7 +5,13 @@ require 'rails_helper'
 RSpec.describe StatementClassifier, type: :service do
   include ActiveSupport::Testing::TimeHelpers
 
-  let(:page) { build(:page, parliamentary_term_item: 'Q2') }
+  let(:page) do
+    build(
+      :page,
+      parliamentary_term_item: 'Q2',
+      csv_source_url: "#{ENV.fetch('SUGGESTIONS_STORE_URL')}/export/ca.csv"
+    )
+  end
 
   let(:data) { { person_item: 'Q1' } }
   let(:statement) { build(:statement, data.merge(page: page)) }
@@ -302,6 +308,35 @@ RSpec.describe StatementClassifier, type: :service do
       it { expect(classifier.actionable).to be_empty }
       it { expect(classifier.manually_actionable).to be_empty }
       it { expect(classifier.done).to be_empty }
+      it { expect(classifier.reverted).to be_empty }
+    end
+
+    context 'when the statement is from suggestions-store and is already correct (apart from the reference) in Wikidata' do
+      before do
+        allow(statement).to receive(:person_item).and_return('Q1')
+      end
+      it { expect(classifier.verifiable).to eq(statements) }
+      it { expect(classifier.unverifiable).to be_empty }
+      it { expect(classifier.reconcilable).to be_empty }
+      it { expect(classifier.actionable).to be_empty }
+      it { expect(classifier.manually_actionable).to be_empty }
+      it { expect(classifier.done).to be_empty }
+      it { expect(classifier.reverted).to be_empty }
+    end
+
+    context 'when the statement is not from suggestions-store and is already correct in Wikidata' do
+      let(:page) do
+        build(:page, parliamentary_term_item: 'Q2', csv_source_url: 'http://example.com/politicians.csv')
+      end
+      before do
+        allow(statement).to receive(:person_item).and_return('Q1')
+      end
+      it { expect(classifier.verifiable).to be_empty }
+      it { expect(classifier.unverifiable).to be_empty }
+      it { expect(classifier.reconcilable).to be_empty }
+      it { expect(classifier.actionable).to be_empty }
+      it { expect(classifier.manually_actionable).to be_empty }
+      it { expect(classifier.done).to eq(statements) }
       it { expect(classifier.reverted).to be_empty }
     end
   end

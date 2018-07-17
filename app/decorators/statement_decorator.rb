@@ -15,12 +15,20 @@ class StatementDecorator < SimpleDelegator
     matching_position_held_data.first
   end
 
-  def done?
-    verified? && reconciled? &&
+  def matches_wikidata?
+    reconciled? &&
       person_matches? &&
       electoral_district_item.present? && electoral_district_item == data&.district &&
       parliamentary_term_item.present? && parliamentary_term_item == data&.term &&
       (parliamentary_group_item.blank? || parliamentary_group_item == data&.group)
+  end
+
+  def matches_but_not_checked?
+    latest_verification.nil? && matches_wikidata?
+  end
+
+  def done?
+    verified? && matches_wikidata?
   end
 
   def problems

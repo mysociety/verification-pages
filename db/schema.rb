@@ -10,9 +10,9 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20180710103915) do
+ActiveRecord::Schema.define(version: 2018_07_17_102517) do
 
-  create_table "countries", force: :cascade, options: "ENGINE=InnoDB DEFAULT CHARSET=utf8" do |t|
+  create_table "countries", options: "ENGINE=InnoDB DEFAULT CHARSET=utf8", force: :cascade do |t|
     t.string "name"
     t.string "code"
     t.string "description_en"
@@ -22,7 +22,7 @@ ActiveRecord::Schema.define(version: 20180710103915) do
     t.datetime "updated_at", null: false
   end
 
-  create_table "pages", force: :cascade, options: "ENGINE=InnoDB DEFAULT CHARSET=utf8" do |t|
+  create_table "pages", options: "ENGINE=InnoDB DEFAULT CHARSET=utf8", force: :cascade do |t|
     t.string "title", null: false
     t.string "position_held_item", null: false
     t.string "parliamentary_term_item"
@@ -32,10 +32,11 @@ ActiveRecord::Schema.define(version: 20180710103915) do
     t.datetime "updated_at", null: false
     t.bigint "country_id", null: false
     t.string "csv_source_url", limit: 2000, null: false
+    t.boolean "executive_position", default: false, null: false
     t.index ["country_id"], name: "index_pages_on_country_id"
   end
 
-  create_table "reconciliations", force: :cascade, options: "ENGINE=InnoDB DEFAULT CHARSET=utf8" do |t|
+  create_table "reconciliations", options: "ENGINE=InnoDB DEFAULT CHARSET=utf8", force: :cascade do |t|
     t.bigint "statement_id"
     t.string "item"
     t.string "user"
@@ -45,7 +46,7 @@ ActiveRecord::Schema.define(version: 20180710103915) do
     t.index ["statement_id"], name: "index_reconciliations_on_statement_id"
   end
 
-  create_table "statements", force: :cascade, options: "ENGINE=InnoDB DEFAULT CHARSET=utf8" do |t|
+  create_table "statements", options: "ENGINE=InnoDB DEFAULT CHARSET=utf8", force: :cascade do |t|
     t.string "transaction_id"
     t.string "person_item"
     t.string "person_revision"
@@ -66,7 +67,7 @@ ActiveRecord::Schema.define(version: 20180710103915) do
     t.index ["page_id"], name: "index_statements_on_page_id"
   end
 
-  create_table "verifications", force: :cascade, options: "ENGINE=InnoDB DEFAULT CHARSET=utf8" do |t|
+  create_table "verifications", options: "ENGINE=InnoDB DEFAULT CHARSET=utf8", force: :cascade do |t|
     t.bigint "statement_id", null: false
     t.boolean "status", default: false
     t.string "user", null: false

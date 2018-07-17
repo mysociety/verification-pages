@@ -18,9 +18,9 @@ class StatementDecorator < SimpleDelegator
   def matches_wikidata?
     reconciled? &&
       person_matches? &&
-      electoral_district_item.present? && electoral_district_item == data&.district &&
-      parliamentary_term_item.present? && parliamentary_term_item == data&.term &&
-      (parliamentary_group_item.blank? || parliamentary_group_item == data&.group)
+      electoral_district_matches? &&
+      parliamentary_term_matches? &&
+      parliamentary_group_matches?
   end
 
   def matches_but_not_checked?
@@ -120,5 +120,17 @@ class StatementDecorator < SimpleDelegator
 
   def person_matches?
     person_item.present? && ([data&.person] + merged_then_deleted).include?(person_item)
+  end
+
+  def electoral_district_matches?
+    electoral_district_item.present? && electoral_district_item == data&.district
+  end
+
+  def parliamentary_term_matches?
+    parliamentary_term_item.present? && parliamentary_term_item == data&.term
+  end
+
+  def parliamentary_group_matches?
+    parliamentary_group_item.blank? || parliamentary_group_item == data&.group
   end
 end

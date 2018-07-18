@@ -78,19 +78,19 @@ RSpec.describe StatementDecorator, type: :decorator do
       end
     end
 
-    context 'when the position start date on Wikidata is more than 1 day before the start of the term' do
+    context 'when the position start date on Wikidata is more than 31 days before the start of the term' do
       let(:matching_position_held_data) do
         [
           OpenStruct.new(
             revision: '123',
             position: 'UUID',
-            position_start: '2014-01-06',
+            position_start: '2013-12-15',
             term_start: '2014-01-31'
           )
         ]
       end
       let(:expected_error) do
-        'On Wikidata, the position held start date (2014-01-06) was before the term start date (2014-01-31)'
+        'On Wikidata, the position held start date (2013-12-15) was before the term start date (2014-01-31)'
       end
       it 'should find a problem with the start date' do
         expect(statement.start_date_before_term_problems).to eq([ expected_error ])
@@ -151,7 +151,7 @@ RSpec.describe StatementDecorator, type: :decorator do
           OpenStruct.new(
             revision: '123',
             position: 'UUID',
-            position_start: '2014-01-06',
+            position_start: '2013-12-15',
             term_start: '2014-01-31',
             district: 'Q345',
             group: 'Q234'
@@ -163,7 +163,7 @@ RSpec.describe StatementDecorator, type: :decorator do
         expected_errors = [
           "The electoral district is different in the statement (Q789) and on Wikidata (Q345)",
           "The parliamentary group (party) is different in the statement (Q123) and on Wikidata (Q234)",
-          "On Wikidata, the position held start date (2014-01-06) was before the term start date (2014-01-31)",
+          "On Wikidata, the position held start date (2013-12-15) was before the term start date (2014-01-31)",
           'There were 2 \'position held\' (P39) statements on Wikidata that match the verified suggestion - one or more of them might be missing an end date or parliamentary term qualifier'
         ]
         expect(statement.problems).to eq(expected_errors)

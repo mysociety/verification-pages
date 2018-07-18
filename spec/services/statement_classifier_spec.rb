@@ -214,10 +214,10 @@ RSpec.describe StatementClassifier, type: :service do
       it { expect(classifier.reverted).to be_empty }
     end
 
-    context 'when position start is 2 days before term start' do
+    context 'when position start is more than 31 days before term start' do
       before do
         position_held.group = nil
-        position_held.position_start = '2017-12-30'
+        position_held.position_start = '2017-11-05'
         allow(statement).to receive(:person_item).and_return('Q1')
       end
       it { expect(classifier.verifiable).to be_empty }

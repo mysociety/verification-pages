@@ -18,7 +18,7 @@ class StatementDecorator < SimpleDelegator
   def matches_wikidata?
     reconciled? &&
       person_matches? &&
-      electoral_district_matches? &&
+      (electoral_district_item.blank? || electoral_district_matches?) &&
       parliamentary_term_matches? &&
       parliamentary_group_matches?
   end
@@ -46,6 +46,7 @@ class StatementDecorator < SimpleDelegator
   end
 
   def electoral_district_problems
+    return [] unless electoral_district_item.present?
     return [] unless data&.district && electoral_district_item != data&.district
     [ "The electoral district is different in the statement (#{electoral_district_item}) and on Wikidata (#{data&.district})" ]
   end

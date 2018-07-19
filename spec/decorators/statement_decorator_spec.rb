@@ -38,7 +38,7 @@ RSpec.describe StatementDecorator, type: :decorator do
 
     context 'when electoral districts contradict' do
       let(:object) do
-        build(
+        create(
           :statement,
           person_item: 'Q1',
           electoral_district_item: 'Q789',
@@ -142,7 +142,7 @@ RSpec.describe StatementDecorator, type: :decorator do
 
     context 'when all known problems happen for the same data' do
       let(:object) do
-        build(
+        create(
           :statement,
           person_item: 'Q1',
           parliamentary_group_item: 'Q123',
@@ -170,6 +170,32 @@ RSpec.describe StatementDecorator, type: :decorator do
           'There were 2 \'position held\' (P39) statements on Wikidata that match the verified suggestion - one or more of them might be missing an end date or parliamentary term qualifier'
         ]
         expect(statement.problems).to eq(expected_errors)
+      end
+    end
+
+    context 'when a source contains no district information' do
+      let(:object) do
+        build(
+          :statement,
+          person_item: 'Q1',
+          parliamentary_group_item: 'Q123',
+          electoral_district_name: 'Somewhereville'
+        )
+      end
+      let(:matching_position_held_data) do
+        [
+          OpenStruct.new(
+            revision: '123',
+            position: 'UUID',
+            position_start: '2014-01-31',
+            term_start: '2014-01-31',
+            district: 'Q345',
+            group: 'Q123'
+          ),
+        ]
+      end
+      it 'should not report any problems with district' do
+        expect(statement.problems).to eq([])
       end
     end
   end

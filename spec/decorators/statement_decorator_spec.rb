@@ -3,7 +3,7 @@
 require 'rails_helper'
 
 RSpec.describe StatementDecorator, type: :decorator do
-  let(:object) { Statement.new(person_item: 'Q1') }
+  let(:object) { build(:statement, person_item: 'Q1') }
   let(:matching_position_held_data) do
     [ OpenStruct.new(revision: '123', position: 'UUID') ]
   end
@@ -38,7 +38,8 @@ RSpec.describe StatementDecorator, type: :decorator do
 
     context 'when electoral districts contradict' do
       let(:object) do
-        Statement.new(
+        build(
+          :statement,
           person_item: 'Q1',
           electoral_district_item: 'Q789',
         )
@@ -59,7 +60,8 @@ RSpec.describe StatementDecorator, type: :decorator do
 
     context 'when parliamentary groups (parties) contradict' do
       let(:object) do
-        Statement.new(
+        build(
+          :statement,
           person_item: 'Q1',
           parliamentary_group_item: 'Q123',
         )
@@ -140,7 +142,8 @@ RSpec.describe StatementDecorator, type: :decorator do
 
     context 'when all known problems happen for the same data' do
       let(:object) do
-        Statement.new(
+        build(
+          :statement,
           person_item: 'Q1',
           parliamentary_group_item: 'Q123',
           electoral_district_item: 'Q789',

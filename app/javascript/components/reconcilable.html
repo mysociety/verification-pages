@@ -2,6 +2,7 @@
   <span v-if="!searchResultsLoading && !searchResultsLoaded">
     <button v-if="statement.reconciliations.indexOf('person') != -1" v-on:click="searchForName()" class="mw-ui-button mw-ui-progressive">Search for person</button>
     <button v-if="statement.reconciliations.indexOf('party') != -1" v-on:click="searchForParty()" class="mw-ui-button mw-ui-progressive">Search for party</button>
+    <button v-if="statement.reconciliations.indexOf('district') != -1" v-on:click="searchForDistrict()" class="mw-ui-button mw-ui-progressive">Search for district</button>
   </span>
   <span v-if="searchResultsLoading">
     Loading search results...

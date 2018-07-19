@@ -216,6 +216,27 @@ RSpec.describe StatementDecorator, type: :decorator do
       it { is_expected.to match_array(%w[person]) }
     end
 
+    context 'when the district has been reconciled' do
+      before { statement.electoral_district_item = 'Q123' }
+      it { is_expected.to match_array([]) }
+    end
+
+    context 'when the district hasn\'t be reconciled but there was no name to reconcile' do
+      before do
+        statement.electoral_district_item = nil
+        statement.electoral_district_name = nil
+      end
+      it { is_expected.to match_array([]) }
+    end
+
+    context 'when the district hasn\'t be reconciled but there was a name to reconcile' do
+      before do
+        statement.electoral_district_item = nil
+        statement.electoral_district_name = 'Cambridge'
+      end
+      it { is_expected.to match_array(%w[district]) }
+    end
+
     context 'when page does not require a party' do
       before { page.require_parliamentary_group = false }
 

@@ -18,6 +18,8 @@ class Reconciliation < ApplicationRecord
       statement.update_attributes(person_item: item)
     when 'party'
       statement.update_attributes(parliamentary_group_item: item)
+    when 'district'
+      statement.update_attributes(electoral_district_item: item)
     end
   end
 

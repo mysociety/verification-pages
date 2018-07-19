@@ -29,6 +29,10 @@ export default template({
       this.searchResourceType = 'party'
       this.search(this.statement.parliamentary_group_name)
     },
+    searchForDistrict: function () {
+      this.searchResourceType = 'district'
+      this.search(this.statement.electoral_district_name)
+    },
     search: function (searchTerm) {
       this.searchResultsLoaded = false;
       this.searchResultsLoading = true;

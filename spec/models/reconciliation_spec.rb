@@ -61,5 +61,21 @@ RSpec.describe Reconciliation, type: :model do
         reconciliation.save! # update
       end
     end
+
+    context 'district resource_type' do
+      before { reconciliation.resource_type = 'district' }
+
+      it 'updates statement electoral district item' do
+        expect(statement).to receive(:update_attributes)
+          .with(electoral_district_item: 'Q5').once
+        reconciliation.item = 'Q5'
+        reconciliation.save! # create
+
+        expect(statement).to receive(:update_attributes)
+          .with(electoral_district_item: 'Q6').once
+        reconciliation.item = 'Q6'
+        reconciliation.save! # update
+      end
+    end
   end
 end

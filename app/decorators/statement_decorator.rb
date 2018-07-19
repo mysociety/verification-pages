@@ -88,7 +88,7 @@ class StatementDecorator < SimpleDelegator
   end
 
   def reconciliations
-    person_reconciliations + party_reconciliations
+    person_reconciliations + party_reconciliations + district_reconciliations
   end
 
   def person_reconciliations
@@ -100,6 +100,11 @@ class StatementDecorator < SimpleDelegator
     return [] if !page.require_parliamentary_group? ||
       parliamentary_group_item.present?
     [ 'party' ]
+  end
+
+  def district_reconciliations
+    return [] if electoral_district_item.present? || !electoral_district_name.present?
+    [ 'district' ]
   end
 
   def verified_on

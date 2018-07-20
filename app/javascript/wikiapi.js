@@ -411,6 +411,7 @@ var wikidata = function(spec) {
     return {
       'www.wikidata.org': {
         'reference URL': 'P854',
+        'Wikimedia import URL': 'P4656',
         'reference retrieved': 'P813',
         'occupation': 'P106',
         'parliamentary group': 'P4100',
@@ -420,6 +421,7 @@ var wikidata = function(spec) {
       },
       'test.wikidata.org': {
         'reference URL': 'P43659',
+        'Wikimedia import URL': 'P77057',
         'reference retrieved': 'P388',
         'occupation': 'P70554',
         'parliamentary group': 'P70557',
@@ -433,6 +435,7 @@ var wikidata = function(spec) {
         // server for this information, since it must know which server
         // it's proxying to..)
         'reference URL': 'P43659',
+        'Wikimedia import URL': 'P77057',
         'reference retrieved': 'P388',
         'occupation': 'P70554',
         'parliamentary group': 'P70557',

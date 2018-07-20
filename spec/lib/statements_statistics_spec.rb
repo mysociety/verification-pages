@@ -2,6 +2,7 @@ require 'rails_helper'
 
 describe StatementsStatistics do
   describe '#statistics' do
+    let! (:page) { create(:page, position_held_item: 'Q15964890') }
     before do
       stub_request(:get, 'https://suggestions-store.mysociety.org/export/countries.json')
         .to_return(body: '[{"code": "ca", "export_json_url": "https://suggestions-store.mysociety.org/export/ca.json"}]')
@@ -24,7 +25,6 @@ describe StatementsStatistics do
       ]
       stub_request(:get, 'https://suggestions-store.mysociety.org/export/ca.json')
         .to_return(body: JSON.generate(body))
-      create(:page, position_held_item: 'Q15964890')
     end
     it 'returns a hash of country stats' do
       statement_statistics = StatementsStatistics.new
@@ -33,7 +33,7 @@ describe StatementsStatistics do
       expect(position_stats.correct).to eq(2)
       expect(position_stats.incorrect).to eq(1)
       expect(position_stats.unchecked).to eq(0)
-      expect(position_stats.pages).to eq(['Test page'])
+      expect(position_stats.pages).to eq([page.title])
     end
   end
 end

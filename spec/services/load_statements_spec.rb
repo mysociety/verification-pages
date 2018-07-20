@@ -107,6 +107,45 @@ RSpec.describe LoadStatements do
         expect(existing_statement.parliamentary_group_name).to eq('Aparty')
         expect(existing_statement.parliamentary_group_item).to eq('Q555')
       end
+
+      context 'items have been manually reconciled, but are still empty in the upstream source' do
+        let(:suggestions_store_response) do
+          [
+            %w[
+              person_name person_item
+              electoral_district_name electoral_district_item
+              parliamentary_group_name parliamentary_group_item
+            ],
+            ['Alice', '', 'Ambridge', '', 'Aparty' ''],
+            %w[Bob Q876 Bambridge Q4321 Bparty Q666]
+          ].map(&:to_csv).join
+        end
+
+        let!(:existing_statement) do
+          create(:statement,
+                 transaction_id: 'md5:24121f7e37f2d3529b019b808f7d9385',
+                 person_name: 'Alice',
+                 person_item: 'Q34543',
+                 electoral_district_item: 'Q934234',
+                 parliamentary_group_item: 'Q234435',
+                 page: page)
+        end
+
+        it 'shouldn\'t wipe out the manually reconciled values' do
+          load_statements = LoadStatements.new(page.title)
+          load_statements.run
+          existing_statement.reload
+          expect(existing_statement.transaction_id).to(
+            eq 'md5:24121f7e37f2d3529b019b808f7d9385'
+          )
+          expect(existing_statement.person_name).to eq('Alice')
+          expect(existing_statement.person_item).to eq('Q34543')
+          expect(existing_statement.electoral_district_name).to eq('Ambridge')
+          expect(existing_statement.electoral_district_item).to eq('Q934234')
+          expect(existing_statement.parliamentary_group_name).to eq('Aparty')
+          expect(existing_statement.parliamentary_group_item).to eq('Q234435')
+        end
+      end
     end
   end
 end

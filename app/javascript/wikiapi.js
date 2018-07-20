@@ -185,8 +185,24 @@ var wikidataItem = function(spec) {
     }
   };
 
+  my.getReferencePropertyInUse = function(newReferences) {
+    var found,
+        newReferenceProperties = Object.keys(newReferences),
+        knownReferencePropertyLabels = [
+          'Wikimedia import URL', 'reference URL'
+        ],
+        knownReferencePropertyIDs = knownReferencePropertyLabels.map(
+          l => wikidata.getPropertyID(l)
+        );
+    found = newReferenceProperties.find(k => knownReferencePropertyIDs.includes(k));
+    if (!found) {
+      throw new Error("Couldn't find a reference property ID in " + newReferenceProperties);
+    }
+    return found;
+  }
+
   my.createReferences = function (claims, data) {
-    var referenceURLProp = wikidata.getPropertyID('reference URL')
+    var referenceURLProp = my.getReferencePropertyInUse(data.references)
     var referenceURL = data.references[referenceURLProp]
 
     var currentReference = getReferenceForURLFromAPIClaims(
@@ -397,6 +413,16 @@ var wikidata = function(spec) {
   that.item = function(itemID) {
     // Get the current revision ID for the item
     return wikidataItem({wikidata: that, item: itemID});
+  };
+
+  that.getReferencePropertyID = function(referenceURL) {
+    var propertyLabel;
+    if (referenceURL.match(/^https?:\/\/\w+.wikipedia.org/)) {
+      propertyLabel = 'Wikimedia import URL';
+    } else {
+      propertyLabel = 'reference URL';
+    }
+    return that.getPropertyID(propertyLabel);
   };
 
   that.getPropertyID = function(propertyLabel) {

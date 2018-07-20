@@ -34,7 +34,13 @@ function getReferencesFromAPIClaims(apiClaims, property) {
 function getReferenceForURLFromAPIClaims (references, referenceURLProp, referenceURL) {
   if (!references || !referenceURL) return
   return references.find(function (r) {
-    var snak = r.snaks[referenceURLProp].find(function (s) {
+    var snak, snaks = r.snaks[referenceURLProp];
+    if (!snaks) {
+      // There may be existing references using other properties, so
+      // skip over them.
+      return false;
+    }
+    snak = snaks.find(function (s) {
       return s.datatype === 'url' && s.datavalue.value === referenceURL.value
     })
     console.log(snak)

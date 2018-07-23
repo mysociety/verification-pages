@@ -9,7 +9,6 @@ Vue.component('StatementChangeSummary', StatementChangeSummary)
 
 export default template({
   data () { return {
-    updating: false,
     finished: false,
     updateError: null,
   } },
@@ -20,9 +19,12 @@ export default template({
     }
   },
   methods: {
+    logger: function (data) {
+      this.$parent.$emit('log', data)
+    },
     updatePositionHeld: function () {
       var personItem = this.statement.person_item,
-          item = wikidataClient.item(personItem),
+          item = wikidataClient.setLogger(this.logger).item(personItem),
           references = {},
           qualifiers = {},
           updateData = {
@@ -31,8 +33,6 @@ export default template({
             references: references,
             qualifiers: qualifiers,
           }, that = this;
-
-      this.updating = true;
 
       if (this.statement.statement_uuid) {
         // Make sure there's a $ in the claim ID separating the item
@@ -61,13 +61,12 @@ export default template({
           this.statement.parliamentary_term_item;
       }
 
-      this.$parent.$emit('statement-error', false)
+      this.$parent.$emit('loading', 'Saving')
 
       item.latestRevision().then(function(lastRevisionID) {
         return item.updateOrCreateClaim(lastRevisionID, updateData);
       }).then(function (result) {
         console.log('updating the statement succeeded:', result);
-        that.updating = false;
         that.finished = true;
         that.updateError = null;
 
@@ -78,15 +77,15 @@ export default template({
           )
         })
       }).catch(function (error) {
-        console.log('updating the statement failed...', error);
-        that.updating = false;
-        that.finished = true;
-        that.updateError = error.message;
-        that.$parent.$emit('statement-error', true)
+        console.log('updating the statement failed...', error)
+
+        that.finished = true
+        that.updateError = error.message
+
+        that.$parent.$emit('error')
       });
     },
     reportStatementError: function () {
-      this.$parent.$emit('statement-error', false)
       this.$parent.$emit('statement-update', () => {
         return Axios.get(
           ENV.url + '/statements/' + this.statement.transaction_id + '.json',

@@ -1,5 +1,6 @@
 import template from './action_wrapper.html'
 
+import loadingComponent from './loading'
 import verifiableComponent from './verifiable'
 import unverifiableComponent from './unverifiable'
 import reconcilableComponent from './reconcilable'
@@ -12,12 +13,14 @@ export default template({
   data () {
     return {
       submitting: false,
-      error: false
+      error: false,
+      loadingText: null
     }
   },
   props: ['statement', 'page', 'country'],
   computed: {
     currentView: function () {
+      if (this.submitting) { return loadingComponent }
       switch (this.statement.type) {
         case 'verifiable': return verifiableComponent
         case 'unverifiable': return unverifiableComponent
@@ -34,8 +37,20 @@ export default template({
     }
   },
   created: function () {
-    this.$on('statement-error', (state) => {
-      this.error = state
+    this.$on('loading', text => {
+      this.loadingText = text
+      this.submitting = true
+      this.error = false
+    })
+
+    this.$on('loaded', () => {
+      this.submitting = false
+      this.error = false
+    })
+
+    this.$on('error', () => {
+      this.submitting = false
+      this.error = true
     })
 
     this.$on('statement-update', requestFunction => {

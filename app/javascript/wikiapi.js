@@ -129,6 +129,7 @@ var wikidataItem = function(spec) {
       my = {};
 
   my.ajaxSetQualifier = function(qualifierDetails) {
+    wikidata.log('Setting ' + wikidata.getPropertyName(qualifierDetails.qualifierProperty))
     return wikidata.ajaxAPI(true, 'wbsetqualifier', {
             claim: qualifierDetails.statement,
             property: qualifierDetails.qualifierProperty,
@@ -202,6 +203,7 @@ var wikidataItem = function(spec) {
         data['reference'] = currentReference.hash
       }
 
+      wikidata.log('Setting references')
       return wikidata.ajaxAPI(true, 'wbsetreference', data)
     } else {
       return Promise.resolve(null)
@@ -213,6 +215,7 @@ var wikidataItem = function(spec) {
     // existing statement to update) might be quite stale,
     // so we should really check that an appropriate claim hasn't
     // been created in the meantime.
+    wikidata.log('Creating a claim')
     return wikidata.ajaxAPI(true, 'wbcreateclaim', {
       entity: item,
       snaktype: 'value',
@@ -232,6 +235,7 @@ var wikidataItem = function(spec) {
   my.updateClaim = function(newClaim) {
     // First check that (currently) there are no qualifiers that
     // would be changed by updating the claim
+    wikidata.log('Getting existing claims')
     return wikidata.ajaxAPI(false, 'wbgetclaims', {
       entity: item,
       claim: newClaim.statement,
@@ -276,6 +280,7 @@ var wikidataItem = function(spec) {
   };
 
   that.latestRevision = function() {
+    wikidata.log('Getting latest revision')
     return wikidata.ajaxAPIBasic({
       action: 'query',
       prop: 'revisions',
@@ -319,7 +324,9 @@ const jsonpPromise = function(url) {
 }
 
 var wikidata = function(spec) {
-  var that = {};
+  var that = {
+    log: function () {}
+  };
 
   if (typeof mw === 'undefined') {
     that.useAPIProxy = true;
@@ -376,12 +383,25 @@ var wikidata = function(spec) {
     }
   };
 
+  that.setLogger = function(loggerCallback) {
+    that.log = loggerCallback
+    return that
+  }
+
   that.item = function(itemID) {
     // Get the current revision ID for the item
     return wikidataItem({wikidata: that, item: itemID});
   };
 
   that.getPropertyID = function(propertyLabel) {
+    return that.getProperties()[propertyLabel]
+  }
+
+  that.getPropertyName = function(property) {
+    return Object.keys(that.getProperties()).find(key => that.getProperties()[key] === property)
+  }
+
+  that.getProperties = function() {
     return {
       'www.wikidata.org': {
         'reference URL': 'P854',
@@ -414,7 +434,7 @@ var wikidata = function(spec) {
         'position held': 'P39',
         'parliamentary term': 'P70901',
       }
-    }[that.serverName][propertyLabel];
+    }[that.serverName]
   };
 
   that.getItemID = function(itemLabel) {

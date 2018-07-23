@@ -42,10 +42,14 @@ export default template({
     })
     this.$on('statements-loaded', () => {
       this.$nextTick(function () {
-        var statementRow = document.querySelector(window.location.hash.replace(/:/g, '\\:'))
-        if (statementRow) {
-          statementRow.scrollIntoView()
-          statementRow.className += " targetted"
+        var hash = window.location.hash;
+        var statementRow;
+        if (hash) {
+          statementRow = document.querySelector(hash.replace(/:/g, '\\:'))
+          if (statementRow) {
+            statementRow.scrollIntoView()
+            statementRow.className += " targetted"
+          }
         }
       })
     })

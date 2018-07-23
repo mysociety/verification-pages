@@ -90,9 +90,11 @@ export default template({
       }
 
       return statements.sort(function (a, b) {
-        const nameA = (a[prefix] || '') + parseFullName(a.person_name).last
-        const nameB = (b[prefix] || '') + parseFullName(b.person_name).last
-        return nameA.localeCompare(nameB)
+        const namesA = parseFullName(a.person_name)
+        const namesB = parseFullName(b.person_name)
+        const stringA = (a[prefix] + ' ' || '') + namesA.last + ' ' + namesA.first + ' ' + a.transaction_id
+        const stringB = (b[prefix] + ' ' || '') + namesB.last + ' ' + namesB.first + ' ' + b.transaction_id
+        return stringA.localeCompare(stringB)
       })
     }
   }

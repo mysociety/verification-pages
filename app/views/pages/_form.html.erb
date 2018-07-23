@@ -44,6 +44,20 @@
     <%= f.error_span(:reference_url) %>
   </div>
   <div class="form-group">
+    <%= f.label :reference_url_title, class: 'control-label col-lg-2' %>
+    <div class="col-lg-10">
+      <%= f.text_field :reference_url_title, class: 'form-control' %>
+    </div>
+    <%= f.error_span(:reference_url_title) %>
+  </div>
+  <div class="form-group">
+    <%= f.label :reference_url_language, class: 'control-label col-lg-2' %>
+    <div class="col-lg-10">
+      <%= f.text_field :reference_url_language, class: 'form-control' %>
+    </div>
+    <%= f.error_span(:reference_url_language) %>
+  </div>
+  <div class="form-group">
     <%= f.label :csv_source_url, class: 'control-label col-lg-2' %>
     <div class="col-lg-10">
       <%= f.text_field :csv_source_url, class: 'form-control' %>

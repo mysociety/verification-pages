@@ -5,10 +5,10 @@ import template from './reconcilable.html'
 
 export default template({
   data () { return {
+    searchTerm: null,
     searchResults: null,
     searchResourceType: null,
-    languageCode: 'en',
-    languageChooserActive: false
+    languageCode: 'en'
   } },
   props: ['statement', 'page', 'country'],
   created: function () {
@@ -17,15 +17,24 @@ export default template({
   methods: {
     searchForName: function () {
       this.searchResourceType = 'person'
-      this.search(this.statement.person_name)
+      if (!this.searchTerm) {
+        this.searchTerm = this.statement.person_name
+      }
+      this.search(this.searchTerm)
     },
     searchForParty: function () {
       this.searchResourceType = 'party'
-      this.search(this.statement.parliamentary_group_name)
+      if (!this.searchTerm) {
+        this.searchTerm = this.statement.parliamentary_group_name
+      }
+      this.search(this.searchTerm)
     },
     searchForDistrict: function () {
       this.searchResourceType = 'district'
-      this.search(this.statement.electoral_district_name)
+      if (!this.searchTerm) {
+        this.searchTerm = this.statement.electoral_district_name
+      }
+      this.search(this.searchTerm)
     },
     search: function (searchTerm) {
       this.$parent.$emit('loading', 'Loading search results')
@@ -61,18 +70,12 @@ export default template({
         this.reconcileWithItem(createdItemData.item);
       })
     },
-    toggleLanguageChooser: function () {
-      this.languageChooserActive = !this.languageChooserActive;
-    },
     changeLanguage: function () {
-      this.languageChooserActive = false;
       localStorage.setItem(wikidataClient.page + '.language', this.languageCode);
-
-      if (this.searchResourceType == 'person') {
-        this.search(this.statement.person_name);
-      } else if (this.searchResourceType == 'party') {
-        this.search(this.statement.parliamentary_group_name)
-      }
+      this.updateSearchResults()
+    },
+    updateSearchResults: function() {
+      this.search(this.searchTerm);
     },
     getLanguageCode: function () {
       return localStorage.getItem(wikidataClient.page + '.language') || this.languageCode;

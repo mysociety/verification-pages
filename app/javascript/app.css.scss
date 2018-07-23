@@ -44,10 +44,13 @@ $color_pale_grey: #eee;
             margin: 0 0.5em;
         }
 
-        .language-chooser {
-            width: 3em;
+        input {
             font-weight: inherit;
             font-size: inherit;
+        }
+
+        .language-chooser {
+            width: 3em;
             text-align: right;
         }
     }

@@ -9,7 +9,7 @@ function lowerCaseSnak(upperCase) {
   return parts[0] + '$' + parts[1].toLowerCase();
 }
 
-function getItemValue(item) {
+export function getItemValue(item) {
   return {'entity-type': 'item', 'numeric-id': Number(item.substring(1))};
 }
 
@@ -450,6 +450,8 @@ var wikidata = function(spec) {
         'electoral district': 'P768',
         'position held': 'P39',
         'parliamentary term': 'P2937',
+        'title': 'P1476',
+        'language of work or name': 'P407',
       },
       'test.wikidata.org': {
         'reference URL': 'P43659',
@@ -460,6 +462,8 @@ var wikidata = function(spec) {
         'electoral district': 'P70558',
         'position held': 'P39',
         'parliamentary term': 'P70901',
+        'title': 'P95',
+        'language of work or name': 'P77090',
       },
       'localhost': {
         // For local development assume we're using test.wikidata for
@@ -474,6 +478,8 @@ var wikidata = function(spec) {
         'electoral district': 'P70558',
         'position held': 'P39',
         'parliamentary term': 'P70901',
+        'title': 'P95',
+        'language of work or name': 'P77090',
       }
     }
     if (!(that.serverName in knownPropertiesByServer)) {

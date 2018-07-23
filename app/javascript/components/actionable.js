@@ -1,7 +1,7 @@
 import Vue from 'vue'
 import ENV from '../env'
 import Axios from 'axios'
-import wikidataClient from '../wikiapi'
+import wikidataClient, { getItemValue } from '../wikiapi'
 import template from './actionable.html'
 import StatementChangeSummary from './statement_change_summary'
 
@@ -46,6 +46,20 @@ export default template({
 
       references[wikidataClient.getPropertyID('reference retrieved')] = {
         value: this.statement.verified_on, type: 'time'
+      }
+
+      if (this.page.reference_url_title) {
+        references[wikidataClient.getPropertyID('title')] = {
+          value: this.page.reference_url_title,
+          type: 'string'
+        };
+      }
+
+      if (this.page.reference_url_language) {
+        references[wikidataClient.getPropertyID('language of work or name')] = {
+          value: getItemValue(this.page.reference_url_language),
+          type: 'wikibase-entityid'
+        };
       }
 
       if (!this.page.executive_position && this.statement.parliamentary_group_item) {

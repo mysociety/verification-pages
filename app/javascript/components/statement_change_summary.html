@@ -18,6 +18,18 @@
   </li>
   <li>'reference URL' qualifier:
     <a target="_blank" rel="noopener nofollow" class="external free" :href="page.reference_url">{{ page.reference_url }}</a>
+    <ul v-if="page.reference_url_title || page.reference_url_language">
+      <li v-if="page.reference_url_title">
+        'title' qualifier:
+        {{ page.reference_url_title }}
+      </li>
+      <li v-if="page.reference_url_language">
+        'language of work or name' qualifier:
+        <wikilink :id="page.reference_url_language">
+          {{ page.reference_url_language }}
+        </wikilink>
+      </li>
+    </ul>
   </li>
   <li>'reference retrieved' qualifier:
     {{ statement.verified_on }}

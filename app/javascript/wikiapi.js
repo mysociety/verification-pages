@@ -426,7 +426,13 @@ var wikidata = function(spec) {
   };
 
   that.getPropertyID = function(propertyLabel) {
-    return that.getProperties()[propertyLabel]
+    var knownProperties = that.getProperties();
+    if (!(propertyLabel in knownProperties)) {
+      throw new Error(
+        'Unknown property ' + propertyLabel + ' for server ' + that.serverName
+      );
+    };
+    return knownProperties[propertyLabel]
   }
 
   that.getPropertyName = function(property) {
@@ -434,7 +440,7 @@ var wikidata = function(spec) {
   }
 
   that.getProperties = function() {
-    return {
+    var knownPropertiesByServer = {
       'www.wikidata.org': {
         'reference URL': 'P854',
         'Wikimedia import URL': 'P4656',
@@ -469,7 +475,11 @@ var wikidata = function(spec) {
         'position held': 'P39',
         'parliamentary term': 'P70901',
       }
-    }[that.serverName]
+    }
+    if (!(that.serverName in knownPropertiesByServer)) {
+      throw new Error('Unknown server name ' + that.serverName);
+    }
+    return knownPropertiesByServer[that.serverName]
   };
 
   that.getItemID = function(itemLabel) {

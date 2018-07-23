@@ -52,7 +52,7 @@ $color_pale_grey: #eee;
         }
     }
 
-    tr:target {
+    tr:target, .targetted {
         animation: background-yellow-to-white 5s 1;
     }
 }

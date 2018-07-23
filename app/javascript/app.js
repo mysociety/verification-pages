@@ -40,6 +40,15 @@ export default template({
         this.statements.splice(index, 1, newStatement)
       }).then(cb)
     })
+    this.$on('statements-loaded', () => {
+      this.$nextTick(function () {
+        var statementRow = document.querySelector(window.location.hash.replace(/:/g, '\\:'))
+        if (statementRow) {
+          statementRow.scrollIntoView()
+          statementRow.className += " targetted"
+        }
+      })
+    })
   },
   methods: {
     loadStatements: function () {
@@ -51,6 +60,7 @@ export default template({
         this.country = response.data.country
       }).then(() => {
         this.loaded = true
+        this.$emit('statements-loaded')
       })
     },
     countStatementsOfType: function (type) {

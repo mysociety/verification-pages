@@ -47,7 +47,7 @@
   <div v-if="loaded && currentStatements.length > 0">
     <table class="verification-tool__table">
       <tbody v-for="statement in currentStatements">
-      <tr>
+      <tr :id="'s:' + statement.transaction_id">
         <td>
           <span class="verification-tool__table__cell-label">Subject</span>
           <wikilink :id="statement.person_item">{{ statement.person_name }}</wikilink>
@@ -60,9 +60,8 @@
           <span class="verification-tool__table__cell-label">Parliamentary group</span>
           <wikilink :id="statement.parliamentary_group_item">{{ statement.parliamentary_group_name || '&nbsp;' }}</wikilink>
         </td>
-        <td>
-          <span class="verification-tool__table__cell-label">Transaction ID</span>
-          {{ statement.transaction_id }}
+        <td class="verification-tool__table__cell--narrow">
+          <a class="verification-tool__table__cell-link" :href="'#s:' + statement.transaction_id" title="Link to this statement">§</a>
         </td>
       </tr>
       <tr>

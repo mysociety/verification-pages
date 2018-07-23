@@ -32,7 +32,6 @@ $color_pale_grey: #eee;
 .verification-tool__table {
     width: 100%;
     border-collapse: collapse;
-    table-layout: fixed;
 
     td {
         padding: 1em;
@@ -51,6 +50,10 @@ $color_pale_grey: #eee;
             font-size: inherit;
             text-align: right;
         }
+    }
+
+    tr:target {
+        animation: background-yellow-to-white 5s 1;
     }
 }
 
@@ -89,10 +92,27 @@ $color_pale_grey: #eee;
   }
 }
 
+@keyframes background-yellow-to-white {
+  0%, 50% {
+    background: #ffffcc;
+  }
+  100% {
+    background: #ffffff;
+  }
+}
+
 .verification-tool__table__cell-label {
     font-size: 0.8em;
     font-weight: bold;
     display: block;
+}
+
+.verification-tool__table__cell-link {
+    padding: 0.5em;
+}
+
+.verification-tool__table__cell--narrow {
+    width: 0;
 }
 
 .verification-tool__controls {

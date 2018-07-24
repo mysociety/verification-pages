@@ -60,7 +60,7 @@ export default template({
       wikidataClient.createPerson(
         {
           lang: this.country.label_lang,
-          value: this.statement.person_name,
+          value: this.searchTerm,
         },
         {
           lang: 'en',

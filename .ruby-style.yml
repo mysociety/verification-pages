@@ -14,3 +14,4 @@ Metrics/BlockLength:
 
 inherit_from:
   - 'https://raw.githubusercontent.com/everypolitician/everypolitician-data/master/.rubocop_base.yml'
+  - .rubocop_todo.yml

@@ -15,11 +15,11 @@ class Reconciliation < ApplicationRecord
   def update_statement
     case resource_type
     when 'person'
-      statement.update_attributes(person_item: item)
+      statement.update(person_item: item)
     when 'party'
-      statement.update_attributes(parliamentary_group_item: item)
+      statement.update(parliamentary_group_item: item)
     when 'district'
-      statement.update_attributes(electoral_district_item: item)
+      statement.update(electoral_district_item: item)
     end
   end
 

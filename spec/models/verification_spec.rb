@@ -15,7 +15,7 @@ RSpec.describe Verification, type: :model do
     context 'the page is from suggestions-store' do
       it 'sends verification to suggestions-store' do
         expect(UpdateStatementVerification).to receive(:run)
-        .with(verification).once
+          .with(verification).once
 
         page = build(
           :page,
@@ -26,7 +26,7 @@ RSpec.describe Verification, type: :model do
         verification.save! # create
 
         expect(UpdateStatementVerification).to receive(:run)
-                                               .with(verification).once
+          .with(verification).once
 
         verification.user = 'Frodo'
         verification.save! # update

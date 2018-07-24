@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 namespace :verification_page do
   desc 'Generate verification page for the page_title given'
   task :generate, %i[page_title] => %i[environment] do |_, args|

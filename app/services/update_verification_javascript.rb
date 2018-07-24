@@ -11,14 +11,12 @@ class UpdateVerificationJavascript < ServiceBase
   end
 
   def run
-    begin
-      print "Updating #{page_title}... "
-      client.create_page(page_title, source.read)
-    rescue MediawikiApi::ApiError => ex
-      puts "... error (#{ex.message})"
-    else
-      puts 'done'
-    end
+    print "Updating #{page_title}... "
+    client.create_page(page_title, source.read)
+  rescue MediawikiApi::ApiError => ex
+    puts "... error (#{ex.message})"
+  else
+    puts 'done'
   end
 
   private

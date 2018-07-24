@@ -5,7 +5,7 @@ require 'rails_helper'
 RSpec.describe StatementDecorator, type: :decorator do
   let(:object) { build(:statement, person_item: 'Q1') }
   let(:matching_position_held_data) do
-    [ OpenStruct.new(revision: '123', position: 'UUID') ]
+    [OpenStruct.new(revision: '123', position: 'UUID')]
   end
   let(:statement) { StatementDecorator.new(object, matching_position_held_data) }
 
@@ -25,14 +25,14 @@ RSpec.describe StatementDecorator, type: :decorator do
       let(:matching_position_held_data) do
         [
           OpenStruct.new(person_item: 'Q1', revision: '123', position: 'UUID1'),
-          OpenStruct.new(person_item: 'Q1', revision: '234', position: 'UUID2')
+          OpenStruct.new(person_item: 'Q1', revision: '234', position: 'UUID2'),
         ]
       end
       let(:expected_error) do
         'There were 2 \'position held\' (P39) statements on Wikidata that match the verified suggestion - one or more of them might be missing an end date or parliamentary term qualifier'
       end
       it 'should find a problem with there being multiple matching statements' do
-        expect(statement.multiple_statement_problems).to eq([ expected_error ])
+        expect(statement.multiple_statement_problems).to eq([expected_error])
       end
     end
 
@@ -40,21 +40,21 @@ RSpec.describe StatementDecorator, type: :decorator do
       let(:object) do
         create(
           :statement,
-          person_item: 'Q1',
-          electoral_district_item: 'Q789',
+          person_item:             'Q1',
+          electoral_district_item: 'Q789'
         )
       end
       let(:matching_position_held_data) do
-        [ OpenStruct.new(revision: '123', position: 'UUID', district: 'Q345') ]
+        [OpenStruct.new(revision: '123', position: 'UUID', district: 'Q345')]
       end
       let(:expected_error) do
         'The electoral district is different in the statement (Q789) and on Wikidata (Q345)'
       end
       it 'should find a problem with the electoral districts' do
-        expect(statement.electoral_district_problems).to eq([ expected_error ])
+        expect(statement.electoral_district_problems).to eq([expected_error])
       end
       it 'should find a problem overall' do
-        expect(statement.problems).to eq([ expected_error ])
+        expect(statement.problems).to eq([expected_error])
       end
     end
 
@@ -62,21 +62,21 @@ RSpec.describe StatementDecorator, type: :decorator do
       let(:object) do
         build(
           :statement,
-          person_item: 'Q1',
-          parliamentary_group_item: 'Q123',
+          person_item:              'Q1',
+          parliamentary_group_item: 'Q123'
         )
       end
       let(:matching_position_held_data) do
-        [ OpenStruct.new(revision: '123', position: 'UUID', group: 'Q234') ]
+        [OpenStruct.new(revision: '123', position: 'UUID', group: 'Q234')]
       end
       let(:expected_error) do
         'The parliamentary group (party) is different in the statement (Q123) and on Wikidata (Q234)'
       end
       it 'should find a problem with the parliamentary groups' do
-        expect(statement.parliamentary_group_problems).to eq([ expected_error ])
+        expect(statement.parliamentary_group_problems).to eq([expected_error])
       end
       it 'should find a problem overall' do
-        expect(statement.problems).to eq([ expected_error ])
+        expect(statement.problems).to eq([expected_error])
       end
     end
 
@@ -84,21 +84,21 @@ RSpec.describe StatementDecorator, type: :decorator do
       let(:matching_position_held_data) do
         [
           OpenStruct.new(
-            revision: '123',
-            position: 'UUID',
+            revision:       '123',
+            position:       'UUID',
             position_start: '2013-12-15',
-            term_start: '2014-01-31'
-          )
+            term_start:     '2014-01-31'
+          ),
         ]
       end
       let(:expected_error) do
         'On Wikidata, the position held start date (2013-12-15) was before the term start date (2014-01-31)'
       end
       it 'should find a problem with the start date' do
-        expect(statement.start_date_before_term_problems).to eq([ expected_error ])
+        expect(statement.start_date_before_term_problems).to eq([expected_error])
       end
       it 'should find a problem overall' do
-        expect(statement.problems).to eq([ expected_error ])
+        expect(statement.problems).to eq([expected_error])
       end
     end
 
@@ -106,11 +106,11 @@ RSpec.describe StatementDecorator, type: :decorator do
       let(:matching_position_held_data) do
         [
           OpenStruct.new(
-            revision: '123',
-            position: 'UUID',
+            revision:       '123',
+            position:       'UUID',
             position_start: '2014-01-06',
-            term_start: '2014-01-07'
-          )
+            term_start:     '2014-01-07'
+          ),
         ]
       end
       it 'should find no problem with the start date' do
@@ -125,11 +125,11 @@ RSpec.describe StatementDecorator, type: :decorator do
       let(:matching_position_held_data) do
         [
           OpenStruct.new(
-            revision: '123',
-            position: 'UUID',
+            revision:       '123',
+            position:       'UUID',
             position_start: '2014-01-06',
-            term_start: '2014-01-04'
-          )
+            term_start:     '2014-01-04'
+          ),
         ]
       end
       it 'should find no problem with the start date' do
@@ -144,30 +144,30 @@ RSpec.describe StatementDecorator, type: :decorator do
       let(:object) do
         create(
           :statement,
-          person_item: 'Q1',
+          person_item:              'Q1',
           parliamentary_group_item: 'Q123',
-          electoral_district_item: 'Q789',
+          electoral_district_item:  'Q789'
         )
       end
       let(:matching_position_held_data) do
         [
           OpenStruct.new(
-            revision: '123',
-            position: 'UUID',
+            revision:       '123',
+            position:       'UUID',
             position_start: '2013-12-15',
-            term_start: '2014-01-31',
-            district: 'Q345',
-            group: 'Q234'
+            term_start:     '2014-01-31',
+            district:       'Q345',
+            group:          'Q234'
           ),
-          OpenStruct.new
+          OpenStruct.new,
         ]
       end
       it 'should report all those problems' do
         expected_errors = [
-          "The electoral district is different in the statement (Q789) and on Wikidata (Q345)",
-          "The parliamentary group (party) is different in the statement (Q123) and on Wikidata (Q234)",
-          "On Wikidata, the position held start date (2013-12-15) was before the term start date (2014-01-31)",
-          'There were 2 \'position held\' (P39) statements on Wikidata that match the verified suggestion - one or more of them might be missing an end date or parliamentary term qualifier'
+          'The electoral district is different in the statement (Q789) and on Wikidata (Q345)',
+          'The parliamentary group (party) is different in the statement (Q123) and on Wikidata (Q234)',
+          'On Wikidata, the position held start date (2013-12-15) was before the term start date (2014-01-31)',
+          'There were 2 \'position held\' (P39) statements on Wikidata that match the verified suggestion - one or more of them might be missing an end date or parliamentary term qualifier',
         ]
         expect(statement.problems).to eq(expected_errors)
       end
@@ -177,20 +177,20 @@ RSpec.describe StatementDecorator, type: :decorator do
       let(:object) do
         build(
           :statement,
-          person_item: 'Q1',
+          person_item:              'Q1',
           parliamentary_group_item: 'Q123',
-          electoral_district_name: 'Somewhereville'
+          electoral_district_name:  'Somewhereville'
         )
       end
       let(:matching_position_held_data) do
         [
           OpenStruct.new(
-            revision: '123',
-            position: 'UUID',
+            revision:       '123',
+            position:       'UUID',
             position_start: '2014-01-31',
-            term_start: '2014-01-31',
-            district: 'Q345',
-            group: 'Q123'
+            term_start:     '2014-01-31',
+            district:       'Q345',
+            group:          'Q123'
           ),
         ]
       end

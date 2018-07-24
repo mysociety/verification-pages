@@ -49,10 +49,10 @@ class Statement < ApplicationRecord
 
   def duplicate_statements
     Statement.where(
-      person_name: person_name,
+      person_name:             person_name,
       electoral_district_name: electoral_district_name,
       electoral_district_item: electoral_district_item,
-      fb_identifier: fb_identifier
+      fb_identifier:           fb_identifier
     ).where.not(id: id).order(created_at: :asc)
   end
 
@@ -71,7 +71,7 @@ class Statement < ApplicationRecord
     return unless duplicate_verification
 
     verifications.create!(
-      user: duplicate_verification.user,
+      user:   duplicate_verification.user,
       status: duplicate_verification.status
     )
   end

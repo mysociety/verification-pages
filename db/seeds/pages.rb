@@ -16,7 +16,7 @@ CSV.parse(raw_data, headers: true).each do |row|
 
   create_with = ["title: '#{title}'"]
   create_with << "reference_url: '#{url}'" unless url.nil?
-  create_with << "require_parliamentary_group: true"
+  create_with << 'require_parliamentary_group: true'
 
   attrs = ["position_held_item: '#{position}'"]
   attrs << "parliamentary_term_item: '#{term}'" unless term.nil?

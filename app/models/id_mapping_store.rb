@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 class IDMappingStore
   def initialize(wikidata_id: nil, facebook_id: nil)
     @wikidata_id = wikidata_id

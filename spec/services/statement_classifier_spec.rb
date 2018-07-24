@@ -9,7 +9,7 @@ RSpec.describe StatementClassifier, type: :service do
     build(
       :page,
       parliamentary_term_item: 'Q2',
-      csv_source_url: "#{ENV.fetch('SUGGESTIONS_STORE_URL')}/export/ca.csv"
+      csv_source_url:          "#{ENV.fetch('SUGGESTIONS_STORE_URL')}/export/ca.csv"
     )
   end
 
@@ -26,12 +26,13 @@ RSpec.describe StatementClassifier, type: :service do
 
   before do
     allow(statement_relation).to receive_message_chain(
-      :original, :includes, :references, :order).and_return(statement_relation)
+      :original, :includes, :references, :order
+    ).and_return(statement_relation)
     allow(Page).to receive(:find_by!)
       .with(title: 'page_title')
       .and_return(page)
-    allow(page).to receive(:statements).
-      and_return(statement_relation)
+    allow(page).to receive(:statements)
+      .and_return(statement_relation)
     allow(RetrievePositionData).to receive(:run)
       .with(page.position_held_item, page.parliamentary_term_item, nil)
       .and_return(position_held_data)
@@ -46,19 +47,19 @@ RSpec.describe StatementClassifier, type: :service do
 
   describe 'statement classification' do
     let(:data) do
-      { person_item: '',
+      { person_item:              '',
         parliamentary_group_item: 'Q3',
-        electoral_district_item: 'Q4' }
+        electoral_district_item:  'Q4', }
     end
 
     let(:wikidata_data) do
-      { person: 'Q1',
+      { person:              'Q1',
         merged_then_deleted: '',
-        term: 'Q2',
-        term_start: '2018-01-01',
-        position_start: '2018-01-01',
-        group: 'Q3',
-        district: 'Q4' }
+        term:                'Q2',
+        term_start:          '2018-01-01',
+        position_start:      '2018-01-01',
+        group:               'Q3',
+        district:            'Q4', }
     end
 
     context 'when verifiable' do
@@ -258,7 +259,6 @@ RSpec.describe StatementClassifier, type: :service do
       it { expect(classifier.reverted).to be_empty }
     end
 
-
     context 'when there are not any statements' do
       let(:statement) { nil }
       it { expect(classifier.verifiable).to be_empty }
@@ -277,13 +277,13 @@ RSpec.describe StatementClassifier, type: :service do
       # position data should still be detected as associated with Q1,
       # so the statement will be in "done".
       let(:wikidata_data) do
-        { person: 'Q200',
+        { person:              'Q200',
           merged_then_deleted: 'http://www.wikidata.org/entity/Q1111 http://www.wikidata.org/entity/Q1',
-          term: 'Q2',
-          term_start: '2018-01-01',
-          position_start: '2018-01-01',
-          group: 'Q3',
-          district: 'Q4' }
+          term:                'Q2',
+          term_start:          '2018-01-01',
+          position_start:      '2018-01-01',
+          group:               'Q3',
+          district:            'Q4', }
       end
       before do
         statement.verifications.build(status: true)
@@ -345,13 +345,13 @@ RSpec.describe StatementClassifier, type: :service do
         build(:page, parliamentary_term_item: 'Q2', executive_position: true)
       end
       let(:wikidata_data) do
-        { person: 'Q1',
+        { person:              'Q1',
           merged_then_deleted: '',
-          term: 'Q2',
-          term_start: '2018-01-01',
-          position_start: '2018-01-01',
-          group: 'Q3',
-          district: nil }
+          term:                'Q2',
+          term_start:          '2018-01-01',
+          position_start:      '2018-01-01',
+          group:               'Q3',
+          district:            nil, }
       end
       before do
         allow(statement).to receive(:person_item).and_return('Q1')
@@ -370,13 +370,13 @@ RSpec.describe StatementClassifier, type: :service do
         build(:page, parliamentary_term_item: 'Q2', executive_position: true)
       end
       let(:wikidata_data) do
-        { person: 'Q1',
+        { person:              'Q1',
           merged_then_deleted: '',
-          term: 'Q2',
-          term_start: '2018-01-01',
-          position_start: '2018-01-01',
-          group: nil,
-          district: 'Q4' }
+          term:                'Q2',
+          term_start:          '2018-01-01',
+          position_start:      '2018-01-01',
+          group:               nil,
+          district:            'Q4', }
       end
       before do
         allow(statement).to receive(:person_item).and_return('Q1')
@@ -395,18 +395,18 @@ RSpec.describe StatementClassifier, type: :service do
         build(:page, parliamentary_term_item: 'Q2', csv_source_url: 'http://example.com/politicians.csv')
       end
       let(:data) do
-        { person_item: 'Q1',
+        { person_item:              'Q1',
           parliamentary_group_item: 'Q3',
-          electoral_district_item: nil }
+          electoral_district_item:  nil, }
       end
       let(:wikidata_data) do
-        { person: 'Q1',
+        { person:              'Q1',
           merged_then_deleted: '',
-          term: 'Q2',
-          term_start: '2018-01-01',
-          position_start: '2018-01-01',
-          group: 'Q3',
-          district: 'Q4' }
+          term:                'Q2',
+          term_start:          '2018-01-01',
+          position_start:      '2018-01-01',
+          group:               'Q3',
+          district:            'Q4', }
       end
       it { expect(classifier.verifiable).to be_empty }
       it { expect(classifier.unverifiable).to be_empty }

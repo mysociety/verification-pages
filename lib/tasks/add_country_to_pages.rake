@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 desc 'Add country_id to existing pages'
 task add_country_to_pages: :environment do
   Page.all.each do |page|

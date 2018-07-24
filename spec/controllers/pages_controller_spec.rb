@@ -11,7 +11,7 @@ RSpec.describe PagesController, type: :controller do
     { title: 'Page title', position_held_item: 'Q1',
       parliamentary_term_item: 'Q2', reference_url: 'http://example.com',
       country_id: country.id, csv_source_url: 'http://example.com/export.csv', executive_position: false,
-      reference_url_title: 'Example site', reference_url_language: 'en' }
+      reference_url_title: 'Example site', reference_url_language: 'en', }
   end
 
   let(:invalid_attributes) do
@@ -49,9 +49,9 @@ RSpec.describe PagesController, type: :controller do
     context 'with querystring parameters' do
       it 'uses them to populate new Page instance' do
         get :new, params: {
-          title: 'Test title',
+          title:              'Test title',
           position_held_item: 'Q123321',
-          csv_source_url: 'https://example.com/export.csv'
+          csv_source_url:     'https://example.com/export.csv',
         }, session: valid_session
         page = @controller.view_assigns['page']
         expect(page.title).to eq('Test title')
@@ -73,7 +73,7 @@ RSpec.describe PagesController, type: :controller do
     context 'with valid params' do
       it 'creates a new Page' do
         expect do
-          post :create, params: { page: valid_attributes },
+          post :create, params:  { page: valid_attributes },
                         session: valid_session
         end.to change(Page, :count).by(1)
       end
@@ -86,7 +86,7 @@ RSpec.describe PagesController, type: :controller do
 
     context 'with invalid params' do
       it "returns a success response (i.e. to display the 'new' template)" do
-        post :create, params: { page: invalid_attributes },
+        post :create, params:  { page: invalid_attributes },
                       session: valid_session
         expect(response).to be_successful
       end
@@ -101,7 +101,7 @@ RSpec.describe PagesController, type: :controller do
 
       it 'updates the requested page' do
         page = Page.create! valid_attributes
-        put :update, params: { id: page.to_param, page: new_attributes },
+        put :update, params:  { id: page.to_param, page: new_attributes },
                      session: valid_session
         page.reload
         expect(page.title).to eq 'New title'
@@ -109,7 +109,7 @@ RSpec.describe PagesController, type: :controller do
 
       it 'redirects to the page' do
         page = Page.create! valid_attributes
-        put :update, params: { id: page.to_param, page: valid_attributes },
+        put :update, params:  { id: page.to_param, page: valid_attributes },
                      session: valid_session
         expect(response).to redirect_to(page)
       end
@@ -118,7 +118,7 @@ RSpec.describe PagesController, type: :controller do
     context 'with invalid params' do
       it "returns a success response (i.e. to display the 'edit' template)" do
         page = Page.create! valid_attributes
-        put :update, params: { id: page.to_param, page: invalid_attributes },
+        put :update, params:  { id: page.to_param, page: invalid_attributes },
                      session: valid_session
         expect(response).to be_successful
       end
@@ -145,7 +145,7 @@ RSpec.describe PagesController, type: :controller do
       suggestions_store_response = [
         %w[transaction_id],
         %w[489434391472318],
-        %w[1656343594481923]
+        %w[1656343594481923],
       ].map(&:to_csv).join
 
       stub_request(:get, 'http://example.com/export.csv')

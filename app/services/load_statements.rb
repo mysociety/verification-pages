@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 require 'csv'
 require 'digest'
 
@@ -20,17 +22,15 @@ class LoadStatements < ServiceBase
       # items when refreshing from the upstream CSV file, so don't
       # overwrite the *_item attributes if that'd make them blank:
       %i[person_item electoral_district_item parliamentary_group_item].each do |item_attribute|
-        if result[item_attribute].present?
-          statement.public_send("#{item_attribute}=", result[item_attribute])
-        end
+        statement.public_send("#{item_attribute}=", result[item_attribute]) if result[item_attribute].present?
       end
       # The other attributes we always update from the upstream CSV:
-      statement.update_attributes!(
-        page: page,
-        person_name: result[:person_name],
-        electoral_district_name: result[:electoral_district_name],
+      statement.update!(
+        page:                     page,
+        person_name:              result[:person_name],
+        electoral_district_name:  result[:electoral_district_name],
         parliamentary_group_name: result[:parliamentary_group_name],
-        fb_identifier: result[:fb_identifier]
+        fb_identifier:            result[:fb_identifier]
       )
     end
   end

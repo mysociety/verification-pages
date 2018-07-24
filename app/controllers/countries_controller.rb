@@ -1,7 +1,9 @@
+# frozen_string_literal: true
+
 class CountriesController < ApplicationController
   include AdminAuthentication
 
-  before_action :set_country, only: [:show, :edit, :update, :destroy]
+  before_action :set_country, only: %i[show edit update destroy]
 
   # GET /countries
   # GET /countries.json
@@ -11,8 +13,7 @@ class CountriesController < ApplicationController
 
   # GET /countries/1
   # GET /countries/1.json
-  def show
-  end
+  def show; end
 
   # GET /countries/new
   def new
@@ -20,8 +21,7 @@ class CountriesController < ApplicationController
   end
 
   # GET /countries/1/edit
-  def edit
-  end
+  def edit; end
 
   # POST /countries
   # POST /countries.json
@@ -64,13 +64,14 @@ class CountriesController < ApplicationController
   end
 
   private
-    # Use callbacks to share common setup or constraints between actions.
-    def set_country
-      @country = Country.find(params[:id])
-    end
 
-    # Never trust parameters from the scary internet, only allow the white list through.
-    def country_params
-      params.require(:country).permit(:name, :code, :description_en, :label_lang, :wikidata_id)
-    end
+  # Use callbacks to share common setup or constraints between actions.
+  def set_country
+    @country = Country.find(params[:id])
+  end
+
+  # Never trust parameters from the scary internet, only allow the white list through.
+  def country_params
+    params.require(:country).permit(:name, :code, :description_en, :label_lang, :wikidata_id)
+  end
 end

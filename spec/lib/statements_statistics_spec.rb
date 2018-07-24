@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 require 'rails_helper'
 
 describe StatementsStatistics do
@@ -8,20 +10,20 @@ describe StatementsStatistics do
         .to_return(body: '[{"code": "ca", "export_json_url": "https://suggestions-store.mysociety.org/export/ca.json"}]')
       body = [
         {
-          id: 1,
+          id:                  1,
           verification_status: 'correct',
-          position_item: 'Q15964890'
+          position_item:       'Q15964890',
         },
         {
-          id: 2,
+          id:                  2,
           verification_status: 'correct',
-          position_item: 'Q15964890'
+          position_item:       'Q15964890',
         },
         {
-          id: 3,
+          id:                  3,
           verification_status: 'incorrect',
-          position_item: 'Q15964890'
-        }
+          position_item:       'Q15964890',
+        },
       ]
       stub_request(:get, 'https://suggestions-store.mysociety.org/export/ca.json')
         .to_return(body: JSON.generate(body))

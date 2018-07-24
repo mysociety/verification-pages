@@ -452,6 +452,7 @@ var wikidata = function(spec) {
         'parliamentary term': 'P2937',
         'title': 'P1476',
         'language of work or name': 'P407',
+        'instance of': 'P31',
       },
       'test.wikidata.org': {
         'reference URL': 'P43659',
@@ -464,6 +465,7 @@ var wikidata = function(spec) {
         'parliamentary term': 'P70901',
         'title': 'P95',
         'language of work or name': 'P77090',
+        'instance of': 'P82',
       },
       'localhost': {
         // For local development assume we're using test.wikidata for
@@ -480,6 +482,7 @@ var wikidata = function(spec) {
         'parliamentary term': 'P70901',
         'title': 'P95',
         'language of work or name': 'P77090',
+        'instance of': 'P82',
       }
     }
     if (!(that.serverName in knownPropertiesByServer)) {
@@ -493,10 +496,12 @@ var wikidata = function(spec) {
       'www.wikidata.org': {
         'politician': 'Q82955',
         'Canada': 'Q16',
+        'human': 'Q5',
       },
       'test.wikidata.org': {
         'politician': 'Q514',
         'Canada': 'Q620',
+        'human': 'Q497',
       },
       'localhost': {
         // For local development assume we're using test.wikidata for
@@ -505,6 +510,7 @@ var wikidata = function(spec) {
         // it's proxying to..)
         'politician': 'Q514',
         'Canada': 'Q620',
+        'human': 'Q497',
       }
     }[that.serverName][itemLabel];
   };
@@ -529,6 +535,18 @@ var wikidata = function(spec) {
           'property': that.getPropertyID('occupation'),
           'datavalue': {
             'value': getItemValue(that.getItemID('politician')),
+            'type': 'wikibase-entityid'
+          }
+        },
+        'type': 'statement',
+        'rank': 'normal',
+      },
+      {
+        'mainsnak': {
+          'snaktype': 'value',
+          'property': that.getPropertyID('instance of'),
+          'datavalue': {
+            'value': getItemValue(that.getItemID('human')),
             'type': 'wikibase-entityid'
           }
         },

@@ -46,18 +46,23 @@
   </div>
   <div v-if="loaded && currentStatements.length > 0">
     <table class="verification-tool__table">
+      <thead>
+        <tr>
+          <th>Subject</th>
+          <th>District</th>
+          <th>Parliamentary group</th>
+          <th></th>
+        </tr>
+      </thead>
       <tbody v-for="statement in currentStatements">
       <tr :id="'s:' + statement.transaction_id">
         <td>
-          <span class="verification-tool__table__cell-label">Subject</span>
           <wikilink :id="statement.person_item">{{ statement.person_name }}</wikilink>
         </td>
         <td>
-          <span class="verification-tool__table__cell-label">District</span>
           <wikilink :id="statement.electoral_district_item">{{ statement.electoral_district_name || '&nbsp;' }}</wikilink>
         </td>
         <td>
-          <span class="verification-tool__table__cell-label">Parliamentary group</span>
           <wikilink :id="statement.parliamentary_group_item">{{ statement.parliamentary_group_name || '&nbsp;' }}</wikilink>
         </td>
         <td class="verification-tool__table__cell--narrow">

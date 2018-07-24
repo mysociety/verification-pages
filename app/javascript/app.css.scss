@@ -31,11 +31,27 @@ $color_pale_grey: #eee;
 
 .verification-tool__table {
     width: 100%;
-    border-collapse: collapse;
+    border-spacing: 0;
 
     td {
         padding: 1em;
         vertical-align: top;
+    }
+
+    th {
+        position: -webkit-sticky;
+        position: sticky;
+        top: 0;
+        background: transparent linear-gradient(to bottom, #fff 66%, transparent);
+
+        padding: 1em;
+        text-align: inherit;
+    }
+
+    thead {
+        & + tbody tr:first-child td {
+            padding-top: 0;
+        }
     }
 
     h3 {
@@ -102,12 +118,6 @@ $color_pale_grey: #eee;
   100% {
     background: #ffffff;
   }
-}
-
-.verification-tool__table__cell-label {
-    font-size: 0.8em;
-    font-weight: bold;
-    display: block;
 }
 
 .verification-tool__table__cell-link {

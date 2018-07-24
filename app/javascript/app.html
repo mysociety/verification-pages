@@ -54,25 +54,7 @@
           <th></th>
         </tr>
       </thead>
-      <tbody v-for="statement in currentStatements">
-      <tr :id="'s:' + statement.transaction_id">
-        <td>
-          <wikilink :id="statement.person_item">{{ statement.person_name }}</wikilink>
-        </td>
-        <td>
-          <wikilink :id="statement.electoral_district_item">{{ statement.electoral_district_name || '&nbsp;' }}</wikilink>
-        </td>
-        <td>
-          <wikilink :id="statement.parliamentary_group_item">{{ statement.parliamentary_group_name || '&nbsp;' }}</wikilink>
-        </td>
-        <td class="verification-tool__table__cell--narrow">
-          <a class="verification-tool__table__cell-link" :href="'#s:' + statement.transaction_id" title="Link to this statement">§</a>
-        </td>
-      </tr>
-      <tr>
-        <ActionWrapper :statement="statement" :page="page" :country="country"></ActionWrapper>
-      </tr>
-      </tbody>
+      <ActionWrapper v-for="statement in currentStatements" :statement="statement" :page="page" :country="country"></ActionWrapper>
     </table>
   </div>
   <div v-if="!loaded" class="verification-tool__blank-slate">

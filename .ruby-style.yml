@@ -4,6 +4,7 @@ AllCops:
     - 'db/migrate/**'
     - 'db/schema.rb'
     - 'node_modules/**/*'
+    - 'vendor/**/*'
 
 Rails:
   Enabled: true

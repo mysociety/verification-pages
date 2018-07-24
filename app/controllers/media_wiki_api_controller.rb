@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 require 'mediawiki_api'
 
 class MediaWikiApiController < ApplicationController
@@ -7,14 +9,14 @@ class MediaWikiApiController < ApplicationController
     unless ENV['API_PROXY'] && Integer(ENV['API_PROXY']) == 1
       error = 'API_PROXY=1 must be set in the environment to use the ' \
               'API proxy (Warning: not for use on public installations!)'
-      return render(:json => {error: error})
+      return render(json: { error: error })
     end
     action = params[:action_name]
-    return render(:json => {error: 'No action supplied'}) unless action
+    return render(json: { error: 'No action supplied' }) unless action
     api_data = api_data_for_action(action)
     api_data[:token_type] = false unless TOKEN_REQUIRED_FOR_ACTION[action]
     response = client.action action, api_data
-    render(:json => response.data)
+    render(json: response.data)
   end
 
   private
@@ -24,23 +26,19 @@ class MediaWikiApiController < ApplicationController
   WIKIDATA_SITE = ENV['WIKIDATA_SITE']
 
   def client
-    if WIKIDATA_USERNAME.to_s.empty? || WIKIDATA_PASSWORD.to_s.empty?
-      raise "Please set WIKIDATA_USERNAME and WIKIDATA_PASSWORD"
-    end
+    raise 'Please set WIKIDATA_USERNAME and WIKIDATA_PASSWORD' if WIKIDATA_USERNAME.to_s.empty? || WIKIDATA_PASSWORD.to_s.empty?
     @client ||= MediawikiApi::Client.new("https://#{WIKIDATA_SITE}/w/api.php").tap do |c|
       result = c.log_in(WIKIDATA_USERNAME, WIKIDATA_PASSWORD)
-      unless result['result'] == 'Success'
-        raise "MediawikiApi::Client#log_in failed: #{result}"
-      end
+      raise "MediawikiApi::Client#log_in failed: #{result}" unless result['result'] == 'Success'
     end
   end
 
   TOKEN_REQUIRED_FOR_ACTION = {
     'wbsetreference' => true,
     'wbsetqualifier' => true,
-    'wbcreateclaim' => true,
-    'wbeditentity' => true
-  }
+    'wbcreateclaim'  => true,
+    'wbeditentity'   => true,
+  }.freeze
 
   def api_data_for_action(action)
     if action == 'wbsearchentities'

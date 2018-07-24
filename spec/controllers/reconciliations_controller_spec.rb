@@ -9,7 +9,7 @@ RSpec.describe ReconciliationsController, type: :controller do
 
   let(:valid_attributes) do
     { id: '123', user: 'ExampleUser', item: 'Q1', resource_type: 'person',
-      format: 'json' }
+      format: 'json', }
   end
 
   describe 'POST #create' do

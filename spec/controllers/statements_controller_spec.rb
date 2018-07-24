@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 require 'rails_helper'
 
 RSpec.describe StatementsController, type: :controller do
@@ -8,8 +10,8 @@ RSpec.describe StatementsController, type: :controller do
   end
 
   before do
-    allow(Statement).to receive(:find_by!).with(transaction_id: '123').
-      and_return(statement)
+    allow(Statement).to receive(:find_by!).with(transaction_id: '123')
+                                          .and_return(statement)
   end
 
   describe 'GET #show' do
@@ -37,7 +39,7 @@ RSpec.describe StatementsController, type: :controller do
     context 'when force_type: manually_actionable is provided' do
       let(:show_parameters) do
         { id: '123', format: 'json', force_type: 'manually_actionable',
-          error_message: 'Error' }
+          error_message: 'Error', }
       end
 
       it 'should call report_error!! on statement' do

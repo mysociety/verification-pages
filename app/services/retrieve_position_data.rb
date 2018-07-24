@@ -17,12 +17,9 @@ class RetrievePositionData < ServiceBase
   end
 
   def query
-    format(
-      query_format,
-      position_held_item: position_held_item,
-      parliamentary_term_item: parliamentary_term_item,
-      person_bind: person_bind
-    )
+    query_format % { position_held_item:      position_held_item,
+                     parliamentary_term_item: parliamentary_term_item,
+                     person_bind:             person_bind, }
   end
 
   private

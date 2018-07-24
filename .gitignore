@@ -24,3 +24,4 @@ yarn-debug.log*
 
 .env
 config/database.yml
+.rubocop-https---raw-githubusercontent-com-everypolitician-everypolitician-data-master--rubocop-base-yml

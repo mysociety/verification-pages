@@ -7,10 +7,10 @@ RSpec.describe CreateVerification, type: :service do
   include_context 'id-mapping-store default setup'
   let(:statement_params) do
     {
-      person_name: 'Alice',
+      person_name:             'Alice',
       electoral_district_name: 'Foo',
       electoral_district_item: 'Q123',
-      fb_identifier: '444333'
+      fb_identifier:           '444333',
     }
   end
   let(:statement) { create(:statement, statement_params) }
@@ -23,8 +23,8 @@ RSpec.describe CreateVerification, type: :service do
     subject do
       CreateVerification.new(
         statement: statement,
-        params: {
-          user: 'foo', status: 'true', new_name: 'baz'
+        params:    {
+          user: 'foo', status: 'true', new_name: 'baz',
         }
       )
     end

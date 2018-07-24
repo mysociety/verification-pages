@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 class UpdateStatementVerification < ServiceBase
   attr_reader :transaction_id, :verification
 

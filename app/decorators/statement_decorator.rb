@@ -41,29 +41,29 @@ class StatementDecorator < SimpleDelegator
 
   def start_date_before_term_problems
     return [] unless data&.position_start && data&.term_start &&
-      Date.parse(data.position_start) < Date.parse(data.term_start) - 31.days
-    [ "On Wikidata, the position held start date (#{data&.position_start}) was before the term start date (#{data&.term_start})" ]
+                     Date.parse(data.position_start) < Date.parse(data.term_start) - 31.days
+    ["On Wikidata, the position held start date (#{data&.position_start}) was before the term start date (#{data&.term_start})"]
   end
 
   def electoral_district_problems
-    return [] unless electoral_district_item.present?
+    return [] if electoral_district_item.blank?
     return [] unless data&.district && electoral_district_item != data&.district
-    [ "The electoral district is different in the statement (#{electoral_district_item}) and on Wikidata (#{data&.district})" ]
+    ["The electoral district is different in the statement (#{electoral_district_item}) and on Wikidata (#{data&.district})"]
   end
 
   def parliamentary_group_problems
     return [] unless data&.group && parliamentary_group_item != data&.group
-    [ "The parliamentary group (party) is different in the statement (#{parliamentary_group_item}) and on Wikidata (#{data&.group})" ]
+    ["The parliamentary group (party) is different in the statement (#{parliamentary_group_item}) and on Wikidata (#{data&.group})"]
   end
 
   def multiple_statement_problems
     return [] unless matching_position_held_data.length > 1
-    [ "There were #{matching_position_held_data.length} 'position held' (P39) statements on Wikidata that match the verified suggestion - one or more of them might be missing an end date or parliamentary term qualifier" ]
+    ["There were #{matching_position_held_data.length} 'position held' (P39) statements on Wikidata that match the verified suggestion - one or more of them might be missing an end date or parliamentary term qualifier"]
   end
 
   def reported_problems
     return [] unless problem_reported?
-    [ error_reported ]
+    [error_reported]
   end
 
   def problem_reported?
@@ -93,18 +93,18 @@ class StatementDecorator < SimpleDelegator
 
   def person_reconciliations
     return [] if person_item.present?
-    [ 'person' ]
+    ['person']
   end
 
   def party_reconciliations
     return [] if !page.require_parliamentary_group? ||
-      parliamentary_group_item.present?
-    [ 'party' ]
+                 parliamentary_group_item.present?
+    ['party']
   end
 
   def district_reconciliations
-    return [] if electoral_district_item.present? || !electoral_district_name.present?
-    [ 'district' ]
+    return [] if electoral_district_item.present? || electoral_district_name.blank?
+    ['district']
   end
 
   def verified_on

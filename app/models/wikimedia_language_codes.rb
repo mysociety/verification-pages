@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 class WikimediaLanguageCodes
   def self.all
     %w[

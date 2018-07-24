@@ -11,9 +11,7 @@ module WikiClient
       client = MediawikiApi::Client.new("https://#{wiki_site}/w/api.php")
 
       result = client.log_in(wiki_username, wiki_password)
-      if result['result'] != 'Success'
-        abort "MediawikiApi::Client#log_in failed: #{result}"
-      end
+      abort "MediawikiApi::Client#log_in failed: #{result}" if result['result'] != 'Success'
 
       client
     end

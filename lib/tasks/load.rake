@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 namespace :verification_page do
   desc 'Load statements from suggestions store'
   task :load, %i[page_title] => %i[environment] do |_, args|

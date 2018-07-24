@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 # Include this in a controller to protect it with basic auth.
 #
 # Set the ADMIN_USERNAME and ADMIN_PASSWORD environment variables to activate this module.

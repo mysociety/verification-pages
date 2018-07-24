@@ -3,6 +3,9 @@ AllCops:
     - 'bin/**'
     - 'db/migrate/**'
     - 'db/schema.rb'
+    - 'node_modules/**/*'
+    - 'vendor/**/*'
+  TargetRubyVersion: 2.4
 
 Rails:
   Enabled: true
@@ -10,3 +13,7 @@ Rails:
 Metrics/BlockLength:
   Exclude:
     - 'spec/**/*.rb'
+
+inherit_from:
+  - 'https://raw.githubusercontent.com/everypolitician/everypolitician-data/master/.rubocop_base.yml'
+  - .rubocop_todo.yml

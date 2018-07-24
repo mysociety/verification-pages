@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 class StatementsStatistics
   def initialize(suggestion_store_url: 'https://suggestions-store.mysociety.org')
     @suggestion_store_url = suggestion_store_url
@@ -9,8 +11,8 @@ class StatementsStatistics
       grouped_statements = statements.group_by { |s| s['position_item'] }
       position_stats = grouped_statements.map do |position, position_statements|
         PositionStatistics.new(
-          position: position,
-          statements: position_statements,
+          position:           position,
+          statements:         position_statements,
           existing_positions: existing_positions
         )
       end
@@ -30,9 +32,8 @@ class StatementsStatistics
     return @position_to_page_titles if @position_to_page_titles
     # Make a Hash mapping from a position to a Set of associated page titles:
     @position_to_page_titles = Hash.new { |h, k| h[k] = Set.new }
-    Page.pluck(:position_held_item, :title).inject(@position_to_page_titles) do |acc, (position, page_title)|
+    Page.pluck(:position_held_item, :title).each_with_object(@position_to_page_titles) do |(position, page_title), acc|
       acc[position].add(page_title)
-      acc
     end
   end
 end

@@ -34,12 +34,12 @@ RSpec.describe Reconciliation, type: :model do
       before { reconciliation.resource_type = 'person' }
 
       it 'updates statement person item' do
-        expect(statement).to receive(:update_attributes)
+        expect(statement).to receive(:update)
           .with(person_item: 'Q2').once
         reconciliation.item = 'Q2'
         reconciliation.save! # create
 
-        expect(statement).to receive(:update_attributes)
+        expect(statement).to receive(:update)
           .with(person_item: 'Q3').once
         reconciliation.item = 'Q3'
         reconciliation.save! # update
@@ -50,12 +50,12 @@ RSpec.describe Reconciliation, type: :model do
       before { reconciliation.resource_type = 'party' }
 
       it 'updates statement parlimentary group item' do
-        expect(statement).to receive(:update_attributes)
+        expect(statement).to receive(:update)
           .with(parliamentary_group_item: 'Q2').once
         reconciliation.item = 'Q2'
         reconciliation.save! # create
 
-        expect(statement).to receive(:update_attributes)
+        expect(statement).to receive(:update)
           .with(parliamentary_group_item: 'Q3').once
         reconciliation.item = 'Q3'
         reconciliation.save! # update
@@ -66,12 +66,12 @@ RSpec.describe Reconciliation, type: :model do
       before { reconciliation.resource_type = 'district' }
 
       it 'updates statement electoral district item' do
-        expect(statement).to receive(:update_attributes)
+        expect(statement).to receive(:update)
           .with(electoral_district_item: 'Q5').once
         reconciliation.item = 'Q5'
         reconciliation.save! # create
 
-        expect(statement).to receive(:update_attributes)
+        expect(statement).to receive(:update)
           .with(electoral_district_item: 'Q6').once
         reconciliation.item = 'Q6'
         reconciliation.save! # update

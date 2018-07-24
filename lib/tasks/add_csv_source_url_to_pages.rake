@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 desc 'Add CSV source URL to existing pages'
 task add_csv_source_url_to_pages: :environment do
   Page.transaction do

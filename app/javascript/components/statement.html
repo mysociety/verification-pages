@@ -1,13 +1,16 @@
 <tbody>
-<tr :id="'s:' + statement.transaction_id">
+<tr :id="'s:' + statement.transaction_id" class="verification-tool__statement">
   <td>
-    <wikilink :id="statement.person_item">{{ statement.person_name }}</wikilink>
+    {{ statement.person_name }}
+    <wikilink :id="statement.person_item">{{ statement.person_item }}</wikilink>
   </td>
   <td>
-    <wikilink :id="statement.electoral_district_item">{{ statement.electoral_district_name || '&nbsp;' }}</wikilink>
+    {{ statement.electoral_district_name }}
+    <wikilink :id="statement.electoral_district_item">{{ statement.electoral_district_item }}</wikilink>
   </td>
   <td>
-    <wikilink :id="statement.parliamentary_group_item">{{ statement.parliamentary_group_name || '&nbsp;' }}</wikilink>
+    {{ statement.parliamentary_group_name }}
+    <wikilink :id="statement.parliamentary_group_item">{{  statement.parliamentary_group_item }}</wikilink>
   </td>
   <td class="verification-tool__table__cell--narrow">
     <a class="verification-tool__table__cell-link" :href="'#s:' + statement.transaction_id" title="Link to this statement">§</a>

@@ -5,9 +5,9 @@ import wikidataClient from './wikiapi'
 import template from './app.html?style=./app.css'
 import { parseFullName } from 'parse-full-name'
 
-import actionWrapper from './components/action_wrapper'
+import statementComponent from './components/statement'
 
-Vue.component('ActionWrapper', actionWrapper)
+Vue.component('Statement', statementComponent)
 
 export default template({
   data () {

@@ -1,4 +1,4 @@
-import template from './action_wrapper.html'
+import template from './statement.html'
 
 import loadingComponent from './loading'
 import verifiableComponent from './verifiable'

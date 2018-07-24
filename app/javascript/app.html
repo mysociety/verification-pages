@@ -54,7 +54,7 @@
           <th></th>
         </tr>
       </thead>
-      <ActionWrapper v-for="statement in currentStatements" :statement="statement" :page="page" :country="country"></ActionWrapper>
+      <Statement v-for="statement in currentStatements" :statement="statement" :page="page" :country="country"></Statement>
     </table>
   </div>
   <div v-if="!loaded" class="verification-tool__blank-slate">

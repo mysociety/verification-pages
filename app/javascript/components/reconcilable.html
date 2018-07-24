@@ -7,9 +7,9 @@
   <span v-else>
     <h3>
       Results for
-      <input v-model="searchTerm" type="search">
+      <input v-model="searchTerm" type="search" v-on:keyup.enter="changeLanguage()">
       from Wikidata and
-      <input v-model="languageCode" class="language-chooser">.wikipedia.org
+      <input v-model="languageCode" class="language-chooser"v-on:keyup.enter="changeLanguage()">.wikipedia.org
       <button v-on:click="changeLanguage()" class="mw-ui-button mw-ui-progressive">Update results</button>
     </h3>
     <ul class="verification-tool__search-results">

@@ -2,15 +2,18 @@
 <tr :id="'s:' + statement.transaction_id" class="verification-tool__statement">
   <td>
     {{ statement.person_name }}
-    <wikilink :id="statement.person_item">{{ statement.person_item }}</wikilink>
+    <wikilink v-if="statement.person_item" :id="statement.person_item">{{ statement.person_item }}</wikilink>
+    <span class="unreconciled-value" v-else="">unreconciled</span>
   </td>
   <td>
     {{ statement.electoral_district_name }}
-    <wikilink :id="statement.electoral_district_item">{{ statement.electoral_district_item }}</wikilink>
+    <wikilink v-if="statement.electoral_district_item" :id="statement.electoral_district_item">{{ statement.electoral_district_item }}</wikilink>
+    <span class="unreconciled-value" v-else="">unreconciled</span>
   </td>
   <td>
     {{ statement.parliamentary_group_name }}
-    <wikilink :id="statement.parliamentary_group_item">{{  statement.parliamentary_group_item }}</wikilink>
+    <wikilink v-if="statement.parliamentary_group_item" :id="statement.parliamentary_group_item">{{  statement.parliamentary_group_item }}</wikilink>
+    <span class="unreconciled-value" v-else="">unreconciled</span>
   </td>
   <td class="verification-tool__table__cell--narrow">
     <a class="verification-tool__table__cell-link" :href="'#s:' + statement.transaction_id" title="Link to this statement">§</a>

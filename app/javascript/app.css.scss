@@ -9,6 +9,8 @@ $color_pale_green: #e6f9e2;
 $color_mid_grey: #999;
 $color_pale_grey: #eee;
 
+$color_wikipedia_redlink: #ba0000;
+
 @mixin clearfix() {
     zoom: 1;
 
@@ -175,13 +177,16 @@ $color_pale_grey: #eee;
 }
 
 .verification-tool__statement {
-    .wikilink {
+    .wikilink, .unreconciled-value {
         display: block;
 
         &:before {
             content: "\21B3";
             margin-right: 0.5em;
         }
+    }
+    .unreconciled-value {
+        color: $color_wikipedia_redlink;
     }
 }
 

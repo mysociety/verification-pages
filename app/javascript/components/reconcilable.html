@@ -12,17 +12,22 @@
       <input v-model="languageCode" class="language-chooser">.wikipedia.org
       <button v-on:click="changeLanguage()" class="mw-ui-button mw-ui-progressive">Update results</button>
     </h3>
-    <ul class="wp-search-results">
+    <ul class="verification-tool__search-results">
       <li v-for="wdResult in searchResults.fromWikidata">
         <button v-on:click="reconcileWithItem(wdResult.item)" class="mw-ui-button">Use this</button>
-        <span class="item-from-search">{{ wdResult.item }}</span>
-        <a target="_blank" rel="noopener nofollow" class="external free" :href="wdResult.url">{{ wdResult.label }} ({{ wdResult.description }})</a>
+        <div>
+          <a target="_blank" rel="noopener nofollow" class="external free name" :href="wdResult.url">{{ wdResult.label }}</a>
+          <span class="item-from-search">{{ wdResult.item }}</span>
+          <p class="description">{{ wdResult.description }}</p>
+        </div>
       </li>
       <li v-for="wpResult in searchResults.fromWikipedia">
         <button v-on:click="reconcileWithItem(wpResult.item)" class="mw-ui-button">Use this</button>
-        <span class="item-from-search">{{ wpResult.item }}</span>
-        <a target="_blank" rel="noopener nofollow" class="external free" :href="wpResult.wpURL">{{ wpResult.title }} </a>
-        <div v-html="wpResult.snippetHTML"></div>
+        <div>
+          <a target="_blank" rel="noopener nofollow" class="external free name" :href="wpResult.wpURL">{{ wpResult.title }} </a>
+          <span class="item-from-search">{{ wpResult.item }}</span>
+          <p v-html="wpResult.snippetHTML" class="description"></p>
+        </div>
       </li>
       <li v-if="this.searchResourceType === 'person'">
         <button v-on:click="createPerson()" class="mw-ui-button">Create new item: {{ searchTerm }}</button>

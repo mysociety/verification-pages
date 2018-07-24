@@ -118,6 +118,36 @@ $color_pale_grey: #eee;
     width: 0;
 }
 
+.verification-tool__search-results {
+    list-style: none;
+    margin: 0;
+
+    li {
+        padding-top: 1em;
+        margin-top: 1em;
+        border-top: 1px solid rgba(#000, 0.1);
+        display: flex;
+        align-items: center;
+
+        & > button {
+            flex: 0 0 auto;
+            margin-right: 1em;
+        }
+
+        & > div {
+            flex: 1 1 auto;
+        }
+    }
+
+    p.description {
+        margin: 0;
+    }
+
+    .searchmatch {
+        background-color: rgba(#ff0, 0.7);
+    }
+}
+
 .verification-tool__controls {
     @include clearfix();
     margin: 0 -0.5em -0.5em -0.5em;

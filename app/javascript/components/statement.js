@@ -70,6 +70,9 @@ export default template({
       this.$nextTick( () => {
         this.$emit('search-for', field)
       })
+    },
+    changeVerification: function(field) {
+      this.statement.type = 'verifiable'
     }
   }
 })

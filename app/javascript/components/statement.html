@@ -1,5 +1,14 @@
 <tbody>
 <tr :id="'s:' + statement.transaction_id" v-bind:class="'verification-tool__statement verification-tool__statement--' + stylingClass">
+  <td style="text-align: center">
+    <span v-if="statement.type === 'verifiable'"></span>
+    <span v-else>
+      <span v-if="statement.type === 'unverifiable'">✖︎</span>
+      <span v-else>✔︎</span>
+      <br>
+      <span class="edit-value" v-on:click="changeVerification()">(edit)</span>
+    </span>
+  </td>
   <td>
     <div v-if="statement.person_name">
       {{ statement.person_name }}
@@ -41,7 +50,7 @@
   </td>
 </tr>
 <tr>
-  <td colspan="4" v-bind:class="'verification-tool__statement-controls verification-tool__statement-controls--' + stylingClass">
+  <td colspan="5" v-bind:class="'verification-tool__statement-controls verification-tool__statement-controls--' + stylingClass">
     <keep-alive>
       <component v-bind:is="currentView" :statement="statement" :page="page" :country="country"></component>
     </keep-alive>

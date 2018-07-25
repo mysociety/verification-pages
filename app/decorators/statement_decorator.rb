@@ -32,11 +32,14 @@ class StatementDecorator < SimpleDelegator
   end
 
   def problems
-    electoral_district_problems +
-      parliamentary_group_problems +
-      start_date_before_term_problems +
-      multiple_statement_problems +
-      reported_problems
+    if multiple_statement_problems.any?
+      multiple_statement_problems
+    else
+      electoral_district_problems +
+        parliamentary_group_problems +
+        start_date_before_term_problems +
+        reported_problems
+    end
   end
 
   def start_date_before_term_problems

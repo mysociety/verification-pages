@@ -181,12 +181,24 @@ $color_wikipedia_redlink: #ba0000;
         display: block;
 
         &:before {
+            display: inline-block;
             content: "\21B3";
             margin-right: 0.5em;
         }
     }
     .unreconciled-value {
+        color: $color_mid_grey;
+    }
+}
+
+.verification-tool__statement--reconcilable {
+    .unreconciled-value {
         color: $color_wikipedia_redlink;
+        cursor: pointer;
+
+        &:hover, &:focus {
+            text-decoration: underline;
+        }
     }
 }
 

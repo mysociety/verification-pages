@@ -59,5 +59,10 @@ export default template({
         this.submitting = false
       })
     })
+  },
+  methods: {
+    searchFor: function (field) {
+      this.$emit('search-for', field)
+    }
   }
 })

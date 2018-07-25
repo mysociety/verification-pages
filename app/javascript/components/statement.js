@@ -62,7 +62,14 @@ export default template({
   },
   methods: {
     searchFor: function (field) {
-      this.$emit('search-for', field)
+      if ( this.statement.type === 'verifiable' ) {
+        return
+      }
+
+      this.statement.type = 'reconcilable'
+      this.$nextTick( () => {
+        this.$emit('search-for', field)
+      })
     }
   }
 })

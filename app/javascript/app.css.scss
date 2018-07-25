@@ -188,13 +188,6 @@ $color_wikipedia_redlink: #ba0000;
 
     .unreconciled-value,
     .edit-value {
-        color: $color_mid_grey;
-    }
-}
-
-.verification-tool__statement--reconcilable {
-    .unreconciled-value,
-    .edit-value {
         cursor: pointer;
 
         &:hover, &:focus {
@@ -208,6 +201,18 @@ $color_wikipedia_redlink: #ba0000;
 
     .edit-value {
         color: $color_wikipedia_bluelink;
+    }
+}
+
+.verification-tool__statement--verifiable {
+    .unreconciled-value,
+    .edit-value {
+        color: $color_mid_grey;
+        cursor: not-allowed;
+
+        &:hover, &:focus {
+            text-decoration: none;
+        }
     }
 }
 

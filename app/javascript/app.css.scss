@@ -9,6 +9,7 @@ $color_pale_green: #e6f9e2;
 $color_mid_grey: #999;
 $color_pale_grey: #eee;
 
+$color_wikipedia_bluelink: #0645ad;
 $color_wikipedia_redlink: #ba0000;
 
 @mixin clearfix() {
@@ -178,27 +179,35 @@ $color_wikipedia_redlink: #ba0000;
 
 .verification-tool__statement {
     .wikilink, .unreconciled-value {
-        display: block;
-
         &:before {
             display: inline-block;
             content: "\21B3";
             margin-right: 0.5em;
         }
     }
-    .unreconciled-value {
+
+    .unreconciled-value,
+    .edit-value {
         color: $color_mid_grey;
     }
 }
 
 .verification-tool__statement--reconcilable {
-    .unreconciled-value {
-        color: $color_wikipedia_redlink;
+    .unreconciled-value,
+    .edit-value {
         cursor: pointer;
 
         &:hover, &:focus {
             text-decoration: underline;
         }
+    }
+
+    .unreconciled-value {
+        color: $color_wikipedia_redlink;
+    }
+
+    .edit-value {
+        color: $color_wikipedia_bluelink;
     }
 }
 

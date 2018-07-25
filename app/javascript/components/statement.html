@@ -3,22 +3,37 @@
   <td>
     <div v-if="statement.person_name">
       {{ statement.person_name }}
-      <wikilink v-if="statement.person_item" :id="statement.person_item">{{ statement.person_item }}</wikilink>
-      <span class="unreconciled-value" v-else="" v-on:click="searchFor('person')">unreconciled</span>
+      <div v-if="statement.person_item">
+        <wikilink :id="statement.person_item">{{ statement.person_item }}</wikilink>
+        <span class="edit-value" v-on:click="searchFor('person')">(edit)</span>
+      </div>
+      <div v-else>
+        <span class="unreconciled-value" v-on:click="searchFor('person')">unreconciled</span>
+      </div>
     </div>
   </td>
   <td>
     <div v-if="statement.electoral_district_name">
       {{ statement.electoral_district_name }}
-      <wikilink v-if="statement.electoral_district_item" :id="statement.electoral_district_item">{{ statement.electoral_district_item }}</wikilink>
-      <span class="unreconciled-value" v-else="" v-on:click="searchFor('electoral_district')">unreconciled</span>
+      <div v-if="statement.electoral_district_item">
+        <wikilink :id="statement.electoral_district_item">{{ statement.electoral_district_item }}</wikilink>
+        <span class="edit-value" v-on:click="searchFor('electoral_district')">(edit)</span>
+      </div>
+      <div v-else>
+        <span class="unreconciled-value" v-on:click="searchFor('electoral_district')">unreconciled</span>
+      </div>
     </div>
   </td>
   <td>
     <div v-if="statement.parliamentary_group_name">
       {{ statement.parliamentary_group_name }}
-      <wikilink v-if="statement.parliamentary_group_item" :id="statement.parliamentary_group_item">{{  statement.parliamentary_group_item }}</wikilink>
-      <span class="unreconciled-value" v-else="" v-on:click="searchFor('parliamentary_group')">unreconciled</span>
+      <div v-if="statement.parliamentary_group_item">
+        <wikilink :id="statement.parliamentary_group_item">{{  statement.parliamentary_group_item }}</wikilink>
+        <span class="edit-value" v-on:click="searchFor('parliamentary_group')">(edit)</span>
+      </div>
+      <div v-else>
+        <span class="unreconciled-value" v-on:click="searchFor('parliamentary_group')">unreconciled</span>
+      </div>
     </div>
   </td>
   <td class="verification-tool__table__cell--narrow">

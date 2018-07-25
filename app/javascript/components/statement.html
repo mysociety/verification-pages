@@ -1,0 +1,50 @@
+<tbody>
+<tr :id="'s:' + statement.transaction_id" v-bind:class="'verification-tool__statement verification-tool__statement--' + stylingClass">
+  <td>
+    <div v-if="statement.person_name">
+      {{ statement.person_name }}
+      <div v-if="statement.person_item">
+        <wikilink :id="statement.person_item">{{ statement.person_item }}</wikilink>
+        <span class="edit-value" v-on:click="searchFor('person')">(edit)</span>
+      </div>
+      <div v-else>
+        <span class="unreconciled-value" v-on:click="searchFor('person')">unreconciled</span>
+      </div>
+    </div>
+  </td>
+  <td>
+    <div v-if="statement.electoral_district_name">
+      {{ statement.electoral_district_name }}
+      <div v-if="statement.electoral_district_item">
+        <wikilink :id="statement.electoral_district_item">{{ statement.electoral_district_item }}</wikilink>
+        <span class="edit-value" v-on:click="searchFor('electoral_district')">(edit)</span>
+      </div>
+      <div v-else>
+        <span class="unreconciled-value" v-on:click="searchFor('electoral_district')">unreconciled</span>
+      </div>
+    </div>
+  </td>
+  <td>
+    <div v-if="statement.parliamentary_group_name">
+      {{ statement.parliamentary_group_name }}
+      <div v-if="statement.parliamentary_group_item">
+        <wikilink :id="statement.parliamentary_group_item">{{  statement.parliamentary_group_item }}</wikilink>
+        <span class="edit-value" v-on:click="searchFor('parliamentary_group')">(edit)</span>
+      </div>
+      <div v-else>
+        <span class="unreconciled-value" v-on:click="searchFor('parliamentary_group')">unreconciled</span>
+      </div>
+    </div>
+  </td>
+  <td class="verification-tool__table__cell--narrow">
+    <a class="verification-tool__table__cell-link" :href="'#s:' + statement.transaction_id" title="Link to this statement">§</a>
+  </td>
+</tr>
+<tr>
+  <td colspan="4" v-bind:class="'verification-tool__statement-controls verification-tool__statement-controls--' + stylingClass">
+    <keep-alive>
+      <component v-bind:is="currentView" :statement="statement" :page="page" :country="country"></component>
+    </keep-alive>
+  </td>
+</tr>
+</tbody>

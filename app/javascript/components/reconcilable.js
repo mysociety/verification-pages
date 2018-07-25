@@ -13,6 +13,20 @@ export default template({
   props: ['statement', 'page', 'country'],
   created: function () {
     this.languageCode = this.getLanguageCode();
+
+    this.$parent.$on('search-for', (field) => {
+      this.searchTerm = null
+
+      if (field === 'person') {
+        this.searchForName()
+      } else if (field === 'electoral_district') {
+        this.searchForDistrict()
+      } else if (field === 'parliamentary_group') {
+        this.searchForParty()
+      } else {
+        throw new Error('Unknown field to search-for: ' + field);
+      }
+    })
   },
   methods: {
     searchForName: function () {

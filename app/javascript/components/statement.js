@@ -1,4 +1,4 @@
-import template from './action_wrapper.html'
+import template from './statement.html'
 
 import loadingComponent from './loading'
 import verifiableComponent from './verifiable'
@@ -59,5 +59,17 @@ export default template({
         this.submitting = false
       })
     })
+  },
+  methods: {
+    searchFor: function (field) {
+      if ( this.statement.type === 'verifiable' ) {
+        return
+      }
+
+      this.statement.type = 'reconcilable'
+      this.$nextTick( () => {
+        this.$emit('search-for', field)
+      })
+    }
   }
 })

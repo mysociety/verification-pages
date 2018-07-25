@@ -9,6 +9,9 @@ $color_pale_green: #e6f9e2;
 $color_mid_grey: #999;
 $color_pale_grey: #eee;
 
+$color_wikipedia_bluelink: #0645ad;
+$color_wikipedia_redlink: #ba0000;
+
 @mixin clearfix() {
     zoom: 1;
 
@@ -172,6 +175,45 @@ $color_pale_grey: #eee;
 .verification-tool__controls__group {
     float: left;
     padding: 1em 0.5em;
+}
+
+.verification-tool__statement {
+    .wikilink, .unreconciled-value {
+        &:before {
+            display: inline-block;
+            content: "\21B3";
+            margin-right: 0.5em;
+        }
+    }
+
+    .unreconciled-value,
+    .edit-value {
+        cursor: pointer;
+
+        &:hover, &:focus {
+            text-decoration: underline;
+        }
+    }
+
+    .unreconciled-value {
+        color: $color_wikipedia_redlink;
+    }
+
+    .edit-value {
+        color: $color_wikipedia_bluelink;
+    }
+}
+
+.verification-tool__statement--verifiable {
+    .unreconciled-value,
+    .edit-value {
+        color: $color_mid_grey;
+        cursor: not-allowed;
+
+        &:hover, &:focus {
+            text-decoration: none;
+        }
+    }
 }
 
 .verification-tool__statement-controls {

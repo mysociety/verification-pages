@@ -140,6 +140,37 @@ RSpec.describe StatementDecorator, type: :decorator do
       end
     end
 
+    context 'when all problems apart from multiple P39s happen for the same data' do
+      let(:object) do
+        create(
+          :statement,
+          person_item:              'Q1',
+          parliamentary_group_item: 'Q123',
+          electoral_district_item:  'Q789'
+        )
+      end
+      let(:matching_position_held_data) do
+        [
+          OpenStruct.new(
+            revision:       '123',
+            position:       'UUID',
+            position_start: '2013-12-15',
+            term_start:     '2014-01-31',
+            district:       'Q345',
+            group:          'Q234'
+          ),
+        ]
+      end
+      it 'should report all those problems' do
+        expected_errors = [
+          'The electoral district is different in the statement (Q789) and on Wikidata (Q345)',
+          'The parliamentary group (party) is different in the statement (Q123) and on Wikidata (Q234)',
+          'On Wikidata, the position held start date (2013-12-15) was before the term start date (2014-01-31)',
+        ]
+        expect(statement.problems).to eq(expected_errors)
+      end
+    end
+
     context 'when all known problems happen for the same data' do
       let(:object) do
         create(
@@ -162,11 +193,8 @@ RSpec.describe StatementDecorator, type: :decorator do
           OpenStruct.new,
         ]
       end
-      it 'should report all those problems' do
+      it 'should only report the P39 all those problems' do
         expected_errors = [
-          'The electoral district is different in the statement (Q789) and on Wikidata (Q345)',
-          'The parliamentary group (party) is different in the statement (Q123) and on Wikidata (Q234)',
-          'On Wikidata, the position held start date (2013-12-15) was before the term start date (2014-01-31)',
           'There were 2 \'position held\' (P39) statements on Wikidata that match the verified suggestion - one or more of them might be missing an end date or parliamentary term qualifier',
         ]
         expect(statement.problems).to eq(expected_errors)

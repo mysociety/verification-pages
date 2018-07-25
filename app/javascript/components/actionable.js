@@ -50,8 +50,15 @@ export default template({
 
       if (this.page.reference_url_title) {
         references[wikidataClient.getPropertyID('title')] = {
-          value: this.page.reference_url_title,
-          type: 'string'
+          value: {
+            text: this.page.reference_url_title,
+            // FIXME: This needs to be set dynamically depending on the
+            // language of the page, but we can't just use
+            // page.reference_url_language, because that's a Q value, not a
+            // plain string.
+            language: 'en',
+          },
+          type: 'monolingualtext'
         };
       }
 

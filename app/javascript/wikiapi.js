@@ -463,7 +463,7 @@ var wikidata = function(spec) {
         'electoral district': 'P70558',
         'position held': 'P39',
         'parliamentary term': 'P70901',
-        'title': 'P95',
+        'title': 'P77107',
         'language of work or name': 'P77090',
         'instance of': 'P82',
       },
@@ -480,7 +480,7 @@ var wikidata = function(spec) {
         'electoral district': 'P70558',
         'position held': 'P39',
         'parliamentary term': 'P70901',
-        'title': 'P95',
+        'title': 'P77107',
         'language of work or name': 'P77090',
         'instance of': 'P82',
       }

@@ -21,10 +21,12 @@ json.statements @classifier.to_a do |statement|
     :reconciliations
   )
 
-  if statement.verified_on
+  if statement.latest_verification
     json.verified_on "+#{statement.verified_on.iso8601}T00:00:00Z"
+    json.verification_status statement.latest_verification.status
   else
     json.verified_on nil
+    json.verification_status nil
   end
 end
 

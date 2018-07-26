@@ -1,13 +1,11 @@
 <tbody>
 <tr :id="'s:' + statement.transaction_id" v-bind:class="'verification-tool__statement verification-tool__statement--' + stylingClass">
   <td style="text-align: center">
-    <span v-if="statement.type === 'verifiable'"></span>
-    <span v-else>
-      <span v-if="statement.type === 'unverifiable'">✖︎</span>
-      <span v-else>✔︎</span>
-      <br>
-      <span class="edit-value" v-on:click="changeVerification()">(edit)</span>
-    </span>
+    <span v-if="statement.verification_status">✔</span>
+    <span v-else-if="statement.verification_status === false">✖︎</span>
+    <span v-else>?</span>
+    <br>
+    <span class="edit-value" v-on:click="changeVerification()">(edit)</span>
   </td>
   <td>
     <div v-if="statement.person_name">

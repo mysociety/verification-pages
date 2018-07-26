@@ -52,7 +52,9 @@ export default template({
       let selector = fragment.replace(/:/g, '\\:')
       let statementRow = document.querySelector(selector)
       if (statementRow) {
+        let headerHeight = document.querySelector('.verification-tool__table th').offsetHeight
         statementRow.scrollIntoView()
+        window.scrollBy(0, -headerHeight)
         statementRow.className += " targetted"
       }
     })

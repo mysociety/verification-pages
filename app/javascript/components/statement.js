@@ -73,6 +73,12 @@ export default template({
     },
     changeVerification: function(field) {
       this.statement.type = 'verifiable'
+    },
+    scrollHere: function(event) {
+      let fragment = event.currentTarget.hash
+      window.location = fragment
+      this.$parent.$emit('scroll-to-fragment', fragment)
+      event.preventDefault()
     }
   }
 })

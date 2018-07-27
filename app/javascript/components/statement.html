@@ -45,7 +45,7 @@
     </div>
   </td>
   <td class="verification-tool__table__cell--narrow">
-    <a class="verification-tool__table__cell-link" :href="'#s:' + statement.transaction_id" title="Link to this statement">§</a>
+    <a class="verification-tool__table__cell-link" :href="'#s:' + statement.transaction_id" v-on:click="scrollHere($event)" title="Link to this statement">§</a>
   </td>
 </tr>
 <tr>

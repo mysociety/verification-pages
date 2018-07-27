@@ -43,15 +43,20 @@ export default template({
     this.$on('statements-loaded', () => {
       this.$nextTick(function () {
         var hash = window.location.hash;
-        var statementRow;
         if (hash) {
-          statementRow = document.querySelector(hash.replace(/:/g, '\\:'))
-          if (statementRow) {
-            statementRow.scrollIntoView()
-            statementRow.className += " targetted"
-          }
+          this.$emit('scroll-to-fragment', hash)
         }
       })
+    }),
+    this.$on('scroll-to-fragment', (fragment) => {
+      let selector = fragment.replace(/:/g, '\\:')
+      let statementRow = document.querySelector(selector)
+      if (statementRow) {
+        let headerHeight = document.querySelector('.verification-tool__table th').offsetHeight
+        statementRow.scrollIntoView()
+        window.scrollBy(0, -headerHeight)
+        statementRow.className += " targetted"
+      }
     })
   },
   methods: {

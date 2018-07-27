@@ -105,7 +105,24 @@ RSpec.describe StatementClassifier, type: :service do
     end
 
     context 'when unverifiable' do
-      before { statement.verifications.build(status: false) }
+      before do
+        statement.verifications.build(status: false)
+      end
+      it { expect(classifier.verifiable).to be_empty }
+      it { expect(classifier.unverifiable).to eq(statements) }
+      it { expect(classifier.reconcilable).to be_empty }
+      it { expect(classifier.actionable).to be_empty }
+      it { expect(classifier.manually_actionable).to be_empty }
+      it { expect(classifier.done).to be_empty }
+      it { expect(classifier.reverted).to be_empty }
+    end
+
+    context 'when unverifiable (although otherwise would be marked "manually actionable")' do
+      before do
+        statement.verifications.build(status: false)
+        allow(statement).to receive(:person_item).and_return('Q1')
+        position_held.district = 'other-district'
+      end
       it { expect(classifier.verifiable).to be_empty }
       it { expect(classifier.unverifiable).to eq(statements) }
       it { expect(classifier.reconcilable).to be_empty }

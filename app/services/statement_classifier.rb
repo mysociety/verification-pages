@@ -74,7 +74,9 @@ class StatementClassifier
   end
 
   def statement_type(statement)
-    if statement.recently_actioned?
+    if statement.unverifiable?
+      :unverifiable
+    elsif statement.recently_actioned?
       :done
     elsif statement.done?
       :done
@@ -86,8 +88,6 @@ class StatementClassifier
       :actionable
     elsif statement.verified?
       :reconcilable
-    elsif statement.unverifiable?
-      :unverifiable
     elsif !statement.from_suggestions_store? && statement.matches_but_not_checked?
       :done
     else

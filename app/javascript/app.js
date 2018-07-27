@@ -88,10 +88,27 @@ export default template({
     },
     sortStatements: function (statements) {
       return statements.sort((a, b) => {
+        const typeOrder = [
+          'verifiable',
+          'reconcilable',
+          'actionable',
+          'manually_actionable',
+          'reverted',
+          'unverifiable',
+          'done',
+        ]
         const namesA = parseFullName(a.person_name)
         const namesB = parseFullName(b.person_name)
-        const statementA = Object.assign({}, a, { firstName: namesA.first, lastName: namesA.last })
-        const statementB = Object.assign({}, b, { firstName: namesB.first, lastName: namesB.last })
+        const statementA = Object.assign({}, a, {
+          firstName: namesA.first,
+          lastName: namesA.last,
+          typeSort: typeOrder.indexOf(a.type)
+        })
+        const statementB = Object.assign({}, b, {
+          firstName: namesB.first,
+          lastName: namesB.last,
+          typeSort: typeOrder.indexOf(b.type)
+        })
         let sortFields
         switch (this.sortBy) {
           case 'lastName':
@@ -105,6 +122,9 @@ export default template({
             break
           case 'district':
             sortFields = ['electoral_district_name', 'lastName', 'firstName']
+            break
+          case 'type':
+            sortFields = ['typeSort', 'lastName', 'firstName']
             break
         }
         const stringA = sortFields.map(field => statementA[field]).join(' ')

@@ -92,6 +92,9 @@ export default template({
           case 'lastName':
             sortFields = ['lastName', 'firstName']
             break
+          case 'firstName':
+            sortFields = ['firstName', 'lastName']
+            break
           case 'parliamentaryGroup':
             sortFields = ['parliamentary_group_name', 'lastName', 'firstName']
             break

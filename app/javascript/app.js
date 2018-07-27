@@ -82,18 +82,25 @@ export default template({
       }
     },
     sortStatements: function (statements) {
-      var prefix
-
-      switch (this.sortBy) {
-        case 'parliamentaryGroup': prefix = 'parliamentary_group_name'; break
-        case 'district': prefix = 'electoral_district_name'; break
-      }
-
-      return statements.sort(function (a, b) {
+      return statements.sort((a, b) => {
         const namesA = parseFullName(a.person_name)
         const namesB = parseFullName(b.person_name)
-        const stringA = (a[prefix] + ' ' || '') + namesA.last + ' ' + namesA.first + ' ' + a.transaction_id
-        const stringB = (b[prefix] + ' ' || '') + namesB.last + ' ' + namesB.first + ' ' + b.transaction_id
+        const statementA = Object.assign({}, a, { firstName: namesA.first, lastName: namesA.last })
+        const statementB = Object.assign({}, b, { firstName: namesB.first, lastName: namesB.last })
+        let sortFields
+        switch (this.sortBy) {
+          case 'lastName':
+            sortFields = ['lastName', 'firstName']
+            break
+          case 'parliamentaryGroup':
+            sortFields = ['parliamentary_group_name', 'lastName', 'firstName']
+            break
+          case 'district':
+            sortFields = ['electoral_district_name', 'lastName', 'firstName']
+            break
+        }
+        const stringA = sortFields.map(field => statementA[field]).join(' ')
+        const stringB = sortFields.map(field => statementB[field]).join(' ')
         return stringA.localeCompare(stringB)
       })
     }

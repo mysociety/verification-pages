@@ -14,14 +14,13 @@ export default template({
     return {
       loaded: false,
       statements: [],
-      displayType: 'all',
       sortBy: 'lastName',
       page: null
     }
   },
   computed: {
     currentStatements: function () {
-      return this.sortStatements(this.filterStatements(this.statements))
+      return this.sortStatements(this.statements)
     }
   },
   created: function () {
@@ -77,13 +76,6 @@ export default template({
         return this.statements.filter(s => s.type === type).length
       } else {
         return this.statements.length
-      }
-    },
-    filterStatements: function (statements) {
-      if (this.displayType !== 'all') {
-        return statements.filter(s => s.type === this.displayType)
-      } else {
-        return statements
       }
     },
     sortStatements: function (statements) {

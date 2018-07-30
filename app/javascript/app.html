@@ -1,33 +1,6 @@
 <div id="verification-tool">
   <div v-if="loaded" class="verification-tool__controls">
     <div class="verification-tool__controls__group">
-      <label for="displayType">Type</label>
-      <select v-model="displayType" id="displayType">
-        <option value="all">Show all ({{ countStatementsOfType('all') }})</option>
-        <option value="verifiable" v-bind:disabled="countStatementsOfType('verifiable') === 0">
-          Verifiable ({{ countStatementsOfType('verifiable') }})
-        </option>
-        <option value="unverifiable" v-bind:disabled="countStatementsOfType('unverifiable') === 0">
-          Unverifiable ({{ countStatementsOfType('unverifiable') }})
-        </option>
-        <option value="reconcilable" v-bind:disabled="countStatementsOfType('reconcilable') === 0">
-          Reconcilable ({{ countStatementsOfType('reconcilable') }})
-        </option>
-        <option value="actionable" v-bind:disabled="countStatementsOfType('actionable') === 0">
-          Actionable ({{ countStatementsOfType('actionable') }})
-        </option>
-        <option value="manually_actionable" v-bind:disabled="countStatementsOfType('manually_actionable') === 0">
-          Manually actionable ({{ countStatementsOfType('manually_actionable') }})
-        </option>
-        <option value="done" v-bind:disabled="countStatementsOfType('done') === 0">
-          Done ({{ countStatementsOfType('done') }})
-        </option>
-        <option value="reverted" v-bind:disabled="countStatementsOfType('reverted') === 0">
-          Reverted ({{ countStatementsOfType('reverted') }})
-        </option>
-      </select>
-    </div>
-    <div class="verification-tool__controls__group">
       <label for="sortBy">Sort by</label>
       <select v-model="sortBy" id="sortBy">
         <option value="lastName">Last name</option>
@@ -39,12 +12,7 @@
     </div>
   </div>
   <div v-if="loaded && currentStatements.length === 0" class="verification-tool__blank-slate">
-    <div v-if="displayType === 'all'">
-      No statements
-    </div>
-    <div v-else>
-      No “{{ displayType }}” statements – <a v-on:click="displayType = 'all'">Try showing all statements</a>
-    </div>
+    No statements
   </div>
   <div v-if="loaded && currentStatements.length > 0">
     <table class="verification-tool__table">

@@ -1,20 +1,15 @@
 <div id="verification-tool">
   <div v-if="loaded" class="verification-tool__controls">
-    <div class="verification-tool__controls__group">
-      <label for="sortBy">Sort by</label>
-      <select v-model="sortBy" id="sortBy">
-        <option value="lastName">Last name</option>
-        <option value="firstName">First name</option>
-        <option value="parliamentaryGroup">Parliamentary group</option>
-        <option value="district">District</option>
-        <option value="type">Type</option>
-      </select>
-    </div>
+    <sort-control
+      v-bind:options="sortOptions"
+      v-bind:selectedOption="sortBy"
+      v-on:sort="sortStatements"
+    ></sort-control>
   </div>
-  <div v-if="loaded && currentStatements.length === 0" class="verification-tool__blank-slate">
+  <div v-if="loaded && statements.length === 0" class="verification-tool__blank-slate">
     No statements
   </div>
-  <div v-if="loaded && currentStatements.length > 0">
+  <div v-if="loaded && statements.length > 0">
     <table class="verification-tool__table">
       <thead>
         <tr>
@@ -25,7 +20,7 @@
           <th></th>
         </tr>
       </thead>
-      <Statement v-for="statement in currentStatements" :statement="statement" :page="page" :country="country"></Statement>
+      <Statement v-for="statement in statements" :statement="statement" :page="page" :country="country"></Statement>
     </table>
   </div>
   <div v-if="!loaded" class="verification-tool__blank-slate">

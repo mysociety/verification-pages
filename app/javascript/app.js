@@ -6,8 +6,10 @@ import template from './app.html?style=./app.css'
 import { parseFullName } from 'parse-full-name'
 
 import statementComponent from './components/statement'
+import SortControl from './components/sort_control'
 
 Vue.component('Statement', statementComponent)
+Vue.component('sort-control', SortControl)
 
 export default template({
   data () {
@@ -15,12 +17,14 @@ export default template({
       loaded: false,
       statements: [],
       sortBy: 'lastName',
+      sortOptions: [
+        ['lastName', 'Last name'],
+        ['firstName', 'First name'],
+        ['district', 'District'],
+        ['parliamentaryGroup', 'Parliamentary group'],
+        ['type', 'Type']
+      ],
       page: null
-    }
-  },
-  computed: {
-    currentStatements: function () {
-      return this.sortStatements(this.statements)
     }
   },
   created: function () {
@@ -64,6 +68,7 @@ export default template({
         params: { title: wikidataClient.page }
       }).then(response => {
         this.statements = response.data.statements
+        this.sortStatements(this.sortBy)
         this.page = response.data.page
         this.country = response.data.country
       }).then(() => {
@@ -78,8 +83,8 @@ export default template({
         return this.statements.length
       }
     },
-    sortStatements: function (statements) {
-      return statements.sort((a, b) => {
+    sortStatements: function (sortBy) {
+      this.statements = this.statements.sort((a, b) => {
         const typeOrder = [
           'verifiable',
           'reconcilable',
@@ -102,7 +107,7 @@ export default template({
           typeSort: typeOrder.indexOf(b.type)
         })
         let sortFields
-        switch (this.sortBy) {
+        switch (sortBy) {
           case 'lastName':
             sortFields = ['lastName', 'firstName']
             break

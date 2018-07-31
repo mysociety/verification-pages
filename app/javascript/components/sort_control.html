@@ -1,0 +1,7 @@
+<div class="verification-tool__controls__group">
+  <label for="sortBy">Sort by</label>
+  <select v-model="sortBy" id="sortBy">
+    <option v-for="(label, value) of options" v-bind:value="value">{{ label }}</option>
+  </select>
+  <button v-on:click="$emit('sort', sortBy)">Sort</button>
+</div>

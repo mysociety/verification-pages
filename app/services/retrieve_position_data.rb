@@ -29,7 +29,7 @@ class RetrievePositionData < ServiceBase
       SELECT DISTINCT
         ?person (GROUP_CONCAT(?merged_then_deleted) AS ?merged_then_deleted) ?revision
         ?position ?position_start ?position_start_precision
-        ?term ?term_start
+        ?term ?term_start ?term_start_precision
         ?group ?district
       WHERE {
         %<person_bind>s
@@ -43,12 +43,14 @@ class RetrievePositionData < ServiceBase
         # might be with P571 (inception) or P580 (start time), so
         # prefer more precision to less, and inception to start time
         # using COALESCE:
-        OPTIONAL { ?page_term p:P571 ?inception_s
+        OPTIONAL { ?page_term p:P571 ?inception_s .
+          ?inception_s psv:P571 [wikibase:timePrecision ?inception_s_precision]
           OPTIONAL { ?inception_s psv:P571 [wikibase:timeValue ?term_inception_day_precision; wikibase:timePrecision 11] }
           OPTIONAL { ?inception_s psv:P571 [wikibase:timeValue ?term_inception_month_precision; wikibase:timePrecision 10] }
           OPTIONAL { ?inception_s psv:P571 [wikibase:timeValue ?term_inception_year_precision; wikibase:timePrecision 9] }
         }
-        OPTIONAL { ?page_term p:P580 ?start_time_s
+        OPTIONAL { ?page_term p:P580 ?start_time_s .
+          ?start_time_s psv:P580 [wikibase:timePrecision ?start_time_s_precision]
           OPTIONAL { ?start_time_s psv:P580 [wikibase:timeValue ?term_start_time_day_precision; wikibase:timePrecision 11] }
           OPTIONAL { ?start_time_s psv:P580 [wikibase:timeValue ?term_start_time_month_precision; wikibase:timePrecision 10] }
           OPTIONAL { ?start_time_s psv:P580 [wikibase:timeValue ?term_start_time_year_precision; wikibase:timePrecision 9] }
@@ -63,6 +65,18 @@ class RetrievePositionData < ServiceBase
             ?term_start_time_year_precision
           ) AS ?term_start
         )
+
+        BIND(
+          IF(BOUND(?start_time_s_precision) && BOUND(?inception_s_precision),
+             IF(?start_time_s_precision > ?inception_s_precision, ?start_time_s_precision, ?inception_s_precision),
+          IF(BOUND(?start_time_s_precision) && !BOUND(?inception_s_precision),
+             ?start_time_s_precision,
+          IF(!BOUND(?start_time_s_precision) && BOUND(?inception_s_precision),
+             ?inception_s_precision,
+             -1)))
+          AS ?term_start_precision
+        )
+
         OPTIONAL { ?position pq:P4100 ?group . }
         OPTIONAL { ?position pq:P768 ?district . }
         OPTIONAL { ?position pqv:P580 [wikibase:timeValue ?position_start; wikibase:timePrecision ?position_start_precision] . }
@@ -81,7 +95,7 @@ class RetrievePositionData < ServiceBase
           (?position_start_precision = 11 && ?days_before_term_start < 28)
         )
       }
-      GROUP BY ?person ?revision ?position ?position_start ?position_start_precision ?term ?term_start ?group ?district
+      GROUP BY ?person ?revision ?position ?position_start ?position_start_precision ?term ?term_start ?term_start_precision ?group ?district
     SPARQL
   end
 

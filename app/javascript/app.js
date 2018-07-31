@@ -48,7 +48,25 @@ export default template({
           this.$emit('scroll-to-fragment', hash)
         }
       })
-    }),
+    })
+    this.$on('find-matching-statements', (data, cb) => {
+      const {resourceType, statement, nameAttr, itemAttr, newItem} = data
+      if (resourceType === 'person')  {
+        cb(0, 0);
+        return;
+      }
+      let otherMatching = this.statements.filter(s => {
+        return nameAttr && itemAttr && statement[nameAttr] &&
+          (s[nameAttr] === statement[nameAttr]) &&
+          (s[itemAttr] !== newItem) &&
+          (s.transaction_id != statement.transaction_id)
+      })
+      let otherMatchingUnreconciled = otherMatching.filter(s => !s[itemAttr])
+      cb({
+        otherMatching: otherMatching.length,
+        otherMatchingUnreconciled: otherMatchingUnreconciled.length
+      })
+    })
     this.$on('scroll-to-fragment', (fragment) => {
       let selector = fragment.replace(/:/g, '\\:')
       let statementRow = document.querySelector(selector)

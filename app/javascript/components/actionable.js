@@ -14,6 +14,14 @@ export default template({
   } },
   props: ['statement', 'page', 'country'],
   created: function () {
+    if (this.statement.bulk_update) {
+      // To avoid lots of statements being actioned in parallel, which
+      // is bad API usage etiquette, we don't automatically action
+      // this statement if it appears to come from a bulk update:
+      this.statement.bulk_update = false
+      return;
+    }
+    this.statement.bulk_update = false
     if (['verifiable', 'reconcilable', 'manually_actionable'].indexOf(this.statement.previousType) !== -1) {
       this.updatePositionHeld()
     }

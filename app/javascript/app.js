@@ -31,16 +31,14 @@ export default template({
     this.loadStatements()
     this.$on('statement-update', (requestFunction, cb) => {
       requestFunction().then(response => {
-        if (response.data.statements.length > 1) {
-          throw 'Response has too many statements. We don\'t know which one to update'
-        }
-        var newStatement = response.data.statements[0]
-        const index = this.statements.findIndex(s => {
-          return s.transaction_id === newStatement.transaction_id
-        })
-        const previousType = this.statements[index].type
-        newStatement.previousType = previousType
-        this.statements.splice(index, 1, newStatement)
+        response.data.statements.forEach(function (newStatement) {
+          var index = this.statements.findIndex(s => {
+            return s.transaction_id === newStatement.transaction_id
+          })
+          var previousType = this.statements[index].type
+          newStatement.previousType = previousType
+          this.statements.splice(index, 1, newStatement)
+        }, this)
       }).then(cb)
     })
     this.$on('statements-loaded', () => {
@@ -50,7 +48,25 @@ export default template({
           this.$emit('scroll-to-fragment', hash)
         }
       })
-    }),
+    })
+    this.$on('find-matching-statements', (data, cb) => {
+      const {resourceType, statement, nameAttr, itemAttr, newItem} = data
+      if (resourceType === 'person')  {
+        cb(0, 0);
+        return;
+      }
+      let otherMatching = this.statements.filter(s => {
+        return nameAttr && itemAttr && statement[nameAttr] &&
+          (s[nameAttr] === statement[nameAttr]) &&
+          (s[itemAttr] !== newItem) &&
+          (s.transaction_id != statement.transaction_id)
+      })
+      let otherMatchingUnreconciled = otherMatching.filter(s => !s[itemAttr])
+      cb({
+        otherMatching: otherMatching.length,
+        otherMatchingUnreconciled: otherMatchingUnreconciled.length
+      })
+    })
     this.$on('scroll-to-fragment', (fragment) => {
       let selector = fragment.replace(/:/g, '\\:')
       let statementRow = document.querySelector(selector)

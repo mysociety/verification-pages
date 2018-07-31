@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2018_07_23_140444) do
+ActiveRecord::Schema.define(version: 2018_07_28_130458) do
 
   create_table "countries", options: "ENGINE=InnoDB DEFAULT CHARSET=utf8", force: :cascade do |t|
     t.string "name"
@@ -45,6 +45,7 @@ ActiveRecord::Schema.define(version: 2018_07_23_140444) do
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.string "resource_type"
+    t.integer "update_type", default: 0
     t.index ["statement_id"], name: "index_reconciliations_on_statement_id"
   end
 

@@ -1,5 +1,22 @@
 <span>
-  <span v-if="!searchResults">
+  <span v-if="askAboutBulkUpdate">
+    <div>
+      <input type="radio" id="bulk-update-single" value="single" v-model="bulkUpdateType">
+      <label for="bulk-update-single">Just update this statement</label>
+    </div>
+    <div v-if="bulkUpdateCounts.otherMatchingUnreconciled > 0">
+      <input type="radio" id="bulk-update-also_matching_unreconciled" value="also_matching_unreconciled" v-model="bulkUpdateType">
+      <label for="bulk-update-also_matching_unreconciled">Also update {{ bulkUpdateCounts.otherMatchingUnreconciled }} other unreconciled occurences of {{ bulkName }}?</label>
+    </div>
+    <div v-if="bulkUpdateCounts.otherMatching != bulkUpdateCounts.otherMatchingUnreconciled">
+      <input type="radio" id="bulk-update-also_matching" value="also_matching" v-model="bulkUpdateType">
+      <label for="bulk-update-also_matching">Also update {{ bulkUpdateCounts.otherMatching }} other occurences of {{ bulkName }} (including {{ bulkUpdateCounts.otherMatching - bulkUpdateCounts.otherMatchingUnreconciled }} already reconciled with a different item)?</label>
+    </div>
+    <div>
+      <button v-on:click="bulkReconcileWithItem(bulkUpdateItem)">Continue</button>
+    </div>
+  </span>
+  <span v-else-if="!searchResults">
     <p>Click above to reconcile Subject, District, or Parliamentary group.</p>
   </span>
   <span v-else>

@@ -12,8 +12,12 @@ namespace :verification_page do
     desc 'Load statements for all pages from suggestion store'
     task all: :environment do
       Page.all.each do |page|
-        statements = LoadStatements.run(page.title)
-        puts "#{statements.count} Statements loaded for #{page.title}"
+        begin
+          statements = LoadStatements.run(page.title)
+          puts "#{statements.count} Statements loaded for #{page.title}"
+        rescue => e
+          warn "Unable to load statements for #{page.title}: #{e.message}"
+        end
       end
     end
   end

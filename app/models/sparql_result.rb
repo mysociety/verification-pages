@@ -19,11 +19,20 @@ class SparqlResult
     h = @raw[attr]
     return nil unless h
 
-    map_value(h)
+    map_value(h, attr)
   end
 
-  def map_value(h)
-    return h[:value].to_s[0..9] if h[:datatype] == 'http://www.w3.org/2001/XMLSchema#dateTime'
+  def partial_date_value(h, attr)
+    s = h[:value][0...10]
+    precision = @raw.dig(:"#{attr}_precision", :value) || '11'
+    return s if precision == '11'
+    return s[0...7] if precision == '10'
+    return s[0...4] if precision == '9'
+    raise "Unknown precision #{precision} for attribute #{attr}"
+  end
+
+  def map_value(h, attr)
+    return partial_date_value(h, attr) if h[:datatype] == 'http://www.w3.org/2001/XMLSchema#dateTime'
 
     return h[:value].to_s.split('/').last if h[:type] == 'uri'
 

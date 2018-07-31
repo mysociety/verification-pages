@@ -28,6 +28,8 @@ json.statements @classifier.to_a do |statement|
     json.verified_on nil
     json.verification_status nil
   end
+
+  json.bulk_update @bulk_update
 end
 
 json.page @classifier.page, :reference_url, :position_held_item, :executive_position, :reference_url_title, :reference_url_language

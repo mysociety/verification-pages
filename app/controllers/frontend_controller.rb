@@ -6,6 +6,7 @@ class FrontendController < ApplicationController
   skip_before_action :verify_authenticity_token
 
   def respond_with(statement, statements = nil)
+    @bulk_update = statements && (statements.length > 1)
     page = statement.page
     statements ||= [statement]
 

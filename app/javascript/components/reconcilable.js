@@ -15,6 +15,9 @@ export default template({
     languageCode: 'en'
   } },
   props: ['statement', 'page', 'country'],
+  created: function () {
+    this.statement.bulk_update = false
+  },
   computed: {
     bulkFieldPrefix: function() {
       return {

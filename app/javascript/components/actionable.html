@@ -1,15 +1,7 @@
 <div>
   <div v-if="!finished && !updateError">
     <p>
-      You can update Wikidata with the following 'position held' information for statement for
-      <wikilink :id="statement.person_item">{{ statement.person_name }}</wikilink>
-      now:
-    </p>
-
-    <StatementChangeSummary :statement="statement" :page="page"></StatementChangeSummary>
-
-    <p>
-      <button v-on:click="updatePositionHeld()" class="mw-ui-button mw-ui-progressive">Create or update 'position held'</button>
+      <button v-on:click="updatePositionHeld()" class="mw-ui-button mw-ui-progressive">Submit to Wikidata</button>
     </p>
   </div>
   <div v-else-if="finished && updateError">

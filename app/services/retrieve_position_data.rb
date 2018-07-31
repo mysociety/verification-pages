@@ -28,7 +28,7 @@ class RetrievePositionData < ServiceBase
     <<~SPARQL
       SELECT DISTINCT
         ?person (GROUP_CONCAT(?merged_then_deleted) AS ?merged_then_deleted) ?revision
-        ?position ?position_start
+        ?position ?position_start ?position_start_precision
         ?term ?term_start
         ?group ?district
       WHERE {
@@ -81,7 +81,7 @@ class RetrievePositionData < ServiceBase
           (?position_start_precision = 11 && ?days_before_term_start < 28)
         )
       }
-      GROUP BY ?person ?revision ?position ?position_start ?term ?term_start ?group ?district
+      GROUP BY ?person ?revision ?position ?position_start ?position_start_precision ?term ?term_start ?group ?district
     SPARQL
   end
 

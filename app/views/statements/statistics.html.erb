@@ -20,7 +20,12 @@
     <tbody>
       <% statements.each do |statement| %>
       <tr>
-        <td><%= link_to statement.position, "https://www.wikidata.org/wiki/#{statement.position}" %></td>
+        <td>
+          <%= link_to "https://www.wikidata.org/wiki/#{statement.position}" do %>
+            <%= @position_name_mapping[statement.position] %>
+            <small>(<%= statement.position %>)</small>
+          <% end %>
+        </td>
         <td><% if statement.pages.each do |page_title| %>
           <a href="https://www.wikidata.org/wiki/<%= page_title %>"><%= page_title %></a>
           <% end.empty? %>

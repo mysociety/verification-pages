@@ -12,6 +12,7 @@ class StatementsController < FrontendController
 
   def statistics
     @country_statements = StatementsStatistics.new.statistics
+    @country_lookup = Country.all.map { |c| [c.code, c] }.to_h
   end
 
   def show

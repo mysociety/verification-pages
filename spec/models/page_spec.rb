@@ -22,10 +22,6 @@ RSpec.describe Page, type: :model do
       expect(page.errors).to include(:position_held_item)
     end
 
-    it 'requires reference_url' do
-      expect(page.errors).to include(:reference_url)
-    end
-
     it 'requires csv_source_url' do
       expect(page.errors).to include(:csv_source_url)
     end

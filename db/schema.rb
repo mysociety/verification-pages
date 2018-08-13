@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2018_07_28_130458) do
+ActiveRecord::Schema.define(version: 2018_08_09_155552) do
 
   create_table "countries", options: "ENGINE=InnoDB DEFAULT CHARSET=utf8", force: :cascade do |t|
     t.string "name"
@@ -26,7 +26,7 @@ ActiveRecord::Schema.define(version: 2018_07_28_130458) do
     t.string "title", null: false
     t.string "position_held_item", null: false
     t.string "parliamentary_term_item"
-    t.string "reference_url", null: false
+    t.string "reference_url", limit: 2000, null: false
     t.boolean "require_parliamentary_group", default: false
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false

@@ -7,6 +7,6 @@ class Page < ApplicationRecord
 
   validates :title, presence: true, uniqueness: true
   validates :position_held_item, presence: true
-  validates :reference_url, presence: true
+  validates :reference_url, presence: true, length: { maximum: 2000 }
   validates :csv_source_url, presence: true
 end

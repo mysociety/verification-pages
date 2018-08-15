@@ -19,7 +19,8 @@ export default template({
         return Axios.post(ENV.url + '/verifications.json', {
           id: this.statement.transaction_id,
           user: wikidataClient.user,
-          status
+          status,
+          reference_url: this.page.reference_url
         })
       })
     }

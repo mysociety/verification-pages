@@ -4,11 +4,14 @@
 class CreateVerification < ServiceBase
   def initialize(statement:, params:)
     @statement = statement
+    @reference_url = params.delete(:reference_url)
     @params = params
   end
 
   def run
     statement.verifications.create!(params)
+
+    statement.page.update(reference_url: reference_url) if reference_url.present?
 
     # Find duplicate statements and update their verifications
     statement.duplicate_statements.each do |duplicate_statement|
@@ -22,5 +25,5 @@ class CreateVerification < ServiceBase
 
   private
 
-  attr_reader :statement, :params
+  attr_reader :statement, :params, :reference_url
 end

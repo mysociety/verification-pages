@@ -79,6 +79,9 @@ export default template({
       window.location = fragment
       this.$parent.$emit('scroll-to-fragment', fragment)
       event.preventDefault()
+    },
+    onChangeReferenceURL: function(url) {
+      this.page.reference_url = url
     }
   }
 })

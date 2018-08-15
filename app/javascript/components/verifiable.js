@@ -4,7 +4,11 @@ import wikidataClient from '../wikiapi'
 import template from './verifiable.html'
 
 export default template({
-  data () { return {} },
+  data () {
+    return {
+      referenceURL: ''
+    }
+  },
   props: ['statement', 'page', 'country'],
   created: function () {
     this.statement.bulk_update = false

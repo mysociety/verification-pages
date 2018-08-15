@@ -1,6 +1,15 @@
-<span>
-  <p>Is this shown at <a target="_blank" rel="noopener nofollow" class="external free" :href="page.reference_url">{{ page.reference_url }}</a>?</p>
+<div>
+  <span v-if="page.reference_url">
+    <p>Is this shown at <a target="_blank" rel="noopener nofollow" class="external free" :href="page.reference_url">{{ page.reference_url }}</a>?</p>
 
-  <button v-on:click="submitStatement(true)" class="mw-ui-button mw-ui-progressive">Yes</button>
-  <button v-on:click="submitStatement(false)" class="mw-ui-button">No</button>
-</span>
+    <button v-on:click="submitStatement(true)" class="mw-ui-button mw-ui-progressive">Yes</button>
+    <button v-on:click="submitStatement(false)" class="mw-ui-button">No</button>
+  </span>
+  <span v-else>
+    <p>
+      Please enter a reference URL:
+      <input v-model="referenceURL" type="url">
+      <button v-on:click="$emit('reference-url-change', referenceURL)">Save</button>
+    </p>
+  </span>
+</div>

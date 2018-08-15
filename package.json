@@ -1,6 +1,9 @@
 {
   "name": "verification-pages",
   "private": true,
+  "scripts": {
+    "lint": "eslint app/javascript"
+  },
   "devDependencies": {
     "eslint": "^5.3.0",
     "webpack-dev-server": "^2.11.1"

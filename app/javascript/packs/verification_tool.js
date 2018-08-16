@@ -21,7 +21,7 @@ function createVueApp() {
   const el = document.getElementById('js-verification-tool')
                      .appendChild(document.createElement('verification-tool'))
 
-  const app = new Vue({ el, render: h => h(App) })
+  new Vue({ el, render: h => h(App) })
   removeInstallPrompt();
 }
 

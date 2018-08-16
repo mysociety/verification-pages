@@ -71,7 +71,7 @@ export default template({
         this.$emit('search-for', field)
       })
     },
-    changeVerification: function(field) {
+    changeVerification: function() {
       this.statement.type = 'verifiable'
     },
     scrollHere: function(event) {

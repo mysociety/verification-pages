@@ -15,9 +15,6 @@ export default template({
     languageCode: 'en'
   } },
   props: ['statement', 'page', 'country'],
-  created: function () {
-    this.statement.bulk_update = false
-  },
   computed: {
     bulkFieldPrefix: function() {
       return {
@@ -30,6 +27,7 @@ export default template({
     bulkName: function() { return this.statement[this.bulkNameAttr] }
   },
   created: function () {
+    this.statement.bulk_update = false
     this.languageCode = this.getLanguageCode();
 
     this.$parent.$on('search-for', (field) => {
@@ -134,7 +132,7 @@ export default template({
         {
           lang: 'en',
           value: this.country.description_en,
-        },
+        }
       ).then(createdItemData => {
         this.reconcileWithItem(createdItemData.item);
       })

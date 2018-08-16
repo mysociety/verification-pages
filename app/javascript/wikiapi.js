@@ -1,13 +1,8 @@
-/* global $, mw */
+/* global mw */
 'use strict';
 
 import Axios from 'axios'
 import jsonp from 'jsonp'
-
-function lowerCaseSnak(upperCase) {
-  var parts = upperCase.split('$');
-  return parts[0] + '$' + parts[1].toLowerCase();
-}
 
 export function getItemValue(item) {
   return {'entity-type': 'item', 'numeric-id': Number(item.substring(1))};
@@ -214,7 +209,7 @@ var wikidataItem = function(spec) {
     console.log('There are ' + Object.keys(data.references).length + ' references to create....');
 
     if (Object.keys(data.references).length > 0) {
-      var data = {
+      var referenceData = {
         statement: data.statement,
         snaks: buildReferenceSnaks(data.references),
         baserevid: lastRevisionID,
@@ -222,11 +217,11 @@ var wikidataItem = function(spec) {
       }
 
       if (currentReference) {
-        data['reference'] = currentReference.hash
+        referenceData.reference = currentReference.hash
       }
 
       wikidata.log('Setting references')
-      return wikidata.ajaxAPI(true, 'wbsetreference', data)
+      return wikidata.ajaxAPI(true, 'wbsetreference', referenceData)
     } else {
       return Promise.resolve(null)
     }
@@ -262,7 +257,7 @@ var wikidataItem = function(spec) {
       entity: item,
       claim: newClaim.statement,
     }).then(function(data) {
-        var i, requestChain, newQualifiers;
+        var newQualifiers;
         checkForError(data);
         try {
           newQualifiers = getNewQualifiers(
@@ -280,7 +275,7 @@ var wikidataItem = function(spec) {
 
       console.log('Looks good to update these qualifiers:', newQualifiers)
 
-      return my.createQualifiers(newClaim, newQualifiers).then(function (foo) {
+      return my.createQualifiers(newClaim, newQualifiers).then(function () {
         return my.createReferences(data.claims, newClaim)
       })
     })
@@ -309,7 +304,7 @@ var wikidataItem = function(spec) {
       titles: item,
     }).then(function(data) {
       checkForError(data);
-      var pageKey, revision = null,
+      var pageKey,
           // FIXME: this is very weird; the response from the
           // mediawiki API doesn't include the .query, but when
           // calling the API directly it doesn't (!)
@@ -345,7 +340,7 @@ const jsonpPromise = function(url) {
   });
 }
 
-var wikidata = function(spec) {
+var wikidata = function() {
   var that = {
     log: function () {}
   };
@@ -356,7 +351,7 @@ var wikidata = function(spec) {
     that.serverName = 'localhost'
     that.neverUseToken = true;
     that.user = 'ExampleUser';
-    that.page = CURRENT_PAGE_TITLE;
+    that.page = window.CURRENT_PAGE_TITLE;
   } else {
     that.useAPIProxy = false;
     that.apiURL = 'https:' + mw.config.get('wgServer') + '/w/api.php';
@@ -431,7 +426,7 @@ var wikidata = function(spec) {
       throw new Error(
         'Unknown property ' + propertyLabel + ' for server ' + that.serverName
       );
-    };
+    }
     return knownProperties[propertyLabel]
   }
 
@@ -576,7 +571,7 @@ var wikidata = function(spec) {
     var allResults = {}
     var site = wikipediaToSearch + 'wiki'
 
-    var searchWikidata = new Promise(function(resolve, reject){
+    var searchWikidata = new Promise(function(resolve){
       that.ajaxAPIBasic({
         action: 'wbsearchentities',
         search: name,
@@ -590,7 +585,7 @@ var wikidata = function(spec) {
       })
     })
 
-    var searchWikipedia = new Promise(function(resolve, reject) {
+    var searchWikipedia = new Promise(function(resolve) {
       jsonpPromise(
         'https://' + wikipediaToSearch + '.wikipedia.org/w/api.php?' +
         encodeURIParams({
@@ -656,7 +651,7 @@ var wikidata = function(spec) {
         }
         titleToWikidataItem[sitelinkData.sitelinks[site].title] = wikidataItem;
       }
-      allResults.fromWikipedia.forEach(function(data, index) {
+      allResults.fromWikipedia.forEach(function(data) {
         var item = titleToWikidataItem[data.title];
         if (item) {
           data.item = item;

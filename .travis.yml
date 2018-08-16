@@ -1,6 +1,8 @@
 sudo: false
 language: ruby
-cache: bundler
+cache:
+  bundler: true
+  yarn: true
 rvm:
   - 2.3.6
   - 2.4.3
@@ -10,5 +12,13 @@ env:
 before_install:
   - gem update --system
   - cp config/database.yml.sample config/database.yml
+  - . $HOME/.nvm/nvm.sh
+  - nvm install --lts
+  - nvm use --lts
+install:
+  - bundle install --jobs=3 --retry=3
+  - yarn install
 before_script:
   - bundle exec rake db:create db:schema:load db:test:prepare
+script:
+  - bundle exec rake

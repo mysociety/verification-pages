@@ -4,6 +4,8 @@
 class Verification < ApplicationRecord
   belongs_to :statement
 
+  validates :reference_url, presence: true
+
   default_scope -> { order(updated_at: :asc) }
 
   after_commit :send_to_suggestions_store

@@ -25,6 +25,7 @@ RSpec.describe CreateVerification, type: :service do
         statement: statement,
         params:    {
           user: 'foo', status: 'true', new_name: 'baz',
+          reference_url: 'https://example.org/members/',
         }
       )
     end

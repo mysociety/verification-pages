@@ -144,6 +144,9 @@ export default template({
         const stringB = sortFields.map(field => statementB[field]).join(' ')
         return stringA.localeCompare(stringB)
       })
+    },
+    onChangeReferenceURL: function (newReferenceURL) {
+      this.page.reference_url = newReferenceURL
     }
   }
 })

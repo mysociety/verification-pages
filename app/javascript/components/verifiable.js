@@ -6,7 +6,11 @@ import template from './verifiable.html'
 export default template({
   data () {
     return {
-      referenceURL: ''
+      editing: false,
+      askAboutOtherStatements: false,
+      userReferenceURL: '',
+      overrideReferenceURL: '',
+      referenceURLScope: 'this-statement'
     }
   },
   props: ['statement', 'page', 'country'],
@@ -20,9 +24,23 @@ export default template({
           id: this.statement.transaction_id,
           user: wikidataClient.user,
           status,
-          reference_url: this.page.reference_url
+          reference_url: this.referenceURL
         })
       })
+    },
+    onChangeReferenceURL: function() {
+      if (this.referenceURLScope === 'all-statements') {
+        this.$emit('reference-url-change', this.userReferenceURL)
+      } else if (this.referenceURLScope === 'this-statement') {
+        this.overrideReferenceURL = this.userReferenceURL
+      }
+      this.editing = false
+      this.askAboutOtherStatements = false
+    }
+  },
+  computed: {
+    referenceURL: function() {
+      return this.overrideReferenceURL || this.page.reference_url
     }
   }
 })

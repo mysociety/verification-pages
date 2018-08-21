@@ -1,14 +1,14 @@
-import template from './wikilink.html'
+import template from "./wikilink.html";
 
 export default template({
-  props: ['id', 'name'],
+  props: ["id", "name"],
   computed: {
-    wikidata_site: function () {
-      if (typeof window.WIKIDATA_SITE !== 'undefined') {
-        return 'https://' + window.WIKIDATA_SITE
+    wikidata_site: function() {
+      if (typeof window.WIKIDATA_SITE !== "undefined") {
+        return "https://" + window.WIKIDATA_SITE;
       } else {
-        return ''
+        return "";
       }
     }
   }
-})
+});

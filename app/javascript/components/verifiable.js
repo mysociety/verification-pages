@@ -1,28 +1,28 @@
-import ENV from '../env'
-import Axios from 'axios'
-import wikidataClient from '../wikiapi'
-import template from './verifiable.html'
+import ENV from "../env";
+import Axios from "axios";
+import wikidataClient from "../wikiapi";
+import template from "./verifiable.html";
 
 export default template({
-  data () {
+  data() {
     return {
-      referenceURL: ''
-    }
+      referenceURL: ""
+    };
   },
-  props: ['statement', 'page', 'country'],
-  created: function () {
-    this.statement.bulk_update = false
+  props: ["statement", "page", "country"],
+  created: function() {
+    this.statement.bulk_update = false;
   },
   methods: {
-    submitStatement: function (status) {
-      this.$parent.$emit('statement-update', () => {
-        return Axios.post(ENV.url + '/verifications.json', {
+    submitStatement: function(status) {
+      this.$parent.$emit("statement-update", () => {
+        return Axios.post(ENV.url + "/verifications.json", {
           id: this.statement.transaction_id,
           user: wikidataClient.user,
           status,
           reference_url: this.page.reference_url
-        })
-      })
+        });
+      });
     }
   }
-})
+});

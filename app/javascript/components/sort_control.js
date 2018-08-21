@@ -1,10 +1,10 @@
-import template from './sort_control.html'
+import template from "./sort_control.html";
 
 export default template({
-  data () {
+  data() {
     return {
       sortBy: this.selectedOption
-    }
+    };
   },
-  props: ['options', 'selectedOption']
-})
+  props: ["options", "selectedOption"]
+});

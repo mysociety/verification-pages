@@ -2,7 +2,8 @@
   "name": "verification-pages",
   "private": true,
   "scripts": {
-    "lint": "eslint app/javascript"
+    "lint": "eslint app/javascript",
+    "lint:fix": "eslint --fix app/javascript"
   },
   "devDependencies": {
     "eslint": "^5.4.0",

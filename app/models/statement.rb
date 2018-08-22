@@ -49,6 +49,7 @@ class Statement < ApplicationRecord
 
   def duplicate_statements
     Statement.where(
+      page:                    page,
       person_name:             person_name,
       electoral_district_name: electoral_district_name,
       electoral_district_item: electoral_district_item,

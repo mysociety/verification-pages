@@ -1,7 +1,5 @@
 #!/usr/bin/env bash
 
-set -e
-
 # Make sure we're in the correct directory
 cd "$(dirname "$0")/.."
 

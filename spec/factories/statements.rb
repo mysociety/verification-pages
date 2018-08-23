@@ -5,4 +5,9 @@ FactoryBot.define do
     page
     transaction_id '123'
   end
+
+  factory :statement_with_names, class: Statement do
+    person_name { 'Person' }
+    electoral_district_name { 'District' }
+  end
 end

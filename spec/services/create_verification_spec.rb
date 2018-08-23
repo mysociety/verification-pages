@@ -43,7 +43,7 @@ RSpec.describe CreateVerification, type: :service do
     it 'adds verification to duplicate statements' do
       statement2 = create(
         :statement,
-        statement_params.merge(transaction_id: '456')
+        statement_params.merge(transaction_id: '456', page: statement.page)
       )
       expect { subject.run }.to change { statement2.verifications.count }.by(1)
     end

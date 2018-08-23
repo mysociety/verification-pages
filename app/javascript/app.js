@@ -47,6 +47,10 @@ export default template({
         if (hash) {
           this.$emit('scroll-to-fragment', hash)
         }
+        const localStorageReferenceURL = localStorage.getItem(this.localStorageKey)
+        if (localStorageReferenceURL) {
+          this.page.reference_url = localStorageReferenceURL
+        }
       })
     })
     this.$on('find-matching-statements', (data, cb) => {
@@ -144,6 +148,15 @@ export default template({
         const stringB = sortFields.map(field => statementB[field]).join(' ')
         return stringA.localeCompare(stringB)
       })
+    },
+    onChangeReferenceURL: function (newReferenceURL) {
+      this.page.reference_url = newReferenceURL
+      localStorage.setItem(this.localStorageKey, newReferenceURL)
+    }
+  },
+  computed: {
+    localStorageKey: function() {
+      return wikidataClient.page + '.reference_url'
     }
   }
 })

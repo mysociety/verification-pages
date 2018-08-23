@@ -56,7 +56,7 @@
         :statement="statement"
         :page="page"
         :country="country"
-        @reference-url-change="onChangeReferenceURL"
+        @reference-url-change="$emit('reference-url-change', $event)"
       ></component>
     </keep-alive>
   </td>

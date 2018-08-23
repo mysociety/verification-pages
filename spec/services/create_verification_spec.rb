@@ -5,12 +5,14 @@ require 'rails_helper'
 
 RSpec.describe CreateVerification, type: :service do
   include_context 'id-mapping-store default setup'
+  let(:page) { create(:page) }
   let(:statement_params) do
     {
       person_name:             'Alice',
       electoral_district_name: 'Foo',
       electoral_district_item: 'Q123',
       fb_identifier:           '444333',
+      page:                    page,
     }
   end
   let(:statement) { create(:statement, statement_params) }
@@ -25,6 +27,7 @@ RSpec.describe CreateVerification, type: :service do
         statement: statement,
         params:    {
           user: 'foo', status: 'true', new_name: 'baz',
+          reference_url: 'https://example.org/members/',
         }
       )
     end
@@ -46,6 +49,21 @@ RSpec.describe CreateVerification, type: :service do
         statement_params.merge(transaction_id: '456', page: statement.page)
       )
       expect { subject.run }.to change { statement2.verifications.count }.by(1)
+    end
+
+    context 'page.reference_url' do
+      let(:page) { create(:page, reference_url: '') }
+
+      it 'is set if blank' do
+        subject.run
+        expect(page.reference_url).to eq('https://example.org/members/')
+      end
+
+      it 'is left untouched if not blank' do
+        page.update(reference_url: 'http://example.com')
+        subject.run
+        expect(page.reference_url).to eq('http://example.com')
+      end
     end
   end
 end

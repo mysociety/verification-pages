@@ -23,6 +23,7 @@ RSpec.describe Verification, type: :model do
         )
         verification.statement = build(:statement, page: page)
         verification.user = 'Bilbo'
+        verification.reference_url = 'https://example.org/members/'
         verification.save! # create
 
         expect(UpdateStatementVerification).to receive(:run)
@@ -39,6 +40,7 @@ RSpec.describe Verification, type: :model do
 
         verification.statement = build(:statement)
         verification.user = 'Bilbo'
+        verification.reference_url = 'https://example.org/members/'
         verification.save! # create
 
         expect(UpdateStatementVerification).to_not receive(:run)
@@ -46,6 +48,15 @@ RSpec.describe Verification, type: :model do
         verification.user = 'Frodo'
         verification.save! # update
       end
+    end
+  end
+
+  describe 'validations' do
+    let(:verification) { Verification.new }
+
+    it 'requires reference_url' do
+      verification.valid?
+      expect(verification.errors).to include(:reference_url)
     end
   end
 end

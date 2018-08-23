@@ -20,7 +20,13 @@
           <th></th>
         </tr>
       </thead>
-      <Statement v-for="statement in statements" :statement="statement" :page="page" :country="country"></Statement>
+      <Statement
+        v-for="statement in statements"
+        :statement="statement"
+        :page="page"
+        :country="country"
+        @reference-url-change="onChangeReferenceURL"
+      ></Statement>
     </table>
   </div>
   <div v-if="!loaded" class="verification-tool__blank-slate">

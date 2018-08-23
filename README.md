@@ -104,3 +104,17 @@ If `foreman start` just exits with:
     18:16:08 webpacker.1 | terminated by SIGTERM
 
 ... try running `rails server` to see the error message.
+
+## Architecture notes
+
+### Reference URL
+
+We currently store the reference URL, that is the URL that the verifier has
+said a statement is described at, in two different tables, which serve different purposes.
+
+1. The `reference_url` column in the `pages` table. If set, this is used as
+the default reference URL for the page.
+2. The `reference_url` column in the `verifications` table. Each time a
+statement is verified a row is added to this table with the `reference_url`
+that was used to verify it. This provides a historical log of URLs that have
+been used for verification.

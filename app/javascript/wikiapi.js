@@ -1,13 +1,8 @@
-/* global $, mw */
+/* global mw */
 'use strict'
 
 import Axios from 'axios'
 import jsonp from 'jsonp'
-
-function lowerCaseSnak (upperCase) {
-  var parts = upperCase.split('$')
-  return parts[0] + '$' + parts[1].toLowerCase()
-}
 
 export function getItemValue (item) {
   return {'entity-type': 'item', 'numeric-id': Number(item.substring(1))}
@@ -34,7 +29,8 @@ function getReferencesFromAPIClaims (apiClaims, property) {
 function getReferenceForURLFromAPIClaims (references, referenceURLProp, referenceURL) {
   if (!references || !referenceURL) return
   return references.find(function (r) {
-    var snak, snaks = r.snaks[referenceURLProp]
+    var snak
+    var snaks = r.snaks[referenceURLProp]
     if (!snaks) {
       // There may be existing references using other properties, so
       // skip over them.
@@ -89,9 +85,11 @@ function buildReferenceSnaks (references) {
 }
 
 function getNewQualifiers (qualifiersFromAPI, wantedQualifiers) {
-  var newQualifiers = Object.assign({}, wantedQualifiers),
-    qualifiersToCheck = Object.keys(newQualifiers),
-    existingQualifiersForProperty, newValue, i
+  var newQualifiers = Object.assign({}, wantedQualifiers)
+  var qualifiersToCheck = Object.keys(newQualifiers)
+  var existingQualifiersForProperty
+  var newValue
+  var i
   if (qualifiersFromAPI) {
     for (i = 0; i < qualifiersToCheck.length; ++i) {
       existingQualifiersForProperty = qualifiersFromAPI[qualifiersToCheck[i]]
@@ -103,20 +101,20 @@ function getNewQualifiers (qualifiersFromAPI, wantedQualifiers) {
           'Multiple existing ' + qualifiersToCheck[i] + ' qualifiers found'
         )
       }
-      if (existingQualifiersForProperty[0].snaktype != 'value') {
+      if (existingQualifiersForProperty[0].snaktype !== 'value') {
         throw new Error(
           'Unexpected snaktype ' + existingQualifiersForProperty[0].snaktype +
           ' found on the ' + qualifiersToCheck[i] + ' qualifier'
         )
       }
-      if (existingQualifiersForProperty[0].datavalue.type != 'wikibase-entityid') {
+      if (existingQualifiersForProperty[0].datavalue.type !== 'wikibase-entityid') {
         throw new Error(
           'Unexpected datavalue type ' + existingQualifiersForProperty[0].datavalue.type +
           ' found on the ' + qualifiersToCheck[i] + ' qualifier'
         )
       }
       newValue = newQualifiers[qualifiersToCheck[i]]
-      if (existingQualifiersForProperty[0].datavalue.value.id == newValue) {
+      if (existingQualifiersForProperty[0].datavalue.value.id === newValue) {
         delete newQualifiers[qualifiersToCheck[i]]
       } else {
         throw new Error(
@@ -131,8 +129,11 @@ function getNewQualifiers (qualifiersFromAPI, wantedQualifiers) {
 }
 
 var wikidataItem = function (spec) {
-  var that = {}, wikidata = spec.wikidata, item = spec.item, lastRevisionID = null,
-    my = {}
+  var that = {}
+  var wikidata = spec.wikidata
+  var item = spec.item
+  var lastRevisionID = null
+  var my = {}
 
   my.ajaxSetQualifier = function (qualifierDetails) {
     wikidata.log('Setting ' + wikidata.getPropertyName(qualifierDetails.qualifierProperty))
@@ -159,14 +160,15 @@ var wikidataItem = function (spec) {
   }
 
   my.createQualifiers = function (newClaim, newQualifiers) {
-    var requestChain, i, statementsToCreate = Object.keys(newQualifiers).map(
-      function (qualifierProperty) {
-        return {
-          statement: newClaim.statement,
-          qualifierProperty: qualifierProperty,
-          value: newQualifiers[qualifierProperty]
-        }
-      })
+    var requestChain
+    var i
+    var statementsToCreate = Object.keys(newQualifiers).map(function (qualifierProperty) {
+      return {
+        statement: newClaim.statement,
+        qualifierProperty: qualifierProperty,
+        value: newQualifiers[qualifierProperty]
+      }
+    })
 
     console.log('There are ' + statementsToCreate.length + ' statements to create....')
 
@@ -186,14 +188,12 @@ var wikidataItem = function (spec) {
   }
 
   my.getReferencePropertyInUse = function (newReferences) {
-    var found,
-      newReferenceProperties = Object.keys(newReferences),
-      knownReferencePropertyLabels = [
-        'Wikimedia import URL', 'reference URL'
-      ],
-      knownReferencePropertyIDs = knownReferencePropertyLabels.map(
-        l => wikidata.getPropertyID(l)
-      )
+    var found
+    var newReferenceProperties = Object.keys(newReferences)
+    var knownReferencePropertyLabels = [
+      'Wikimedia import URL', 'reference URL'
+    ]
+    var knownReferencePropertyIDs = knownReferencePropertyLabels.map(l => wikidata.getPropertyID(l))
     found = newReferenceProperties.find(k => knownReferencePropertyIDs.includes(k))
     if (!found) {
       throw new Error("Couldn't find a reference property ID in " + newReferenceProperties)
@@ -214,7 +214,7 @@ var wikidataItem = function (spec) {
     console.log('There are ' + Object.keys(data.references).length + ' references to create....')
 
     if (Object.keys(data.references).length > 0) {
-      var data = {
+      var referenceData = {
         statement: data.statement,
         snaks: buildReferenceSnaks(data.references),
         baserevid: lastRevisionID,
@@ -222,11 +222,11 @@ var wikidataItem = function (spec) {
       }
 
       if (currentReference) {
-        data['reference'] = currentReference.hash
+        referenceData['reference'] = currentReference.hash
       }
 
       wikidata.log('Setting references')
-      return wikidata.ajaxAPI(true, 'wbsetreference', data)
+      return wikidata.ajaxAPI(true, 'wbsetreference', referenceData)
     } else {
       return Promise.resolve(null)
     }
@@ -262,7 +262,7 @@ var wikidataItem = function (spec) {
       entity: item,
       claim: newClaim.statement
     }).then(function (data) {
-      var i, requestChain, newQualifiers
+      var newQualifiers
       checkForError(data)
       try {
         newQualifiers = getNewQualifiers(
@@ -309,14 +309,14 @@ var wikidataItem = function (spec) {
       titles: item
     }).then(function (data) {
       checkForError(data)
-      var pageKey, revision = null,
-        // FIXME: this is very weird; the response from the
-        // mediawiki API doesn't include the .query, but when
-        // calling the API directly it doesn't (!)
-        pages = data.pages || data.query.pages
+      var pageKey
+      // FIXME: this is very weird; the response from the
+      // mediawiki API doesn't include the .query, but when
+      // calling the API directly it doesn't (!)
+      var pages = data.pages || data.query.pages
       for (pageKey in pages) {
         if (pages.hasOwnProperty(pageKey)) {
-          if (pages[pageKey].title == item) {
+          if (pages[pageKey].title === item) {
             return pages[pageKey].revisions[0].revid
           }
         }
@@ -356,7 +356,7 @@ var wikidata = function (spec) {
     that.serverName = 'localhost'
     that.neverUseToken = true
     that.user = 'ExampleUser'
-    that.page = CURRENT_PAGE_TITLE
+    that.page = window.CURRENT_PAGE_TITLE
   } else {
     that.useAPIProxy = false
     that.apiURL = 'https:' + mw.config.get('wgServer') + '/w/api.php'

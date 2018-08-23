@@ -1,7 +1,7 @@
 import Vue from 'vue'
 import ENV from '../env'
 import Axios from 'axios'
-import wikidataClient, { getItemValue } from '../wikiapi'
+import wikidataClient from '../wikiapi'
 import template from './actionable.html'
 import StatementChangeSummary from './statement_change_summary'
 
@@ -33,16 +33,17 @@ export default template({
       this.$parent.$emit('log', data)
     },
     updatePositionHeld: function () {
-      var personItem = this.statement.person_item,
-        item = wikidataClient.setLogger(this.logger).item(personItem),
-        references = {},
-        qualifiers = {},
-        updateData = {
-          property: wikidataClient.getPropertyID('position held'),
-          object: this.page.position_held_item,
-          references: references,
-          qualifiers: qualifiers
-        }, that = this
+      var personItem = this.statement.person_item
+      var item = wikidataClient.setLogger(this.logger).item(personItem)
+      var references = {}
+      var qualifiers = {}
+      var updateData = {
+        property: wikidataClient.getPropertyID('position held'),
+        object: this.page.position_held_item,
+        references: references,
+        qualifiers: qualifiers
+      }
+      var that = this
 
       if (this.statement.statement_uuid) {
         // Make sure there's a $ in the claim ID separating the item

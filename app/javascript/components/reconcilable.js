@@ -1,3 +1,4 @@
+/* global localStorage */
 import ENV from '../env'
 import Axios from 'axios'
 import wikidataClient from '../wikiapi'
@@ -17,9 +18,6 @@ export default template({
     }
   },
   props: ['statement', 'page', 'country'],
-  created: function () {
-    this.statement.bulk_update = false
-  },
   computed: {
     bulkFieldPrefix: function () {
       return {
@@ -32,6 +30,7 @@ export default template({
     bulkName: function () { return this.statement[this.bulkNameAttr] }
   },
   created: function () {
+    this.statement.bulk_update = false
     this.languageCode = this.getLanguageCode()
 
     this.$parent.$on('search-for', (field) => {
@@ -111,7 +110,10 @@ export default template({
           itemAttr: this.bulkItemAttr,
           newItem: itemID
         },
-        function (counts) {
+        function (err, counts) {
+          if (err) {
+            return
+          }
           self.bulkUpdateCounts = counts
           if (self.bulkUpdateCounts.otherMatching > 0) {
             // Ask whether to do a bulk reconciliation:

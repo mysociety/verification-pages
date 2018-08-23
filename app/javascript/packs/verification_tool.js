@@ -7,7 +7,7 @@ function removeInstallPrompt () {
   // It'd be more robust to get the install prompt by a special class
   // we add to it, but the version of the cmbox template on Wikidata
   // doesn't have the 'class' parameter, so do this another way:
-  while (installPrompt && installPrompt.className != 'layouttemplate plainlinks') {
+  while (installPrompt && installPrompt.className !== 'layouttemplate plainlinks') {
     installPrompt = installPrompt.nextElementSibling
   }
   if (installPrompt) {
@@ -21,7 +21,7 @@ function createVueApp () {
   const el = document.getElementById('js-verification-tool')
     .appendChild(document.createElement('verification-tool'))
 
-  const app = new Vue({ el, render: h => h(App) })
+  window.app = new Vue({ el, render: h => h(App) })
   removeInstallPrompt()
 }
 

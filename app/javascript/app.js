@@ -1,3 +1,4 @@
+/* global localStorage */
 import Vue from 'vue'
 import ENV from './env'
 import Axios from 'axios'
@@ -56,17 +57,17 @@ export default template({
     this.$on('find-matching-statements', (data, cb) => {
       const {resourceType, statement, nameAttr, itemAttr, newItem} = data
       if (resourceType === 'person') {
-        cb(0, 0)
+        cb(null, 0)
         return
       }
       let otherMatching = this.statements.filter(s => {
         return nameAttr && itemAttr && statement[nameAttr] &&
           (s[nameAttr] === statement[nameAttr]) &&
           (s[itemAttr] !== newItem) &&
-          (s.transaction_id != statement.transaction_id)
+          (s.transaction_id !== statement.transaction_id)
       })
       let otherMatchingUnreconciled = otherMatching.filter(s => !s[itemAttr])
-      cb({
+      cb(null, {
         otherMatching: otherMatching.length,
         otherMatchingUnreconciled: otherMatchingUnreconciled.length
       })

@@ -1,4 +1,4 @@
-/* global $ */
+/* global $, wgUserName */
 'use strict'
 
 $(document).ready(function () {

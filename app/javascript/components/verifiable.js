@@ -28,7 +28,7 @@ export default template({
         })
       })
     },
-    onChangeReferenceURL: function() {
+    onChangeReferenceURL: function () {
       if (this.referenceURLScope === 'all-statements') {
         this.$emit('reference-url-change', this.userReferenceURL)
       } else if (this.referenceURLScope === 'this-statement') {
@@ -39,7 +39,7 @@ export default template({
     }
   },
   computed: {
-    referenceURL: function() {
+    referenceURL: function () {
       return this.overrideReferenceURL || this.page.reference_url
     }
   }

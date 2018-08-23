@@ -8,10 +8,12 @@ import StatementChangeSummary from './statement_change_summary'
 Vue.component('StatementChangeSummary', StatementChangeSummary)
 
 export default template({
-  data () { return {
-    finished: false,
-    updateError: null,
-  } },
+  data () {
+    return {
+      finished: false,
+      updateError: null
+    }
+  },
   props: ['statement', 'page', 'country'],
   created: function () {
     if (this.statement.bulk_update) {
@@ -19,7 +21,7 @@ export default template({
       // is bad API usage etiquette, we don't automatically action
       // this statement if it appears to come from a bulk update:
       this.statement.bulk_update = false
-      return;
+      return
     }
     this.statement.bulk_update = false
     if (['verifiable', 'reconcilable', 'manually_actionable'].indexOf(this.statement.previousType) !== -1) {
@@ -32,20 +34,20 @@ export default template({
     },
     updatePositionHeld: function () {
       var personItem = this.statement.person_item,
-          item = wikidataClient.setLogger(this.logger).item(personItem),
-          references = {},
-          qualifiers = {},
-          updateData = {
-            property: wikidataClient.getPropertyID('position held'),
-            object: this.page.position_held_item,
-            references: references,
-            qualifiers: qualifiers,
-          }, that = this;
+        item = wikidataClient.setLogger(this.logger).item(personItem),
+        references = {},
+        qualifiers = {},
+        updateData = {
+          property: wikidataClient.getPropertyID('position held'),
+          object: this.page.position_held_item,
+          references: references,
+          qualifiers: qualifiers
+        }, that = this
 
       if (this.statement.statement_uuid) {
         // Make sure there's a $ in the claim ID separating the item
         // ID from the UUID, otherwise we get invalid GUID errors.
-        updateData.statement = this.statement.statement_uuid.replace(/^(Q\d+)[^\d]/, '$1$');
+        updateData.statement = this.statement.statement_uuid.replace(/^(Q\d+)[^\d]/, '$1$')
       }
 
       references[wikidataClient.getReferencePropertyID(this.page.reference_url)] = {
@@ -82,25 +84,25 @@ export default template({
 
       if (!this.page.executive_position && this.statement.parliamentary_group_item) {
         qualifiers[wikidataClient.getPropertyID('parliamentary group')] =
-          this.statement.parliamentary_group_item;
+          this.statement.parliamentary_group_item
       }
       if (!this.page.executive_position && this.statement.electoral_district_item) {
         qualifiers[wikidataClient.getPropertyID('electoral district')] =
-          this.statement.electoral_district_item;
+          this.statement.electoral_district_item
       }
       if (this.statement.parliamentary_term_item) {
         qualifiers[wikidataClient.getPropertyID('parliamentary term')] =
-          this.statement.parliamentary_term_item;
+          this.statement.parliamentary_term_item
       }
 
       this.$parent.$emit('loading', 'Saving')
 
-      item.latestRevision().then(function(lastRevisionID) {
-        return item.updateOrCreateClaim(lastRevisionID, updateData);
+      item.latestRevision().then(function (lastRevisionID) {
+        return item.updateOrCreateClaim(lastRevisionID, updateData)
       }).then(function (result) {
-        console.log('updating the statement succeeded:', result);
-        that.finished = true;
-        that.updateError = null;
+        console.log('updating the statement succeeded:', result)
+        that.finished = true
+        that.updateError = null
 
         that.$parent.$emit('statement-update', () => {
           return Axios.get(
@@ -115,7 +117,7 @@ export default template({
         that.updateError = error.message
 
         that.$parent.$emit('error')
-      });
+      })
     },
     reportStatementError: function () {
       this.$parent.$emit('statement-update', () => {

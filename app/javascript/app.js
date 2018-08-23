@@ -43,7 +43,7 @@ export default template({
     })
     this.$on('statements-loaded', () => {
       this.$nextTick(function () {
-        var hash = window.location.hash;
+        var hash = window.location.hash
         if (hash) {
           this.$emit('scroll-to-fragment', hash)
         }
@@ -55,9 +55,9 @@ export default template({
     })
     this.$on('find-matching-statements', (data, cb) => {
       const {resourceType, statement, nameAttr, itemAttr, newItem} = data
-      if (resourceType === 'person')  {
-        cb(0, 0);
-        return;
+      if (resourceType === 'person') {
+        cb(0, 0)
+        return
       }
       let otherMatching = this.statements.filter(s => {
         return nameAttr && itemAttr && statement[nameAttr] &&
@@ -78,7 +78,7 @@ export default template({
         let headerHeight = document.querySelector('.verification-tool__table th').offsetHeight
         statementRow.scrollIntoView()
         window.scrollBy(0, -headerHeight)
-        statementRow.className += " targetted"
+        statementRow.className += ' targetted'
       }
     })
   },
@@ -112,7 +112,7 @@ export default template({
           'manually_actionable',
           'reverted',
           'unverifiable',
-          'done',
+          'done'
         ]
         const namesA = parseFullName(a.person_name)
         const namesB = parseFullName(b.person_name)
@@ -155,7 +155,7 @@ export default template({
     }
   },
   computed: {
-    localStorageKey: function() {
+    localStorageKey: function () {
       return wikidataClient.page + '.reference_url'
     }
   }

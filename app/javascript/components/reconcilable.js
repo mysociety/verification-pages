@@ -4,33 +4,35 @@ import wikidataClient from '../wikiapi'
 import template from './reconcilable.html'
 
 export default template({
-  data () { return {
-    searchTerm: null,
-    searchResults: null,
-    searchResourceType: null,
-    askAboutBulkUpdate: false,
-    bulkUpdateItem: null,
-    bulkUpdateType: null,
-    bulkUpdateCounts: null,
-    languageCode: 'en'
-  } },
+  data () {
+    return {
+      searchTerm: null,
+      searchResults: null,
+      searchResourceType: null,
+      askAboutBulkUpdate: false,
+      bulkUpdateItem: null,
+      bulkUpdateType: null,
+      bulkUpdateCounts: null,
+      languageCode: 'en'
+    }
+  },
   props: ['statement', 'page', 'country'],
   created: function () {
     this.statement.bulk_update = false
   },
   computed: {
-    bulkFieldPrefix: function() {
+    bulkFieldPrefix: function () {
       return {
         'district': 'electoral_district_',
         'party': 'parliamentary_group_'
       }[this.searchResourceType]
     },
-    bulkItemAttr: function () { return this.bulkFieldPrefix && (this.bulkFieldPrefix + 'item')},
-    bulkNameAttr: function () { return this.bulkFieldPrefix && (this.bulkFieldPrefix + 'name')},
-    bulkName: function() { return this.statement[this.bulkNameAttr] }
+    bulkItemAttr: function () { return this.bulkFieldPrefix && (this.bulkFieldPrefix + 'item') },
+    bulkNameAttr: function () { return this.bulkFieldPrefix && (this.bulkFieldPrefix + 'name') },
+    bulkName: function () { return this.statement[this.bulkNameAttr] }
   },
   created: function () {
-    this.languageCode = this.getLanguageCode();
+    this.languageCode = this.getLanguageCode()
 
     this.$parent.$on('search-for', (field) => {
       this.searchTerm = null
@@ -42,7 +44,7 @@ export default template({
       } else if (field === 'parliamentary_group') {
         this.searchForParty()
       } else {
-        throw new Error('Unknown field to search-for: ' + field);
+        throw new Error('Unknown field to search-for: ' + field)
       }
     })
   },
@@ -71,12 +73,12 @@ export default template({
     search: function (searchTerm) {
       this.$parent.$emit('loading', 'Loading search results')
       wikidataClient.search(searchTerm, this.getLanguageCode(), 'en').then(data => {
-        console.log(data);
-        this.searchResults = data;
+        console.log(data)
+        this.searchResults = data
         this.$parent.$emit('loaded')
       })
     },
-    createReconciliation: function(itemID, updateType) {
+    createReconciliation: function (itemID, updateType) {
       this.$parent.$emit('statement-update', () => {
         return Axios.post(ENV.url + '/reconciliations.json', {
           id: this.statement.transaction_id,
@@ -87,7 +89,7 @@ export default template({
         })
       })
     },
-    bulkReconcileWithItem: function(itemID) {
+    bulkReconcileWithItem: function (itemID) {
       this.askAboutBulkUpdate = false
       this.bulkUpdateItem = null
       if (this.bulkUpdateType) {
@@ -107,7 +109,7 @@ export default template({
           statement: this.statement,
           nameAttr: this.bulkNameAttr,
           itemAttr: this.bulkItemAttr,
-          newItem: itemID,
+          newItem: itemID
         },
         function (counts) {
           self.bulkUpdateCounts = counts
@@ -125,29 +127,29 @@ export default template({
         }
       )
     },
-    createPerson: function() {
+    createPerson: function () {
       wikidataClient.createPerson(
         {
           lang: this.country.label_lang,
-          value: this.searchTerm,
+          value: this.searchTerm
         },
         {
           lang: 'en',
-          value: this.country.description_en,
-        },
+          value: this.country.description_en
+        }
       ).then(createdItemData => {
-        this.reconcileWithItem(createdItemData.item);
+        this.reconcileWithItem(createdItemData.item)
       })
     },
     changeLanguage: function () {
-      localStorage.setItem(wikidataClient.page + '.language', this.languageCode);
+      localStorage.setItem(wikidataClient.page + '.language', this.languageCode)
       this.updateSearchResults()
     },
-    updateSearchResults: function() {
-      this.search(this.searchTerm);
+    updateSearchResults: function () {
+      this.search(this.searchTerm)
     },
     getLanguageCode: function () {
-      return localStorage.getItem(wikidataClient.page + '.language') || this.languageCode;
+      return localStorage.getItem(wikidataClient.page + '.language') || this.languageCode
     }
   }
 })

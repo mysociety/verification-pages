@@ -1,44 +1,44 @@
 /* global $, mw */
-'use strict';
+'use strict'
 
 import Axios from 'axios'
 import jsonp from 'jsonp'
 
-function lowerCaseSnak(upperCase) {
-  var parts = upperCase.split('$');
-  return parts[0] + '$' + parts[1].toLowerCase();
+function lowerCaseSnak (upperCase) {
+  var parts = upperCase.split('$')
+  return parts[0] + '$' + parts[1].toLowerCase()
 }
 
-export function getItemValue(item) {
-  return {'entity-type': 'item', 'numeric-id': Number(item.substring(1))};
+export function getItemValue (item) {
+  return {'entity-type': 'item', 'numeric-id': Number(item.substring(1))}
 }
 
-function getItemValueString(item) {
-  return JSON.stringify(getItemValue(item));
+function getItemValueString (item) {
+  return JSON.stringify(getItemValue(item))
 }
 
-function getQualifiersFromAPIClaims(apiClaims, property) {
+function getQualifiersFromAPIClaims (apiClaims, property) {
   if (!apiClaims[property]) {
-    return [];
+    return []
   }
-  return apiClaims[property][0].qualifiers;
+  return apiClaims[property][0].qualifiers
 }
 
-function getReferencesFromAPIClaims(apiClaims, property) {
+function getReferencesFromAPIClaims (apiClaims, property) {
   if (!apiClaims[property]) {
-    return [];
+    return []
   }
-  return apiClaims[property][0].references;
+  return apiClaims[property][0].references
 }
 
 function getReferenceForURLFromAPIClaims (references, referenceURLProp, referenceURL) {
   if (!references || !referenceURL) return
   return references.find(function (r) {
-    var snak, snaks = r.snaks[referenceURLProp];
+    var snak, snaks = r.snaks[referenceURLProp]
     if (!snaks) {
       // There may be existing references using other properties, so
       // skip over them.
-      return false;
+      return false
     }
     snak = snaks.find(function (s) {
       return s.datatype === 'url' && s.datavalue.value === referenceURL.value
@@ -48,7 +48,7 @@ function getReferenceForURLFromAPIClaims (references, referenceURLProp, referenc
   })
 }
 
-function checkForError(data) {
+function checkForError (data) {
   // Weirdly, errors like bad CSRF tokens still return success
   // rather than going to the fail handlers, so we use this even
   // on apparently successful AJAX calls.
@@ -56,7 +56,7 @@ function checkForError(data) {
     throw new Error(
       'Error from the Wikidata API [' + data.error.code + '] ' +
       data.error.info + ': ' + data.error['*']
-    );
+    )
   }
 }
 
@@ -88,117 +88,117 @@ function buildReferenceSnaks (references) {
   return JSON.stringify(snaks)
 }
 
-function getNewQualifiers(qualifiersFromAPI, wantedQualifiers) {
+function getNewQualifiers (qualifiersFromAPI, wantedQualifiers) {
   var newQualifiers = Object.assign({}, wantedQualifiers),
-      qualifiersToCheck = Object.keys(newQualifiers),
-      existingQualifiersForProperty, newValue, i;
+    qualifiersToCheck = Object.keys(newQualifiers),
+    existingQualifiersForProperty, newValue, i
   if (qualifiersFromAPI) {
     for (i = 0; i < qualifiersToCheck.length; ++i) {
-      existingQualifiersForProperty = qualifiersFromAPI[qualifiersToCheck[i]];
+      existingQualifiersForProperty = qualifiersFromAPI[qualifiersToCheck[i]]
       if (!existingQualifiersForProperty) {
-        continue;
+        continue
       }
       if (existingQualifiersForProperty.length > 1) {
         throw new Error(
           'Multiple existing ' + qualifiersToCheck[i] + ' qualifiers found'
-        );
+        )
       }
       if (existingQualifiersForProperty[0].snaktype != 'value') {
         throw new Error(
           'Unexpected snaktype ' + existingQualifiersForProperty[0].snaktype +
           ' found on the ' + qualifiersToCheck[i] + ' qualifier'
-        );
+        )
       }
       if (existingQualifiersForProperty[0].datavalue.type != 'wikibase-entityid') {
         throw new Error(
           'Unexpected datavalue type ' + existingQualifiersForProperty[0].datavalue.type +
           ' found on the ' + qualifiersToCheck[i] + ' qualifier'
-        );
+        )
       }
-      newValue = newQualifiers[qualifiersToCheck[i]];
+      newValue = newQualifiers[qualifiersToCheck[i]]
       if (existingQualifiersForProperty[0].datavalue.value.id == newValue) {
-        delete newQualifiers[qualifiersToCheck[i]];
+        delete newQualifiers[qualifiersToCheck[i]]
       } else {
         throw new Error(
           'The existing item for the ' + qualifiersToCheck[i] +
           ' qualifier was ' + existingQualifiersForProperty[0].datavalue.value.id +
           ' but we think it should be' + newValue
-        );
+        )
       }
     }
   }
-  return newQualifiers;
+  return newQualifiers
 }
 
-var wikidataItem = function(spec) {
+var wikidataItem = function (spec) {
   var that = {}, wikidata = spec.wikidata, item = spec.item, lastRevisionID = null,
-      my = {};
+    my = {}
 
-  my.ajaxSetQualifier = function(qualifierDetails) {
+  my.ajaxSetQualifier = function (qualifierDetails) {
     wikidata.log('Setting ' + wikidata.getPropertyName(qualifierDetails.qualifierProperty))
     return wikidata.ajaxAPI(true, 'wbsetqualifier', {
-            claim: qualifierDetails.statement,
-            property: qualifierDetails.qualifierProperty,
-            value: getItemValueString(qualifierDetails.value),
-            baseRevisionID: lastRevisionID,
-            snaktype: 'value',
-            summary: wikidata.summary()
-    }).then(function(data) {
-      checkForError(data);
-      lastRevisionID = data.pageinfo.lastrevid;
-      return data;
-    });
-  };
+      claim: qualifierDetails.statement,
+      property: qualifierDetails.qualifierProperty,
+      value: getItemValueString(qualifierDetails.value),
+      baseRevisionID: lastRevisionID,
+      snaktype: 'value',
+      summary: wikidata.summary()
+    }).then(function (data) {
+      checkForError(data)
+      lastRevisionID = data.pageinfo.lastrevid
+      return data
+    })
+  }
 
-  my.makeSetQualifierThenFunction = function(statementToCreate) {
-    return function(data) {
-      console.log('in \'then\' function for ' + statementToCreate + ' data was: ', data);
-      checkForError(data);
-      return my.ajaxSetQualifier(statementToCreate);
-    };
-  };
+  my.makeSetQualifierThenFunction = function (statementToCreate) {
+    return function (data) {
+      console.log('in \'then\' function for ' + statementToCreate + ' data was: ', data)
+      checkForError(data)
+      return my.ajaxSetQualifier(statementToCreate)
+    }
+  }
 
-  my.createQualifiers = function(newClaim, newQualifiers) {
+  my.createQualifiers = function (newClaim, newQualifiers) {
     var requestChain, i, statementsToCreate = Object.keys(newQualifiers).map(
       function (qualifierProperty) {
         return {
           statement: newClaim.statement,
           qualifierProperty: qualifierProperty,
-          value: newQualifiers[qualifierProperty],
-        };
-      });
+          value: newQualifiers[qualifierProperty]
+        }
+      })
 
-    console.log('There are ' + statementsToCreate.length + ' statements to create....');
+    console.log('There are ' + statementsToCreate.length + ' statements to create....')
 
     if (statementsToCreate.length > 0) {
-      requestChain = my.ajaxSetQualifier(statementsToCreate[0]);
-      for(i = 1; i < statementsToCreate.length; ++i) {
+      requestChain = my.ajaxSetQualifier(statementsToCreate[0])
+      for (i = 1; i < statementsToCreate.length; ++i) {
         requestChain = requestChain.then(
-          my.makeSetQualifierThenFunction(statementsToCreate[i]));
+          my.makeSetQualifierThenFunction(statementsToCreate[i]))
       }
-      return requestChain.then(function(data) {
-        console.log('final data: ', data);
-        checkForError(data);
-      });
+      return requestChain.then(function (data) {
+        console.log('final data: ', data)
+        checkForError(data)
+      })
     } else {
-      return Promise.resolve(null);
+      return Promise.resolve(null)
     }
-  };
+  }
 
-  my.getReferencePropertyInUse = function(newReferences) {
+  my.getReferencePropertyInUse = function (newReferences) {
     var found,
-        newReferenceProperties = Object.keys(newReferences),
-        knownReferencePropertyLabels = [
-          'Wikimedia import URL', 'reference URL'
-        ],
-        knownReferencePropertyIDs = knownReferencePropertyLabels.map(
-          l => wikidata.getPropertyID(l)
-        );
-    found = newReferenceProperties.find(k => knownReferencePropertyIDs.includes(k));
+      newReferenceProperties = Object.keys(newReferences),
+      knownReferencePropertyLabels = [
+        'Wikimedia import URL', 'reference URL'
+      ],
+      knownReferencePropertyIDs = knownReferencePropertyLabels.map(
+        l => wikidata.getPropertyID(l)
+      )
+    found = newReferenceProperties.find(k => knownReferencePropertyIDs.includes(k))
     if (!found) {
-      throw new Error("Couldn't find a reference property ID in " + newReferenceProperties);
+      throw new Error("Couldn't find a reference property ID in " + newReferenceProperties)
     }
-    return found;
+    return found
   }
 
   my.createReferences = function (claims, data) {
@@ -211,7 +211,7 @@ var wikidataItem = function(spec) {
       referenceURL
     )
 
-    console.log('There are ' + Object.keys(data.references).length + ' references to create....');
+    console.log('There are ' + Object.keys(data.references).length + ' references to create....')
 
     if (Object.keys(data.references).length > 0) {
       var data = {
@@ -232,7 +232,7 @@ var wikidataItem = function(spec) {
     }
   }
 
-  my.createBareClaimDeferred = function(claimData) {
+  my.createBareClaimDeferred = function (claimData) {
     // TODO the data we've been passed (indicating there wasn't an
     // existing statement to update) might be quite stale,
     // so we should really check that an appropriate claim hasn't
@@ -245,38 +245,38 @@ var wikidataItem = function(spec) {
       value: getItemValueString(claimData.object),
       baserevid: lastRevisionID,
       summary: wikidata.summary()
-    }).then(function(data) {
-        checkForError(data);
-        lastRevisionID = data.pageinfo.lastrevid;
-        return data.claim.id;
-      }).catch(function(error) {
-        console.log("AJAX failure when trying to create a new claim:", error);
-      });
-  };
+    }).then(function (data) {
+      checkForError(data)
+      lastRevisionID = data.pageinfo.lastrevid
+      return data.claim.id
+    }).catch(function (error) {
+      console.log('AJAX failure when trying to create a new claim:', error)
+    })
+  }
 
-  my.updateClaim = function(newClaim) {
+  my.updateClaim = function (newClaim) {
     // First check that (currently) there are no qualifiers that
     // would be changed by updating the claim
     wikidata.log('Getting existing claims')
     return wikidata.ajaxAPI(false, 'wbgetclaims', {
       entity: item,
-      claim: newClaim.statement,
-    }).then(function(data) {
-        var i, requestChain, newQualifiers;
-        checkForError(data);
-        try {
-          newQualifiers = getNewQualifiers(
-            getQualifiersFromAPIClaims(data.claims, newClaim.property),
-            newClaim.qualifiers
-          );
-        } catch(error) {
-          throw new Error(
-            'Problem checking existing qualifiers for statement ' +
+      claim: newClaim.statement
+    }).then(function (data) {
+      var i, requestChain, newQualifiers
+      checkForError(data)
+      try {
+        newQualifiers = getNewQualifiers(
+          getQualifiersFromAPIClaims(data.claims, newClaim.property),
+          newClaim.qualifiers
+        )
+      } catch (error) {
+        throw new Error(
+          'Problem checking existing qualifiers for statement ' +
             newClaim.statement + ' for relationship ' + item +
-            ' <-- ' + newClaim.property + ' --> ' + newClaim.object + ": " +
+            ' <-- ' + newClaim.property + ' --> ' + newClaim.object + ': ' +
             error.message
-          );
-        }
+        )
+      }
 
       console.log('Looks good to update these qualifiers:', newQualifiers)
 
@@ -286,84 +286,84 @@ var wikidataItem = function(spec) {
     })
   }
 
-  that.updateOrCreateClaim = function(baseRevisionID, claimData) {
-    lastRevisionID = baseRevisionID;
+  that.updateOrCreateClaim = function (baseRevisionID, claimData) {
+    lastRevisionID = baseRevisionID
     if (claimData.statement) {
-      return my.updateClaim(claimData);
+      return my.updateClaim(claimData)
     } else {
       // Then we need to create a new statement:
       return my.createBareClaimDeferred(claimData).then(function (statement) {
         if (!statement) {
-          throw new Error("Creating the new statement failed");
+          throw new Error('Creating the new statement failed')
         }
-        return my.updateClaim(Object.assign({}, claimData, {statement: statement}));
-      });
+        return my.updateClaim(Object.assign({}, claimData, {statement: statement}))
+      })
     }
-  };
+  }
 
-  that.latestRevision = function() {
+  that.latestRevision = function () {
     wikidata.log('Getting latest revision')
     return wikidata.ajaxAPIBasic({
       action: 'query',
       prop: 'revisions',
-      titles: item,
-    }).then(function(data) {
-      checkForError(data);
+      titles: item
+    }).then(function (data) {
+      checkForError(data)
       var pageKey, revision = null,
-          // FIXME: this is very weird; the response from the
-          // mediawiki API doesn't include the .query, but when
-          // calling the API directly it doesn't (!)
-          pages = data.pages || data.query.pages;
+        // FIXME: this is very weird; the response from the
+        // mediawiki API doesn't include the .query, but when
+        // calling the API directly it doesn't (!)
+        pages = data.pages || data.query.pages
       for (pageKey in pages) {
         if (pages.hasOwnProperty(pageKey)) {
           if (pages[pageKey].title == item) {
-            return pages[pageKey].revisions[0].revid;
+            return pages[pageKey].revisions[0].revid
           }
         }
       }
-           throw new Error('No revision found for item ' + item);
-    });
-  };
+      throw new Error('No revision found for item ' + item)
+    })
+  }
 
-  return that;
-};
+  return that
+}
 
-function encodeURIParams(o) {
+function encodeURIParams (o) {
   // From a comment on: https://stackoverflow.com/a/18116302/223092
-  return Object.entries(o).map(e => e.map(ee => encodeURIComponent(ee)).join('=')).join('&');
+  return Object.entries(o).map(e => e.map(ee => encodeURIComponent(ee)).join('=')).join('&')
 }
 
-const jsonpPromise = function(url) {
+const jsonpPromise = function (url) {
   return new Promise(function (resolve, reject) {
-    jsonp(url, null, function(err, data) {
+    jsonp(url, null, function (err, data) {
       if (err) {
-        reject(err);
+        reject(err)
       } else {
-        resolve(data);
+        resolve(data)
       }
-    });
-  });
+    })
+  })
 }
 
-var wikidata = function(spec) {
+var wikidata = function (spec) {
   var that = {
     log: function () {}
-  };
+  }
 
   if (typeof mw === 'undefined') {
-    that.useAPIProxy = true;
+    that.useAPIProxy = true
     that.apiURL = '/api-proxy'
     that.serverName = 'localhost'
-    that.neverUseToken = true;
-    that.user = 'ExampleUser';
-    that.page = CURRENT_PAGE_TITLE;
+    that.neverUseToken = true
+    that.user = 'ExampleUser'
+    that.page = CURRENT_PAGE_TITLE
   } else {
-    that.useAPIProxy = false;
-    that.apiURL = 'https:' + mw.config.get('wgServer') + '/w/api.php';
-    that.serverName = mw.config.get('wgServerName');
-    that.neverUseToken = false;
-    that.user = mw.config.get('wgUserName');
-    that.page = mw.config.get('wgRelevantPageName');
+    that.useAPIProxy = false
+    that.apiURL = 'https:' + mw.config.get('wgServer') + '/w/api.php'
+    that.serverName = mw.config.get('wgServerName')
+    that.neverUseToken = false
+    that.user = mw.config.get('wgUserName')
+    that.page = mw.config.get('wgRelevantPageName')
   }
 
   that.ajaxAPIBasic = function (data) {
@@ -378,68 +378,68 @@ var wikidata = function(spec) {
     }
     return Axios.post(
       that.apiURL, params, { responseType: 'json' }
-    ).then(function(response) {
-      return response.data;
-    });
-  };
+    ).then(function (response) {
+      return response.data
+    })
+  }
 
   if (!that.neverUseToken) {
     that.tokenDeferred = that.ajaxAPIBasic({
       action: 'query',
       meta: 'tokens'
-    }).then(function(data) {
-      return data.query.tokens.csrftoken;
-    });
+    }).then(function (data) {
+      return data.query.tokens.csrftoken
+    })
   }
 
-  that.ajaxAPI = function(writeOperation, action, data) {
-    var completeData = Object.assign({}, data, {action: action});
+  that.ajaxAPI = function (writeOperation, action, data) {
+    var completeData = Object.assign({}, data, {action: action})
     console.log(completeData)
     if (writeOperation && !that.neverUseToken) {
       return that.tokenDeferred.then(function (token) {
-        completeData.token = token;
-        return that.ajaxAPIBasic(completeData);
-      });
+        completeData.token = token
+        return that.ajaxAPIBasic(completeData)
+      })
     } else {
-      return that.ajaxAPIBasic(completeData);
+      return that.ajaxAPIBasic(completeData)
     }
-  };
+  }
 
-  that.setLogger = function(loggerCallback) {
+  that.setLogger = function (loggerCallback) {
     that.log = loggerCallback
     return that
   }
 
-  that.item = function(itemID) {
+  that.item = function (itemID) {
     // Get the current revision ID for the item
-    return wikidataItem({wikidata: that, item: itemID});
-  };
+    return wikidataItem({wikidata: that, item: itemID})
+  }
 
-  that.getReferencePropertyID = function(referenceURL) {
-    var propertyLabel;
+  that.getReferencePropertyID = function (referenceURL) {
+    var propertyLabel
     if (referenceURL.match(/^https?:\/\/\w+.wikipedia.org/)) {
-      propertyLabel = 'Wikimedia import URL';
+      propertyLabel = 'Wikimedia import URL'
     } else {
-      propertyLabel = 'reference URL';
+      propertyLabel = 'reference URL'
     }
-    return that.getPropertyID(propertyLabel);
-  };
+    return that.getPropertyID(propertyLabel)
+  }
 
-  that.getPropertyID = function(propertyLabel) {
-    var knownProperties = that.getProperties();
+  that.getPropertyID = function (propertyLabel) {
+    var knownProperties = that.getProperties()
     if (!(propertyLabel in knownProperties)) {
       throw new Error(
         'Unknown property ' + propertyLabel + ' for server ' + that.serverName
-      );
+      )
     };
     return knownProperties[propertyLabel]
   }
 
-  that.getPropertyName = function(property) {
+  that.getPropertyName = function (property) {
     return Object.keys(that.getProperties()).find(key => that.getProperties()[key] === property)
   }
 
-  that.getProperties = function() {
+  that.getProperties = function () {
     var knownPropertiesByServer = {
       'www.wikidata.org': {
         'reference URL': 'P854',
@@ -452,7 +452,7 @@ var wikidata = function(spec) {
         'parliamentary term': 'P2937',
         'title': 'P1476',
         'language of work or name': 'P407',
-        'instance of': 'P31',
+        'instance of': 'P31'
       },
       'test.wikidata.org': {
         'reference URL': 'P43659',
@@ -465,7 +465,7 @@ var wikidata = function(spec) {
         'parliamentary term': 'P70901',
         'title': 'P77107',
         'language of work or name': 'P77090',
-        'instance of': 'P82',
+        'instance of': 'P82'
       },
       'localhost': {
         // For local development assume we're using test.wikidata for
@@ -482,26 +482,26 @@ var wikidata = function(spec) {
         'parliamentary term': 'P70901',
         'title': 'P77107',
         'language of work or name': 'P77090',
-        'instance of': 'P82',
+        'instance of': 'P82'
       }
     }
     if (!(that.serverName in knownPropertiesByServer)) {
-      throw new Error('Unknown server name ' + that.serverName);
+      throw new Error('Unknown server name ' + that.serverName)
     }
     return knownPropertiesByServer[that.serverName]
-  };
+  }
 
-  that.getItemID = function(itemLabel) {
+  that.getItemID = function (itemLabel) {
     return {
       'www.wikidata.org': {
         'politician': 'Q82955',
         'Canada': 'Q16',
-        'human': 'Q5',
+        'human': 'Q5'
       },
       'test.wikidata.org': {
         'politician': 'Q514',
         'Canada': 'Q620',
-        'human': 'Q497',
+        'human': 'Q497'
       },
       'localhost': {
         // For local development assume we're using test.wikidata for
@@ -510,24 +510,24 @@ var wikidata = function(spec) {
         // it's proxying to..)
         'politician': 'Q514',
         'Canada': 'Q620',
-        'human': 'Q497',
+        'human': 'Q497'
       }
-    }[that.serverName][itemLabel];
-  };
+    }[that.serverName][itemLabel]
+  }
 
-  function getPersonCreateData(label, description) {
+  function getPersonCreateData (label, description) {
     var data = {
       labels: {},
-      descriptions: {},
-    };
+      descriptions: {}
+    }
     data.labels[label.lang] = {
       language: label.lang,
-      value: label.value,
-    };
+      value: label.value
+    }
     data.descriptions[description.lang] = {
       language: description.lang,
-      value: description.value,
-    };
+      value: description.value
+    }
     data.claims = [
       {
         'mainsnak': {
@@ -539,7 +539,7 @@ var wikidata = function(spec) {
           }
         },
         'type': 'statement',
-        'rank': 'normal',
+        'rank': 'normal'
       },
       {
         'mainsnak': {
@@ -551,13 +551,13 @@ var wikidata = function(spec) {
           }
         },
         'type': 'statement',
-        'rank': 'normal',
-      },
-    ];
-    return JSON.stringify(data);
+        'rank': 'normal'
+      }
+    ]
+    return JSON.stringify(data)
   }
 
-  that.createPerson = function(personLabel, personDescription) {
+  that.createPerson = function (personLabel, personDescription) {
     return that.ajaxAPI(true, 'wbeditentity', {
       new: 'item',
       data: getPersonCreateData(personLabel, personDescription),
@@ -565,32 +565,32 @@ var wikidata = function(spec) {
     }).then(function (result) {
       return {
         item: result.entity.id,
-        revisionID: result.entity.lastrevid,
+        revisionID: result.entity.lastrevid
       }
-    });
+    })
   }
 
   // Returns a Promise that is resolved with an array of search results.
   // eg: wikiapi.search(n, w, l).then(function(allResults){ ... })
-  that.search = function(name, wikipediaToSearch, language) {
+  that.search = function (name, wikipediaToSearch, language) {
     var allResults = {}
     var site = wikipediaToSearch + 'wiki'
 
-    var searchWikidata = new Promise(function(resolve, reject){
+    var searchWikidata = new Promise(function (resolve, reject) {
       that.ajaxAPIBasic({
         action: 'wbsearchentities',
         search: name,
         language: language,
         limit: 20,
         type: 'item'
-      }).then(function(data){
+      }).then(function (data) {
         checkForError(data)
         allResults.fromWikidata = transformWikidataResults(data.search)
         resolve()
       })
     })
 
-    var searchWikipedia = new Promise(function(resolve, reject) {
+    var searchWikipedia = new Promise(function (resolve, reject) {
       jsonpPromise(
         'https://' + wikipediaToSearch + '.wikipedia.org/w/api.php?' +
         encodeURIParams({
@@ -599,10 +599,10 @@ var wikidata = function(spec) {
           format: 'json',
           srsearch: name
         })
-      ).then(function(data){
+      ).then(function (data) {
         allResults.fromWikipedia = transformWikipediaResults(data.query.search)
 
-        var titles = allResults.fromWikipedia.map(function(result) { return result.title })
+        var titles = allResults.fromWikipedia.map(function (result) { return result.title })
         if (allResults.fromWikipedia.length > 0) {
           // Get any Wikidata items associated with those titles from
           // sitelinks:
@@ -610,8 +610,8 @@ var wikidata = function(spec) {
             action: 'wbgetentities',
             props: 'sitelinks',
             titles: titles.join('|'),
-            sites: site,
-          }).then(function(sitelinks){
+            sites: site
+          }).then(function (sitelinks) {
             checkForError(sitelinks)
             addWikidataItemsToWikipediaResults(sitelinks)
             resolve()
@@ -622,45 +622,45 @@ var wikidata = function(spec) {
       })
     })
 
-    var transformWikidataResults = function(results) {
-      return results.map(function(result) {
+    var transformWikidataResults = function (results) {
+      return results.map(function (result) {
         return {
           item: result.id,
           label: result.label,
           url: 'https://' + that.serverName + '/wiki/' + result.id,
-          description: result.description,
+          description: result.description
         }
       })
     }
 
-    var transformWikipediaResults = function(results) {
-      return results.map(function(result) {
+    var transformWikipediaResults = function (results) {
+      return results.map(function (result) {
         return {
           title: result.title,
           item: null,
           snippetHTML: result.snippet,
           wpURL: 'https://' + wikipediaToSearch + '.wikipedia.org/wiki/' +
-            encodeURIComponent(result.title.replace(/ /, '_')),
+            encodeURIComponent(result.title.replace(/ /, '_'))
         }
       })
     }
 
-    var addWikidataItemsToWikipediaResults = function(sitelinks) {
+    var addWikidataItemsToWikipediaResults = function (sitelinks) {
       var titleToWikidataItem = {}
       for (let [wikidataItem, sitelinkData] of Object.entries(sitelinks.entities)) {
         // For titles that can't be found, you get back a string of
         // a negative number as the key. If it can be found, the key
         // is an Wikidata item ID.
         if (Number(wikidataItem) < 0) {
-          continue;
+          continue
         }
-        titleToWikidataItem[sitelinkData.sitelinks[site].title] = wikidataItem;
+        titleToWikidataItem[sitelinkData.sitelinks[site].title] = wikidataItem
       }
-      allResults.fromWikipedia.forEach(function(data, index) {
-        var item = titleToWikidataItem[data.title];
+      allResults.fromWikipedia.forEach(function (data, index) {
+        var item = titleToWikidataItem[data.title]
         if (item) {
-          data.item = item;
-          data.wdURL = 'https://' + that.serverName + '/wiki/' + item;
+          data.item = item
+          data.wdURL = 'https://' + that.serverName + '/wiki/' + item
         }
       })
     }
@@ -670,16 +670,16 @@ var wikidata = function(spec) {
     return Promise.all([
       searchWikidata,
       searchWikipedia
-    ]).then(function(){
-      return allResults;
-    });
+    ]).then(function () {
+      return allResults
+    })
   }
 
-  that.summary = function() {
+  that.summary = function () {
     return 'Edited with Verification Pages (' + this.page + ')'
   }
 
-  return that;
-};
+  return that
+}
 
 export default wikidata({})

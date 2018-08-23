@@ -62,19 +62,19 @@ export default template({
   },
   methods: {
     searchFor: function (field) {
-      if ( this.statement.type === 'verifiable' ) {
+      if (this.statement.type === 'verifiable') {
         return
       }
 
       this.statement.type = 'reconcilable'
-      this.$nextTick( () => {
+      this.$nextTick(() => {
         this.$emit('search-for', field)
       })
     },
-    changeVerification: function(field) {
+    changeVerification: function (field) {
       this.statement.type = 'verifiable'
     },
-    scrollHere: function(event) {
+    scrollHere: function (event) {
       let fragment = event.currentTarget.hash
       window.location = fragment
       this.$parent.$emit('scroll-to-fragment', fragment)

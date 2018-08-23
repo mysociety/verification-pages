@@ -9,4 +9,8 @@ class Page < ApplicationRecord
   validates :position_held_item, presence: true
   validates :reference_url, length: { maximum: 2000 }
   validates :csv_source_url, presence: true
+
+  def from_suggestions_store?
+    /^#{Regexp.escape(ENV.fetch('SUGGESTIONS_STORE_URL'))}/.match?(csv_source_url)
+  end
 end

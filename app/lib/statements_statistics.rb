@@ -8,7 +8,8 @@ class StatementsStatistics
   def statistics
     countries.map do |country|
       statements = JSON.parse(RestClient.get(country['export_json_url']))
-      grouped_statements = statements.group_by { |s| s['position_item'] }
+      invalid_statements = statements.select { |s| s['position_item'].nil? }
+      grouped_statements = (statements - invalid_statements).group_by { |s| s['position_item'] }
       position_stats = grouped_statements.map do |position, position_statements|
         PositionStatistics.new(
           position:           position,
@@ -16,7 +17,7 @@ class StatementsStatistics
           existing_positions: existing_positions
         )
       end
-      [country['code'], position_stats]
+      [country['code'], [position_stats, invalid_statements]]
     end.to_h
   end
 

@@ -63,7 +63,7 @@ class Reconciliation < ApplicationRecord
   end
 
   def create_equivalence_claim
-    return if resource_type != 'person' || !item_changed?
+    return if resource_type != 'person' || !item_previously_changed?
     store.create_equivalence_claim("Added FB ID for #{statement.person_name}")
   end
 

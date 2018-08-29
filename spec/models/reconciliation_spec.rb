@@ -234,5 +234,26 @@ RSpec.describe Reconciliation, type: :model do
         end
       end
     end
+
+    context 'statement has FB identifier' do
+      let(:statement) do
+        # set initial person_item otherwise statement will attempt to fetch it
+        # from ID mapping store
+        create(:statement, person_item: 'Q1', fb_identifier: 'ABC')
+      end
+
+      before { reconciliation.resource_type = 'person' }
+
+      it 'should create equivalence claim' do
+        store = double('IDMappingStore')
+        expect(IDMappingStore).to receive(:new)
+          .with(wikidata_id: 'Q123', facebook_id: 'ABC')
+          .and_return(store)
+        expect(store).to receive(:create_equivalence_claim)
+
+        reconciliation.item = 'Q123'
+        reconciliation.save!
+      end
+    end
   end
 end

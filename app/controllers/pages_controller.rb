@@ -11,6 +11,15 @@ class PagesController < ApplicationController
     @pages = Page.all
   end
 
+  def setup
+    setup_wiki_page = SetupWikiPage.new(params[:page_title])
+    setup_wiki_page.run
+    redirect_to setup_wiki_page.redirect_url
+  rescue SetupWikiPage::Error => e
+    # FIXME: Better error handling needed.
+    render plain: "Error: #{e.message}", status: :bad_request
+  end
+
   # GET /pages/1
   def show
     @query = RetrievePositionData.new(

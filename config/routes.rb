@@ -4,6 +4,10 @@ Rails.application.routes.draw do
   # Admin
   resources :countries
   resources :pages do
+    collection do
+      get :setup
+    end
+
     member do
       post :load
       post :create_wikidata

@@ -21,6 +21,8 @@ Rails.application.routes.draw do
 
   match '/api-proxy' => 'media_wiki_api#api_proxy', :via => %i[get post]
 
+  get 'wikidata-page-setup', to: 'wikidata_page#setup'
+
   get 'frontend', to: 'general#frontend'
   root 'general#index'
 end

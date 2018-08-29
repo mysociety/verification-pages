@@ -1,0 +1,21 @@
+<% if @page.errors.any? %>
+  <div id="error_explanation">
+    <h2><%= pluralize(@page.errors.count, "error") %> prevented this page from being saved:</h2>
+
+    <ul>
+    <% @page.errors.messages.each do |field, messages| %>
+      <li>
+        <code><%= field %></code>: <%= messages.join(', ') %>
+        <% if field == :country %>
+          <p>Valid <code>country_code</code> options:</p>
+          <ul>
+            <% Country.all.each do |country| %>
+              <li><%= country.code %> (<%= country.name %>)</li>
+            <% end %>
+          </ul>
+        <% end %>
+      </li>
+    <% end %>
+    </ul>
+  </div>
+<% end %>

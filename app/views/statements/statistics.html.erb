@@ -1,4 +1,4 @@
-<% @country_statements.each do |country_code, statements| %>
+<% @country_statements.each do |country_code, (statements, invalid_statements)| %>
   <h2>
     <% if country = @country_lookup[country_code.downcase] %>
       <%= link_to country.name, country %>
@@ -40,6 +40,30 @@
         <td><%= statement.correct %></td>
         <td><%= statement.incorrect %></td>
       </tr>
+    <% end %>
+    <% if invalid_statements.count > 0 %>
+    <tr>
+      <td colspan="5">
+        <details>
+          <summary>Invalid statements: <%= invalid_statements.count %></summary>
+
+          <table class="wikitable">
+            <tr>
+              <th>Transaction ID</th>
+              <th>Electoral District</th>
+              <th>Role code</th>
+            </tr>
+            <% invalid_statements.each do |statement| %>
+            <tr>
+              <td><%= statement['transaction_id'] %></td>
+              <td><a href="https://www.wikidata.org/wiki/<%= statement['electoral_district_item'] %>"><%= statement['electoral_district_item'] %></a></td>
+              <td><%= statement['role_code'] %></td>
+            </tr>
+            <% end %>
+          </table>
+        </details>
+      </td>
+    </tr>
     <% end %>
     </tbody>
   </table>

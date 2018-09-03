@@ -18,7 +18,7 @@ class StatementDecorator < SimpleDelegator
   def matches_wikidata?
     reconciled? &&
       person_matches? &&
-      (electoral_district_item.blank? || electoral_district_matches?) &&
+      electoral_district_matches? &&
       parliamentary_term_matches? &&
       parliamentary_group_matches?
   end
@@ -133,11 +133,11 @@ class StatementDecorator < SimpleDelegator
 
   def electoral_district_matches?
     return true if page.executive_position?
-    electoral_district_item.present? && electoral_district_item == data&.district
+    electoral_district_item.blank? || electoral_district_item == data&.district
   end
 
   def parliamentary_term_matches?
-    parliamentary_term_item.present? && parliamentary_term_item == data&.term
+    parliamentary_term_item.blank? || parliamentary_term_item == data&.term
   end
 
   def parliamentary_group_matches?

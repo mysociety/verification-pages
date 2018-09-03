@@ -137,7 +137,7 @@ class StatementDecorator < SimpleDelegator
   end
 
   def parliamentary_term_matches?
-    parliamentary_term_item.present? && parliamentary_term_item == data&.term
+    parliamentary_term_item.blank? || parliamentary_term_item == data&.term
   end
 
   def parliamentary_group_matches?

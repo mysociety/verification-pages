@@ -433,5 +433,37 @@ RSpec.describe StatementClassifier, type: :service do
       it { expect(classifier.done).to eq(statements) }
       it { expect(classifier.reverted).to be_empty }
     end
+
+    context 'when statement page has no term and everything else matches' do
+      let(:page) do
+        build(:page, parliamentary_term_item: '', csv_source_url: 'http://example.com/politicians.csv')
+      end
+      let(:data) do
+        { person_item:              'Q1',
+          parliamentary_group_item: 'Q3',
+          electoral_district_item:  nil, }
+      end
+      let(:wikidata_data) do
+        { person:              'Q1',
+          merged_then_deleted: '',
+          term:                '',
+          term_start:          '',
+          position_start:      '2018-01-01',
+          group:               'Q3',
+          district:            'Q4', }
+      end
+      before do
+        statement.verifications.build(status: true)
+        allow(statement).to receive(:actioned_at).and_return(Time.now - 10.minutes)
+        allow(statement).to receive(:actioned_at?).and_return(true)
+      end
+      it { expect(classifier.verifiable).to be_empty }
+      it { expect(classifier.unverifiable).to be_empty }
+      it { expect(classifier.reconcilable).to be_empty }
+      it { expect(classifier.actionable).to be_empty }
+      it { expect(classifier.manually_actionable).to be_empty }
+      it { expect(classifier.done).to eq(statements) }
+      it { expect(classifier.reverted).to be_empty }
+    end
   end
 end

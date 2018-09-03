@@ -8,7 +8,7 @@ rvm:
   - 2.4.3
   - 2.5.0
 env:
-  - RAILS_ENV=test
+  - RAILS_ENV=test WIKIDATA_SITE=test.wikidata.org
 before_install:
   - gem update --system
   - cp config/database.yml.sample config/database.yml

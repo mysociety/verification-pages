@@ -97,7 +97,7 @@ class StatementDecorator < SimpleDelegator
         "There were #{matching_position_held_data.length} 'position held' (P39) statements on Wikidata that match the verified suggestion - " \
         'one or more of them might be missing an end date or parliamentary term qualifier',
       ]
-    elsif actioned? && matching_position_held_data.empty?
+    elsif actioned_at? && matching_position_held_data.empty?
       ["There were no 'position held' (P39) statements on Wikidata that match the actioned suggestion"]
     else
       []
@@ -111,10 +111,6 @@ class StatementDecorator < SimpleDelegator
 
   def problem_reported?
     reported_at.present?
-  end
-
-  def actioned?
-    actioned_at?
   end
 
   def reconciliations

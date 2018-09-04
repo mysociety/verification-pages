@@ -41,7 +41,7 @@ RSpec.describe StatementDecorator, type: :decorator do
       let(:expected_error) do
         'There were no \'position held\' (P39) statements on Wikidata that match the actioned suggestion'
       end
-      before { allow(statement).to receive(:actioned?).and_return(true) }
+      before { allow(statement).to receive(:actioned_at?).and_return(true) }
       it 'should find a problem with there being no matching statements' do
         expect(statement.statement_problems).to eq([expected_error])
       end

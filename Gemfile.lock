@@ -74,10 +74,10 @@ GEM
       railties (>= 3.2, < 6.0)
     erubi (1.7.1)
     execjs (2.7.0)
-    factory_bot (4.10.0)
+    factory_bot (4.11.0)
       activesupport (>= 3.0.0)
-    factory_bot_rails (4.10.0)
-      factory_bot (~> 4.10.0)
+    factory_bot_rails (4.11.0)
+      factory_bot (~> 4.11.0)
       railties (>= 3.0.0)
     faraday (0.14.0)
       multipart-post (>= 1.2, < 3)
@@ -306,7 +306,7 @@ DEPENDENCIES
   bootsnap (>= 1.1.0)
   byebug
   dotenv-rails (~> 2.5.0)
-  factory_bot_rails (~> 4.10.0)
+  factory_bot_rails (~> 4.11.0)
   foreman (~> 0.85.0)
   id-mapper!
   jbuilder (~> 2.5)

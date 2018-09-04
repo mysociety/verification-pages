@@ -40,13 +40,6 @@ class Statement < ApplicationRecord
     save!
   end
 
-  def recently_actioned?
-    # Was this statement actioned in the last 5 minutes?
-    return false unless actioned_at
-    time_difference_seconds = Time.now - actioned_at
-    (time_difference_seconds / 60.0) < 5
-  end
-
   def duplicate_statements
     Statement.where(
       page:                    page,

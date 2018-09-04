@@ -27,8 +27,28 @@ class StatementDecorator < SimpleDelegator
     latest_verification.nil? && matches_wikidata?
   end
 
+  def unverifiable?
+    unverifiable_due_to_party? ||
+      latest_verification && latest_verification.status == false
+  end
+
+  def recently_actioned?
+    # Was this statement actioned in the last 5 minutes?
+    return false unless actioned_at
+    time_difference_seconds = Time.zone.now - actioned_at
+    (time_difference_seconds / 60.0) < 5
+  end
+
   def done?
     verified? && matches_wikidata?
+  end
+
+  def verified?
+    latest_verification && latest_verification.status == true
+  end
+
+  def reconciled?
+    reconciliations.empty?
   end
 
   def problems
@@ -79,19 +99,6 @@ class StatementDecorator < SimpleDelegator
 
   def problem_reported?
     reported_at.present?
-  end
-
-  def unverifiable?
-    unverifiable_due_to_party? ||
-      latest_verification && latest_verification.status == false
-  end
-
-  def verified?
-    latest_verification && latest_verification.status == true
-  end
-
-  def reconciled?
-    reconciliations.empty?
   end
 
   def actioned?

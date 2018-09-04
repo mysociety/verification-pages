@@ -80,11 +80,11 @@ class StatementClassifier
       :done
     elsif statement.done?
       :done
-    elsif statement.actioned?
+    elsif statement.reverted?
       :reverted
-    elsif statement.reconciled? && !statement.problems.empty?
+    elsif statement.manually_actionable?
       :manually_actionable
-    elsif statement.verified? && statement.reconciled?
+    elsif statement.actionable?
       :actionable
     elsif statement.verified?
       :reconcilable

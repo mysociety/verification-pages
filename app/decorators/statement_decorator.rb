@@ -27,13 +27,45 @@ class StatementDecorator < SimpleDelegator
     latest_verification.nil? && matches_wikidata?
   end
 
+  def unverifiable?
+    unverifiable_due_to_party? ||
+      latest_verification && latest_verification.status == false
+  end
+
+  def recently_actioned?
+    # Was this statement actioned in the last 5 minutes?
+    return false unless actioned_at
+    time_difference_seconds = Time.zone.now - actioned_at
+    (time_difference_seconds / 60.0) < 5
+  end
+
   def done?
     verified? && matches_wikidata?
   end
 
+  def reverted?
+    !done? && (actioned_at? && data.present?)
+  end
+
+  def manually_actionable?
+    !reverted? && (reconciled? && !problems.empty?)
+  end
+
+  def actionable?
+    !manually_actionable? && (verified? && reconciled?)
+  end
+
+  def verified?
+    latest_verification && latest_verification.status == true
+  end
+
+  def reconciled?
+    reconciliations.empty?
+  end
+
   def problems
-    if multiple_statement_problems.any?
-      multiple_statement_problems
+    if statement_problems.any?
+      statement_problems
     else
       electoral_district_problems +
         parliamentary_group_problems +
@@ -59,9 +91,17 @@ class StatementDecorator < SimpleDelegator
     ["The parliamentary group (party) is different in the statement (#{parliamentary_group_item}) and on Wikidata (#{data&.group})"]
   end
 
-  def multiple_statement_problems
-    return [] unless matching_position_held_data.length > 1
-    ["There were #{matching_position_held_data.length} 'position held' (P39) statements on Wikidata that match the verified suggestion - one or more of them might be missing an end date or parliamentary term qualifier"]
+  def statement_problems
+    if matching_position_held_data.length > 1
+      [
+        "There were #{matching_position_held_data.length} 'position held' (P39) statements on Wikidata that match the verified suggestion - " \
+        'one or more of them might be missing an end date or parliamentary term qualifier',
+      ]
+    elsif actioned_at? && matching_position_held_data.empty?
+      ["There were no 'position held' (P39) statements on Wikidata that match the actioned suggestion"]
+    else
+      []
+    end
   end
 
   def reported_problems
@@ -71,23 +111,6 @@ class StatementDecorator < SimpleDelegator
 
   def problem_reported?
     reported_at.present?
-  end
-
-  def unverifiable?
-    unverifiable_due_to_party? ||
-      latest_verification && latest_verification.status == false
-  end
-
-  def verified?
-    latest_verification && latest_verification.status == true
-  end
-
-  def reconciled?
-    reconciliations.empty?
-  end
-
-  def actioned?
-    actioned_at?
   end
 
   def reconciliations

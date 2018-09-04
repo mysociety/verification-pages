@@ -43,6 +43,18 @@ class StatementDecorator < SimpleDelegator
     verified? && matches_wikidata?
   end
 
+  def reverted?
+    !done? && (actioned_at? && data.present?)
+  end
+
+  def manually_actionable?
+    !reverted? && (reconciled? && !problems.empty?)
+  end
+
+  def actionable?
+    !manually_actionable? && (verified? && reconciled?)
+  end
+
   def verified?
     latest_verification && latest_verification.status == true
   end

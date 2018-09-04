@@ -32,8 +32,8 @@ class StatementDecorator < SimpleDelegator
   end
 
   def problems
-    if multiple_statement_problems.any?
-      multiple_statement_problems
+    if statement_problems.any?
+      statement_problems
     else
       electoral_district_problems +
         parliamentary_group_problems +
@@ -59,9 +59,14 @@ class StatementDecorator < SimpleDelegator
     ["The parliamentary group (party) is different in the statement (#{parliamentary_group_item}) and on Wikidata (#{data&.group})"]
   end
 
-  def multiple_statement_problems
-    return [] unless matching_position_held_data.length > 1
-    ["There were #{matching_position_held_data.length} 'position held' (P39) statements on Wikidata that match the verified suggestion - one or more of them might be missing an end date or parliamentary term qualifier"]
+  def statement_problems
+    if matching_position_held_data.length > 1
+      ["There were #{matching_position_held_data.length} 'position held' (P39) statements on Wikidata that match the verified suggestion - one or more of them might be missing an end date or parliamentary term qualifier"]
+    elsif actioned? && matching_position_held_data.empty?
+      ["There were no 'position held' (P39) statements on Wikidata that match the actioned suggestion"]
+    else
+      []
+    end
   end
 
   def reported_problems

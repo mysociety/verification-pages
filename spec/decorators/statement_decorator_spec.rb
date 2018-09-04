@@ -32,7 +32,18 @@ RSpec.describe StatementDecorator, type: :decorator do
         'There were 2 \'position held\' (P39) statements on Wikidata that match the verified suggestion - one or more of them might be missing an end date or parliamentary term qualifier'
       end
       it 'should find a problem with there being multiple matching statements' do
-        expect(statement.multiple_statement_problems).to eq([expected_error])
+        expect(statement.statement_problems).to eq([expected_error])
+      end
+    end
+
+    context 'when there are no matching statements' do
+      let(:matching_position_held_data) { [] }
+      let(:expected_error) do
+        'There were no \'position held\' (P39) statements on Wikidata that match the actioned suggestion'
+      end
+      before { allow(statement).to receive(:actioned?).and_return(true) }
+      it 'should find a problem with there being no matching statements' do
+        expect(statement.statement_problems).to eq([expected_error])
       end
     end
 

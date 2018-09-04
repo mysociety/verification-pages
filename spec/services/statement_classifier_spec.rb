@@ -262,6 +262,22 @@ RSpec.describe StatementClassifier, type: :service do
       it { expect(classifier.reverted).to be_empty }
     end
 
+    context 'when statement has been actioned by has no matching Wikidata P39' do
+      let(:position_held_data) { [] }
+      before do
+        statement.verifications.build(status: true)
+        allow(statement).to receive(:person_item).and_return('Q1')
+        allow(statement).to receive(:actioned_at?).and_return(true)
+      end
+      it { expect(classifier.verifiable).to be_empty }
+      it { expect(classifier.unverifiable).to be_empty }
+      it { expect(classifier.reconcilable).to be_empty }
+      it { expect(classifier.actionable).to be_empty }
+      it { expect(classifier.manually_actionable).to eq(statements) }
+      it { expect(classifier.done).to be_empty }
+      it { expect(classifier.reverted).to be_empty }
+    end
+
     context 'when the statement has been actioned' do
       before do
         statement.verifications.build(status: true)

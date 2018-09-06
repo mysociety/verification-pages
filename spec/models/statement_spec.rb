@@ -108,6 +108,39 @@ RSpec.describe Statement, type: :model do
     end
   end
 
+  describe '#self_and_duplicate_statements' do
+    let(:page) { build(:page) }
+    let(:page_2) { build(:page) }
+
+    let(:attributes) { attributes_for(:statement_with_names) }
+
+    let!(:statement) do
+      create(:statement, attributes.merge(transaction_id: '123', page: page))
+    end
+
+    let!(:duplicate) do
+      create(:statement, attributes.merge(transaction_id: '456', page: page))
+    end
+
+    let!(:other) do
+      create(:statement, attributes.merge(transaction_id: '789', page: page_2))
+    end
+
+    subject { statement.self_and_duplicate_statements }
+
+    it 'returns self' do
+      is_expected.to include(statement)
+    end
+
+    it 'returns statements' do
+      is_expected.to include(duplicate)
+    end
+
+    it 'does not returns statements from other pages' do
+      is_expected.to_not include(other)
+    end
+  end
+
   describe '#duplicate_statements' do
     let(:page) { build(:page) }
     let(:page_2) { build(:page) }
@@ -127,6 +160,10 @@ RSpec.describe Statement, type: :model do
     end
 
     subject { statement.duplicate_statements }
+
+    it 'does not returns self' do
+      is_expected.to_not include(statement)
+    end
 
     it 'returns statements' do
       is_expected.to include(duplicate)

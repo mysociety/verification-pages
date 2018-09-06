@@ -40,14 +40,18 @@ class Statement < ApplicationRecord
     save!
   end
 
-  def duplicate_statements
+  def self_and_duplicate_statements
     Statement.where(
       page:                    page,
       person_name:             person_name,
       electoral_district_name: electoral_district_name,
       electoral_district_item: electoral_district_item,
       fb_identifier:           fb_identifier
-    ).where.not(id: id).order(created_at: :asc)
+    )
+  end
+
+  def duplicate_statements
+    self_and_duplicate_statements.where.not(id: id).order(created_at: :asc)
   end
 
   delegate :from_suggestions_store?, to: :page

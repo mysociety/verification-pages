@@ -4,8 +4,36 @@
 import Axios from 'axios'
 import jsonp from 'jsonp'
 
-export function getItemValue (item) {
-  return {'entity-type': 'item', 'numeric-id': Number(item.substring(1))}
+function mapObjectValue (object) {
+  switch (object.type) {
+    case 'wikibase-entityid':
+      return {
+        'entity-type': 'item',
+        'numeric-id': Number(object.value.substring(1)),
+        id: object.value
+      }
+    case 'time':
+      return {
+        after: 0,
+        before: 0,
+        calendarmodel: 'http://www.wikidata.org/entity/Q1985727',
+        precision: 11,
+        time: object.value,
+        timezone: 0
+      }
+    case 'string':
+      return String(object.value)
+    default:
+      throw new Error('unknown data type')
+  }
+}
+
+function getItemValue (item) {
+  if (typeof item !== 'object') {
+    item = { type: 'wikibase-entityid', value: item }
+  }
+
+  return mapObjectValue(item)
 }
 
 function getItemValueString (item) {
@@ -60,24 +88,16 @@ function buildReferenceSnaks (references) {
   var snaks = {}
 
   Object.keys(references).forEach(function (property) {
-    var datavalue = references[property]
-    if (!datavalue.value) return
-
-    if (datavalue.type === 'time') {
-      datavalue.value = {
-        after: 0,
-        before: 0,
-        calendarmodel: 'http://www.wikidata.org/entity/Q1985727',
-        precision: 11,
-        time: datavalue.value,
-        timezone: 0
-      }
-    }
+    var object = references[property]
+    if (!object.value) return
 
     snaks[property] = [{
       snaktype: 'value',
       property: property,
-      datavalue: datavalue
+      datavalue: {
+        type: object.type,
+        value: mapObjectValue(object)
+      }
     }]
   })
 
@@ -87,41 +107,56 @@ function buildReferenceSnaks (references) {
 function getNewQualifiers (qualifiersFromAPI, wantedQualifiers) {
   var newQualifiers = Object.assign({}, wantedQualifiers)
   var qualifiersToCheck = Object.keys(newQualifiers)
-  var existingQualifiersForProperty
-  var newValue
   var i
+
   if (qualifiersFromAPI) {
     for (i = 0; i < qualifiersToCheck.length; ++i) {
-      existingQualifiersForProperty = qualifiersFromAPI[qualifiersToCheck[i]]
+      var qualifierToCheck = qualifiersToCheck[i]
+      var newQualifier = newQualifiers[qualifierToCheck]
+
+      if (typeof newQualifier !== 'object') {
+        newQualifier = { type: 'wikibase-entityid', value: newQualifier }
+      }
+
+      var existingQualifiersForProperty = qualifiersFromAPI[qualifierToCheck]
+
       if (!existingQualifiersForProperty) {
         continue
       }
+
       if (existingQualifiersForProperty.length > 1) {
         throw new Error(
-          'Multiple existing ' + qualifiersToCheck[i] + ' qualifiers found'
+          'Multiple existing ' + qualifierToCheck + ' qualifiers found'
         )
       }
-      if (existingQualifiersForProperty[0].snaktype !== 'value') {
+
+      var existingQualifier = existingQualifiersForProperty[0]
+
+      if (existingQualifier.snaktype !== 'value') {
         throw new Error(
-          'Unexpected snaktype ' + existingQualifiersForProperty[0].snaktype +
-          ' found on the ' + qualifiersToCheck[i] + ' qualifier'
+          'Unexpected snaktype ' + existingQualifier.snaktype +
+          ' found on the ' + qualifierToCheck + ' qualifier'
         )
       }
-      if (existingQualifiersForProperty[0].datavalue.type !== 'wikibase-entityid') {
+
+      if (existingQualifier.datavalue.type !== newQualifier.type) {
         throw new Error(
-          'Unexpected datavalue type ' + existingQualifiersForProperty[0].datavalue.type +
-          ' found on the ' + qualifiersToCheck[i] + ' qualifier'
+          'Unexpected datavalue type ' + existingQualifier.datavalue.type +
+          ' found on the ' + qualifierToCheck + ' qualifier'
         )
       }
-      newValue = newQualifiers[qualifiersToCheck[i]]
-      if (existingQualifiersForProperty[0].datavalue.value.id === newValue) {
-        delete newQualifiers[qualifiersToCheck[i]]
+
+      var newValue = JSON.stringify(
+        getItemValue(newQualifier), Object.keys(getItemValue(newQualifier)).sort()
+      )
+      var oldValue = JSON.stringify(
+        existingQualifier.datavalue.value, Object.keys(existingQualifier.datavalue.value).sort()
+      )
+
+      if (newValue === oldValue) {
+        delete newQualifiers[qualifierToCheck]
       } else {
-        throw new Error(
-          'The existing item for the ' + qualifiersToCheck[i] +
-          ' qualifier was ' + existingQualifiersForProperty[0].datavalue.value.id +
-          ' but we think it should be' + newValue
-        )
+        throw new Error('The existing item for the ' + qualifierToCheck + ' qualifier was ' + oldValue + ' but we think it should be ' + newValue)
       }
     }
   }

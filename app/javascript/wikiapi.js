@@ -487,7 +487,9 @@ var wikidata = function (spec) {
         'parliamentary term': 'P2937',
         'title': 'P1476',
         'language of work or name': 'P407',
-        'instance of': 'P31'
+        'instance of': 'P31',
+        'start time': 'P580',
+        'end time': 'P582'
       },
       'test.wikidata.org': {
         'reference URL': 'P43659',
@@ -500,7 +502,9 @@ var wikidata = function (spec) {
         'parliamentary term': 'P70901',
         'title': 'P77107',
         'language of work or name': 'P77090',
-        'instance of': 'P82'
+        'instance of': 'P82',
+        'start time': 'P355',
+        'end time': 'P356'
       },
       'localhost': {
         // For local development assume we're using test.wikidata for
@@ -517,7 +521,9 @@ var wikidata = function (spec) {
         'parliamentary term': 'P70901',
         'title': 'P77107',
         'language of work or name': 'P77090',
-        'instance of': 'P82'
+        'instance of': 'P82',
+        'start time': 'P355',
+        'end time': 'P356'
       }
     }
     if (!(that.serverName in knownPropertiesByServer)) {

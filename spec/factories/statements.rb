@@ -3,7 +3,7 @@
 FactoryBot.define do
   factory :statement do
     page
-    transaction_id '123'
+    transaction_id { '123' }
   end
 
   factory :statement_with_names, class: Statement do

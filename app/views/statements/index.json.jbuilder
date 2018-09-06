@@ -29,6 +29,18 @@ json.statements @classifier.to_a do |statement|
     json.verification_status nil
   end
 
+  if statement.position_start
+    json.position_start "+#{statement.position_start.iso8601}T00:00:00Z"
+  else
+    json.position_start nil
+  end
+
+  if statement.position_end
+    json.position_end "+#{statement.position_end.iso8601}T00:00:00Z"
+  else
+    json.position_end nil
+  end
+
   json.bulk_update @bulk_update
 end
 

@@ -87,6 +87,7 @@ class StatementDecorator < SimpleDelegator
   end
 
   def parliamentary_group_problems
+    return [] if parliamentary_group_item.blank?
     return [] unless data&.group && parliamentary_group_item != data&.group
     ["The parliamentary group (party) is different in the statement (#{parliamentary_group_item}) and on Wikidata (#{data&.group})"]
   end

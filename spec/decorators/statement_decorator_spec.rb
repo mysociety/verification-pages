@@ -237,6 +237,32 @@ RSpec.describe StatementDecorator, type: :decorator do
         expect(statement.problems).to eq([])
       end
     end
+
+    context 'when a source contains no parliamentary group information' do
+      let(:object) do
+        build(
+          :statement,
+          person_item:             'Q1',
+          electoral_district_item: 'Q345',
+          electoral_district_name: 'Somewhereville'
+        )
+      end
+      let(:matching_position_held_data) do
+        [
+          OpenStruct.new(
+            revision:       '123',
+            position:       'UUID',
+            position_start: '2014-01-31',
+            term_start:     '2014-01-31',
+            district:       'Q345',
+            group:          'Q123'
+          ),
+        ]
+      end
+      it 'should not report any problems with district' do
+        expect(statement.problems).to eq([])
+      end
+    end
   end
 
   describe '#reconciliations' do

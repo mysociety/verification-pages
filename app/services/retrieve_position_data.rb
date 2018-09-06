@@ -28,7 +28,7 @@ class RetrievePositionData < ServiceBase
     <<~SPARQL
       SELECT DISTINCT
         ?person (GROUP_CONCAT(?merged_then_deleted) AS ?merged_then_deleted) ?revision
-        ?position ?position_start
+        ?position ?position_start ?position_end
         ?term ?term_start
         ?group ?district
       WHERE {
@@ -66,6 +66,7 @@ class RetrievePositionData < ServiceBase
         OPTIONAL { ?position pq:P4100 ?group . }
         OPTIONAL { ?position pq:P768 ?district . }
         OPTIONAL { ?position pqv:P580 [wikibase:timeValue ?position_start; wikibase:timePrecision ?position_start_precision] . }
+        OPTIONAL { ?position pqv:P582 [wikibase:timeValue ?position_end; wikibase:timePrecision ?position_end_precision] . }
         OPTIONAL { ?merged_then_deleted owl:sameAs ?person }
         BIND(ceil((year(?term_start) - year(?position_start)) * 365.2425 +
                   (month(?term_start) - month(?position_start)) * 30.4375 +
@@ -81,7 +82,7 @@ class RetrievePositionData < ServiceBase
           (?position_start_precision = 11 && ?days_before_term_start < 28)
         )
       }
-      GROUP BY ?person ?revision ?position ?position_start ?term ?term_start ?group ?district
+      GROUP BY ?person ?revision ?position ?position_start ?position_end ?term ?term_start ?group ?district
     SPARQL
   end
 

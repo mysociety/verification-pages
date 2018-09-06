@@ -20,7 +20,9 @@ class StatementDecorator < SimpleDelegator
       person_matches? &&
       electoral_district_matches? &&
       parliamentary_term_matches? &&
-      parliamentary_group_matches?
+      parliamentary_group_matches? &&
+      position_start_matches? &&
+      position_end_matches?
   end
 
   def matches_but_not_checked?
@@ -167,5 +169,13 @@ class StatementDecorator < SimpleDelegator
   def parliamentary_group_matches?
     return true if page.executive_position?
     parliamentary_group_item.blank? || parliamentary_group_item == data&.group
+  end
+
+  def position_start_matches?
+    position_start.blank? || position_start == data&.position_start
+  end
+
+  def position_end_matches?
+    position_end.blank? || position_end == data&.position_end
   end
 end

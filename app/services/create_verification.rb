@@ -18,9 +18,12 @@ class CreateVerification < ServiceBase
       duplicate_statement.verifications.create!(params)
     end
 
+    return unless params[:new_name]
+
     # If there was a correction to the name, save that on the
     # statement so it'll be used for reconciliation and actioning:
-    statement.update(person_name: params[:new_name]) if params[:new_name]
+    statement.self_and_duplicate_statements
+             .update(person_name: params[:new_name])
   end
 
   private

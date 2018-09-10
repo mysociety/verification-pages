@@ -16,6 +16,7 @@ json.statements @classifier.to_a do |statement|
     :person_name,
     :parliamentary_group_name,
     :electoral_district_name,
+    :parliamentary_term_name,
     :problems,
     :problem_reported?,
     :reconciliations

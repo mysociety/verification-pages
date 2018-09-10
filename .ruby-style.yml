@@ -10,6 +10,9 @@ AllCops:
 Rails:
   Enabled: true
 
+Layout/EmptyLineAfterGuardClause:
+  Enabled: false
+
 Metrics/BlockLength:
   Exclude:
     - 'spec/**/*.rb'

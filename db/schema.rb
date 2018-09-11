@@ -70,6 +70,7 @@ ActiveRecord::Schema.define(version: 2018_09_13_111831) do
     t.timestamp "reported_at"
     t.date "position_start"
     t.date "position_end"
+    t.boolean "removed_from_source", default: false
     t.index ["page_id"], name: "index_statements_on_page_id"
   end
 

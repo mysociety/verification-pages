@@ -182,19 +182,13 @@ RSpec.describe StatementClassifier, type: :service do
     end
 
     context 'when statement is actionable, but has been actioned in the last 5 minutes' do
+      around { |example| freeze_time { example.run } }
+
       before do
-        supposed_current_time = DateTime.new(2018, 6, 6, 15, 1, 1)
-        travel_to supposed_current_time
-        # 3 minutes before that:
-        supposed_actioned_at_time = supposed_current_time - 3.0 / (24 * 60)
         position_held.group = nil
         allow(statement).to receive(:person_item).and_return('Q1')
-        allow(statement).to receive(:actioned_at).and_return(supposed_actioned_at_time)
+        allow(statement).to receive(:actioned_at).and_return((5.minutes - 1.second).ago)
         allow(statement).to receive(:actioned_at?).and_return(true)
-      end
-
-      after do
-        travel_back
       end
 
       include_examples 'classified as', 'done'
@@ -359,7 +353,6 @@ RSpec.describe StatementClassifier, type: :service do
 
       before do
         statement.verifications.build(status: true)
-        allow(statement).to receive(:actioned_at).and_return(Time.now - 10.minutes)
         allow(statement).to receive(:actioned_at?).and_return(true)
       end
 
@@ -367,19 +360,13 @@ RSpec.describe StatementClassifier, type: :service do
     end
 
     context 'when statement would be actionable, but has been actioned over 5 minutes ago' do
+      around { |example| freeze_time { example.run } }
+
       before do
-        supposed_current_time = DateTime.new(2018, 6, 6, 15, 1, 1)
-        travel_to supposed_current_time
-        # 10 minutes before that:
-        supposed_actioned_at_time = supposed_current_time - 10.0 / (24 * 60)
         position_held.group = nil
         allow(statement).to receive(:person_item).and_return('Q1')
-        allow(statement).to receive(:actioned_at).and_return(supposed_actioned_at_time)
+        allow(statement).to receive(:actioned_at).and_return(5.minutes.ago)
         allow(statement).to receive(:actioned_at?).and_return(true)
-      end
-
-      after do
-        travel_back
       end
 
       include_examples 'classified as', 'reverted'

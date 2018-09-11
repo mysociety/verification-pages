@@ -85,6 +85,22 @@ RSpec.describe StatementClassifier, type: :service do
       include_examples 'classified as', 'verifiable'
     end
 
+    context 'when the statements are reconciled but not verified' do
+      before do
+        allow(statement).to receive(:person_item).and_return('Q1')
+      end
+
+      include_examples 'classified as', 'verifiable'
+    end
+
+    context 'when the statement is from suggestions-store and is already correct (apart from the reference) in Wikidata' do
+      before do
+        allow(statement).to receive(:person_item).and_return('Q1')
+      end
+
+      include_examples 'classified as', 'verifiable'
+    end
+
     context 'when unverifiable' do
       before { statement.verifications.build(status: false) }
       include_examples 'classified as', 'unverifiable'
@@ -113,44 +129,6 @@ RSpec.describe StatementClassifier, type: :service do
       end
 
       include_examples 'classified as', 'actionable'
-    end
-
-    context 'when statement is actionable, but has been actioned in the last 5 minutes' do
-      before do
-        supposed_current_time = DateTime.new(2018, 6, 6, 15, 1, 1)
-        travel_to supposed_current_time
-        # 3 minutes before that:
-        supposed_actioned_at_time = supposed_current_time - 3.0 / (24 * 60)
-        position_held.group = nil
-        allow(statement).to receive(:person_item).and_return('Q1')
-        allow(statement).to receive(:actioned_at).and_return(supposed_actioned_at_time)
-        allow(statement).to receive(:actioned_at?).and_return(true)
-      end
-
-      after do
-        travel_back
-      end
-
-      include_examples 'classified as', 'done'
-    end
-
-    context 'when statement would be actionable, but has been actioned over 5 minutes ago' do
-      before do
-        supposed_current_time = DateTime.new(2018, 6, 6, 15, 1, 1)
-        travel_to supposed_current_time
-        # 10 minutes before that:
-        supposed_actioned_at_time = supposed_current_time - 10.0 / (24 * 60)
-        position_held.group = nil
-        allow(statement).to receive(:person_item).and_return('Q1')
-        allow(statement).to receive(:actioned_at).and_return(supposed_actioned_at_time)
-        allow(statement).to receive(:actioned_at?).and_return(true)
-      end
-
-      after do
-        travel_back
-      end
-
-      include_examples 'classified as', 'reverted'
     end
 
     context 'when district qualifier contradict' do
@@ -203,6 +181,25 @@ RSpec.describe StatementClassifier, type: :service do
       include_examples 'classified as', 'manually_actionable'
     end
 
+    context 'when statement is actionable, but has been actioned in the last 5 minutes' do
+      before do
+        supposed_current_time = DateTime.new(2018, 6, 6, 15, 1, 1)
+        travel_to supposed_current_time
+        # 3 minutes before that:
+        supposed_actioned_at_time = supposed_current_time - 3.0 / (24 * 60)
+        position_held.group = nil
+        allow(statement).to receive(:person_item).and_return('Q1')
+        allow(statement).to receive(:actioned_at).and_return(supposed_actioned_at_time)
+        allow(statement).to receive(:actioned_at?).and_return(true)
+      end
+
+      after do
+        travel_back
+      end
+
+      include_examples 'classified as', 'done'
+    end
+
     context 'when the statement has been actioned' do
       before do
         statement.verifications.build(status: true)
@@ -210,11 +207,6 @@ RSpec.describe StatementClassifier, type: :service do
       end
 
       include_examples 'classified as', 'done'
-    end
-
-    context 'when there are not any statements' do
-      let(:statement) { nil }
-      include_examples 'classified as', nil # not classified at all
     end
 
     context 'when the reconciled person has since been merged into someone else' do
@@ -239,22 +231,6 @@ RSpec.describe StatementClassifier, type: :service do
       end
 
       include_examples 'classified as', 'done'
-    end
-
-    context 'when the statements are reconciled but not verified' do
-      before do
-        allow(statement).to receive(:person_item).and_return('Q1')
-      end
-
-      include_examples 'classified as', 'verifiable'
-    end
-
-    context 'when the statement is from suggestions-store and is already correct (apart from the reference) in Wikidata' do
-      before do
-        allow(statement).to receive(:person_item).and_return('Q1')
-      end
-
-      include_examples 'classified as', 'verifiable'
     end
 
     context 'when the statement is not from suggestions-store and is already correct in Wikidata' do
@@ -388,6 +364,30 @@ RSpec.describe StatementClassifier, type: :service do
       end
 
       include_examples 'classified as', 'done'
+    end
+
+    context 'when statement would be actionable, but has been actioned over 5 minutes ago' do
+      before do
+        supposed_current_time = DateTime.new(2018, 6, 6, 15, 1, 1)
+        travel_to supposed_current_time
+        # 10 minutes before that:
+        supposed_actioned_at_time = supposed_current_time - 10.0 / (24 * 60)
+        position_held.group = nil
+        allow(statement).to receive(:person_item).and_return('Q1')
+        allow(statement).to receive(:actioned_at).and_return(supposed_actioned_at_time)
+        allow(statement).to receive(:actioned_at?).and_return(true)
+      end
+
+      after do
+        travel_back
+      end
+
+      include_examples 'classified as', 'reverted'
+    end
+
+    context 'when there are not any statements' do
+      let(:statement) { nil }
+      include_examples 'classified as', nil # not classified at all
     end
   end
 end

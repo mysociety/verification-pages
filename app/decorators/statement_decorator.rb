@@ -41,7 +41,9 @@ class StatementDecorator < SimpleDelegator
   end
 
   def done?
-    verified? && matches_wikidata?
+    recently_actioned? ||
+      (verified? && matches_wikidata?) ||
+      (!from_suggestions_store? && matches_but_not_checked?)
   end
 
   def reverted?

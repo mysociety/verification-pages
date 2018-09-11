@@ -11,39 +11,46 @@ class LoadStatements < ServiceBase
   end
 
   def run
-    csv.map do |result|
-      result[:transaction_id] ||= generate_transaction_id(result)
-
-      statement = Statement.find_or_initialize_by(
-        transaction_id: result[:transaction_id]
-      )
-
-      # We need to be careful not wipe out any manually reconciled
-      # items when refreshing from the upstream CSV file, so don't
-      # overwrite the *_item attributes if that'd make them blank:
-      Reconciliation.resource_mappings.each do |type, attributes|
-        attribute = attributes[:item]
-        reconciliation = statement.reconciliations
-                                  .where(resource_type: type)
-                                  .last
-        value = reconciliation ? reconciliation.item : result[attribute]
-        statement.public_send("#{attribute}=", value) if value.present?
-      end
-
-      # The other attributes we always update from the upstream CSV:
-      statement.update!(
-        page:                     page,
-        person_name:              result[:person_name],
-        electoral_district_name:  result[:electoral_district_name],
-        parliamentary_group_name: result[:parliamentary_group_name],
-        fb_identifier:            result[:fb_identifier],
-        position_start:           result[:position_start],
-        position_end:             result[:position_end]
-      )
-    end
+    touched_statements = csv.map { |result| parse_result(result) }
+    untouched_statements = page.statements.where.not(id: touched_statements)
+    untouched_statements.update(removed_from_source: true)
   end
 
   private
+
+  def parse_result(result)
+    result[:transaction_id] ||= generate_transaction_id(result)
+
+    statement = page.statements.find_or_initialize_by(
+      transaction_id: result[:transaction_id]
+    )
+
+    # We need to be careful not wipe out any manually reconciled
+    # items when refreshing from the upstream CSV file, so don't
+    # overwrite the *_item attributes if that'd make them blank:
+    Reconciliation.resource_mappings.each do |type, attributes|
+      attribute = attributes[:item]
+      reconciliation = statement.reconciliations
+                                .where(resource_type: type)
+                                .last
+      value = reconciliation ? reconciliation.item : result[attribute]
+      statement.public_send("#{attribute}=", value) if value.present?
+    end
+
+    # The other attributes we always update from the upstream CSV:
+    statement.update!(
+      page:                     page,
+      person_name:              result[:person_name],
+      electoral_district_name:  result[:electoral_district_name],
+      parliamentary_group_name: result[:parliamentary_group_name],
+      fb_identifier:            result[:fb_identifier],
+      position_start:           result[:position_start],
+      position_end:             result[:position_end],
+      removed_from_source:      false
+    )
+
+    statement
+  end
 
   def csv
     @csv ||= CSV.parse(raw_data, headers: true, header_converters: :symbol,

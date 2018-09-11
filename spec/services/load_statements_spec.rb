@@ -184,5 +184,41 @@ RSpec.describe LoadStatements do
         expect(existing_statement.parliamentary_group_item).to eq('Q234435')
       end
     end
+
+    context 'items have been removed from upstream source' do
+      let(:suggestions_store_response) do
+        [
+          %w[
+            transaction_id
+            person_name person_item
+            electoral_district_name electoral_district_item
+            parliamentary_group_name parliamentary_group_item
+          ],
+          %w[Alice Q987 Ambridge Q1234 Aparty Q555],
+        ].map(&:to_csv).join
+      end
+
+      let!(:existing_statement) do
+        create(:statement, page: page, removed_from_source: false)
+      end
+
+      let!(:other_statement) do
+        create(:statement, removed_from_source: false)
+      end
+
+      it 'should mark existing statements as being removed from the source' do
+        load_statements = LoadStatements.new(page.title)
+        expect { load_statements.run }.to change(page.statements, :count).by(1)
+        existing_statement.reload
+        expect(existing_statement.removed_from_source).to eq true
+      end
+
+      it 'should not mark as removed statements belonging to other pages' do
+        load_statements = LoadStatements.new(page.title)
+        expect { load_statements.run }.to change(page.statements, :count).by(1)
+        other_statement.reload
+        expect(other_statement.removed_from_source).to eq false
+      end
+    end
   end
 end

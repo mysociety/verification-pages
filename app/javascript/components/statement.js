@@ -8,6 +8,7 @@ import actionableComponent from './actionable'
 import manuallyActionableComponent from './manually_actionable'
 import doneComponent from './done'
 import revertedComponent from './reverted'
+import removedComponent from './removed'
 
 export default template({
   data () {
@@ -29,6 +30,7 @@ export default template({
         case 'manually_actionable': return manuallyActionableComponent
         case 'done': return doneComponent
         case 'reverted': return revertedComponent
+        case 'removed': return removedComponent
       }
     },
     stylingClass: function () {

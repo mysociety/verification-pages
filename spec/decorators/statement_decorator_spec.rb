@@ -265,11 +265,11 @@ RSpec.describe StatementDecorator, type: :decorator do
     end
   end
 
-  describe '#reconciliations' do
+  describe '#reconciliations_required' do
     let(:page) { build(:page) }
     let(:object) { build(:statement, person_item: 'Q1', page: page) }
 
-    subject { statement.reconciliations }
+    subject { statement.reconciliations_required }
 
     context 'when person has been reconciled' do
       before { statement.person_item = 'Q1' }

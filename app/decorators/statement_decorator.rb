@@ -63,7 +63,7 @@ class StatementDecorator < SimpleDelegator
   end
 
   def reconciled?
-    reconciliations.empty?
+    reconciliations_required.empty?
   end
 
   def problems
@@ -117,7 +117,7 @@ class StatementDecorator < SimpleDelegator
     reported_at.present?
   end
 
-  def reconciliations
+  def reconciliations_required
     person_reconciliations + party_reconciliations + district_reconciliations
   end
 

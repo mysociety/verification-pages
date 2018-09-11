@@ -18,7 +18,7 @@ RSpec.describe StatementClassifier, type: :service do
   let(:statements) { [statement].compact }
   let(:statement_relation) { double(:relation, to_a: statements) }
 
-  let(:wikidata_data) { { person: 'Q1' } }
+  let(:wikidata_data) { { person: 'Q1', merged_then_deleted: '' } }
   let(:position_held) { OpenStruct.new(wikidata_data) }
   let(:position_held_data) { [position_held] }
 
@@ -46,11 +46,24 @@ RSpec.describe StatementClassifier, type: :service do
     end
   end
 
+  describe '#to_a' do
+    subject { classifier.to_a }
+
+    it 'should return decorated statements' do
+      is_expected.to include(a_kind_of(StatementDecorator))
+    end
+
+    it 'should not return items without types' do
+      allow(classifier).to receive(:statement_type).and_return(nil)
+      is_expected.to match_array([])
+    end
+  end
+
   RSpec.shared_examples 'classified as' do |current_state|
     %w[
       verifiable unverifiable reconcilable
       actionable manually_actionable done
-      reverted
+      reverted removed
     ].each do |state|
       if state == current_state
         it "should be classified as #{state}" do
@@ -370,6 +383,21 @@ RSpec.describe StatementClassifier, type: :service do
       end
 
       include_examples 'classified as', 'reverted'
+    end
+
+    context 'when statement is done but has been removed from source' do
+      before do
+        statement.removed_from_source = true
+        statement.verifications.build(status: true)
+        allow(statement).to receive(:person_item).and_return('Q1')
+      end
+
+      include_examples 'classified as', 'removed'
+    end
+
+    context 'when statement has been remvoed from source before being verified' do
+      before { statement.removed_from_source = true }
+      include_examples 'classified as', nil # not classified at all
     end
 
     context 'when there are not any statements' do

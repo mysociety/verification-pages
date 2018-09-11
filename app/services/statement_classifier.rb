@@ -21,8 +21,9 @@ class StatementClassifier
   # reconcilable
   # actionable
   # manually_actionable
-  # done(able)
+  # done
   # reverted
+  # removed
 
   def verifiable
     classified_statements.fetch(:verifiable, [])
@@ -52,29 +53,31 @@ class StatementClassifier
     classified_statements.fetch(:reverted, [])
   end
 
+  def removed
+    classified_statements.fetch(:removed, [])
+  end
+
   def to_a
-    decorated_statements.map do |decorated_statement|
-      decorated_statement.tap do |s|
-        s.type = statement_type(s)
-      end
-    end
+    statements.to_a
+              .map { |s| decorate_statement(s) }
+              .select(&:type) # remove statements without a type
   end
 
   private
 
   def classified_statements
-    @classified_statements ||= decorated_statements
-                               .each_with_object({}) do |statement, h|
-      type = statement_type(statement)
-      next unless type
-
-      h[type] ||= []
-      h[type] << statement
+    @classified_statements ||= to_a.each_with_object({}) do |statement, h|
+      h[statement.type] ||= []
+      h[statement.type] << statement
     end
   end
 
   def statement_type(statement)
-    if statement.unverifiable?
+    if statement.removed_from_source? && !statement.done?
+      nil
+    elsif statement.removed_from_source? && statement.done?
+      :removed
+    elsif statement.unverifiable?
       :unverifiable
     elsif statement.done?
       :done
@@ -91,14 +94,11 @@ class StatementClassifier
     end
   end
 
-  def decorated_statements
-    statements.to_a.map do |statement|
-      decorate_statement(statement)
-    end
-  end
-
   def decorate_statement(statement)
-    StatementDecorator.new(statement, matching_position_held_data(statement))
+    data = matching_position_held_data(statement)
+    StatementDecorator.new(statement, data).tap do |s|
+      s.type = statement_type(s)
+    end
   end
 
   def person_item_from_transaction_id

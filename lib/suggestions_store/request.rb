@@ -8,6 +8,8 @@ module SuggestionsStore
     URL = ENV.fetch(
       'SUGGESTIONS_STORE_URL', 'https://suggestions-store.mysociety.org'
     )
+    USERNAME = ENV['SUGGESTIONS_STORE_USERNAME']
+    PASSWORD = ENV['SUGGESTIONS_STORE_PASSWORD']
 
     def self.get(path)
       uri = URI.join(base_uri, path)
@@ -20,7 +22,10 @@ module SuggestionsStore
     end
 
     def self.base_uri
-      URI.parse(URL)
+      URI.parse(URL).tap do |uri|
+        uri.user = USERNAME
+        uri.password = PASSWORD
+      end
     end
     private_class_method :base_uri
 

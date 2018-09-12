@@ -29,6 +29,10 @@ module SuggestionsStore
       URI.join(Request::URL, "/export/#{code}.#{format}").to_s
     end
 
+    def export_position_url(position:, format: 'json')
+      URI.join(Request::URL, "/export/#{code}/#{position}.#{format}").to_s
+    end
+
     private
 
     def get_suggestions(url)

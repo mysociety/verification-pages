@@ -32,7 +32,7 @@
           missing (<%= link_to 'Create page', new_page_path(
             title: "User:Verification_pages_bot/verification/#{country_code.downcase}/",
             position_held_item: statement.position,
-            csv_source_url: "#{ENV['SUGGESTIONS_STORE_URL']}/export/#{country_code.downcase}/#{statement.position}.csv",
+            csv_source_url: SuggestionsStore::Country.new(code: country_code.downcase).export_position_url(position: statement.position, format: 'csv'),
             country_id: @country_lookup[country_code.downcase]
           ) %>)
         <% end %></td>

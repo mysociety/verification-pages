@@ -9,7 +9,7 @@ RSpec.describe StatementClassifier, type: :service do
     build(
       :page,
       parliamentary_term_item: 'Q2',
-      csv_source_url:          "#{ENV.fetch('SUGGESTIONS_STORE_URL')}/export/ca.csv"
+      csv_source_url:          'http://suggestions-store/export/ca.csv'
     )
   end
 
@@ -25,6 +25,7 @@ RSpec.describe StatementClassifier, type: :service do
   let(:classifier) { StatementClassifier.new('page_title') }
 
   before do
+    stub_const('SuggestionsStore::Request::URL', 'http://suggestions-store/')
     allow(statement_relation).to receive_message_chain(
       :original, :includes, :references, :order
     ).and_return(statement_relation)

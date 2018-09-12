@@ -7,7 +7,7 @@ describe StatementsStatistics do
     let! (:page) { create(:page, position_held_item: 'Q15964890') }
 
     before do
-      ENV['SUGGESTIONS_STORE_URL'] = 'http://suggestions-store'
+      stub_const('SuggestionsStore::Request::URL', 'http://suggestions-store/')
       stub_request(:get, 'http://suggestions-store/export/countries.json')
         .to_return(body: '[{"code": "ca", "export_json_url": "http://suggestions-store/export/ca.json"}]')
       body = [

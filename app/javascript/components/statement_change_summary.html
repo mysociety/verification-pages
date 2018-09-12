@@ -16,6 +16,12 @@
       {{ statement.parliamentary_term_item }}
     </wikilink>
   </li>
+  <li v-if="statement.position_start">'start time' qualifier:
+    {{ statement.position_start }}
+  </li>
+  <li v-if="statement.position_end">'end time' qualifier:
+    {{ statement.position_end }}
+  </li>
   <li>'reference URL' qualifier:
     <a target="_blank" rel="noopener nofollow" class="external free" :href="page.reference_url">{{ page.reference_url }}</a>
     <ul v-if="page.reference_url_title || page.reference_url_language">

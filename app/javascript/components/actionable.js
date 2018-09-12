@@ -95,6 +95,16 @@ export default template({
         qualifiers[wikidataClient.getPropertyID('parliamentary term')] =
           this.statement.parliamentary_term_item
       }
+      if (this.statement.position_start) {
+        qualifiers[wikidataClient.getPropertyID('start time')] = {
+          value: this.statement.position_start, type: 'time'
+        }
+      }
+      if (this.statement.position_end) {
+        qualifiers[wikidataClient.getPropertyID('end time')] = {
+          value: this.statement.position_end, type: 'time'
+        }
+      }
 
       this.$parent.$emit('loading', 'Saving')
 

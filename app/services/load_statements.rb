@@ -30,7 +30,9 @@ class LoadStatements < ServiceBase
         person_name:              result[:person_name],
         electoral_district_name:  result[:electoral_district_name],
         parliamentary_group_name: result[:parliamentary_group_name],
-        fb_identifier:            result[:fb_identifier]
+        fb_identifier:            result[:fb_identifier],
+        position_start:           result[:position_start],
+        position_end:             result[:position_end]
       )
     end
   end

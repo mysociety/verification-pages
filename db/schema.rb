@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2018_08_17_110527) do
+ActiveRecord::Schema.define(version: 2018_09_06_141104) do
 
   create_table "countries", options: "ENGINE=InnoDB DEFAULT CHARSET=utf8", force: :cascade do |t|
     t.string "name"
@@ -67,6 +67,8 @@ ActiveRecord::Schema.define(version: 2018_08_17_110527) do
     t.datetime "actioned_at"
     t.string "error_reported"
     t.timestamp "reported_at"
+    t.date "position_start"
+    t.date "position_end"
     t.index ["page_id"], name: "index_statements_on_page_id"
   end
 

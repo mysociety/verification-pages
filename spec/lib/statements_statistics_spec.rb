@@ -7,8 +7,9 @@ describe StatementsStatistics do
     let! (:page) { create(:page, position_held_item: 'Q15964890') }
 
     before do
-      stub_request(:get, 'https://suggestions-store.mysociety.org/export/countries.json')
-        .to_return(body: '[{"code": "ca", "export_json_url": "https://suggestions-store.mysociety.org/export/ca.json"}]')
+      ENV['SUGGESTIONS_STORE_URL'] = 'http://suggestions-store'
+      stub_request(:get, 'http://suggestions-store/export/countries.json')
+        .to_return(body: '[{"code": "ca", "export_json_url": "http://suggestions-store/export/ca.json"}]')
       body = [
         {
           id:                  1,
@@ -30,7 +31,7 @@ describe StatementsStatistics do
           verification_status: 'invalid',
         },
       ]
-      stub_request(:get, 'https://suggestions-store.mysociety.org/export/ca.json')
+      stub_request(:get, 'http://suggestions-store/export/ca.json')
         .to_return(body: JSON.generate(body))
     end
 

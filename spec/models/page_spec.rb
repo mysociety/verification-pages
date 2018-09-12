@@ -70,8 +70,12 @@ RSpec.describe Page, type: :model do
   end
 
   describe '#from_suggestions_store?' do
+    before do
+      ENV['SUGGESTIONS_STORE_URL'] = 'http://suggestions-store'
+    end
+
     it 'knows that it came from suggestions-store' do
-      page = create(:page, csv_source_url: "#{ENV.fetch('SUGGESTIONS_STORE_URL')}/export/blah.csv")
+      page = create(:page, csv_source_url: "http://suggestions-store/export/blah.csv")
       expect(page.from_suggestions_store?).to eq(true)
     end
 

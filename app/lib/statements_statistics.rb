@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 
 class StatementsStatistics
-  def initialize(suggestion_store_url: 'https://suggestions-store.mysociety.org')
+  def initialize(suggestion_store_url: ENV['SUGGESTIONS_STORE_URL'])
     @suggestion_store_url = suggestion_store_url
   end
 

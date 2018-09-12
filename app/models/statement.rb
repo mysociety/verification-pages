@@ -13,7 +13,7 @@ class Statement < ApplicationRecord
   before_create :detect_duplicate_statements, :retrieve_wikidata_id
   after_create :verify_duplicate!, if: :duplicate?
 
-  delegate :parliamentary_term_item, to: :page
+  delegate :parliamentary_term_item, :parliamentary_term_name, to: :page
 
   def latest_verification
     verifications.last

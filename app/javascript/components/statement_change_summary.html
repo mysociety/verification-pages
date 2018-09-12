@@ -13,7 +13,8 @@
   </li>
   <li>'parliamentary term' qualifier:
     <wikilink :id="statement.parliamentary_term_item">
-      {{ statement.parliamentary_term_item }}
+      {{ statement.parliamentary_term_name }}
+      ({{ statement.parliamentary_term_item }})
     </wikilink>
   </li>
   <li v-if="statement.position_start">'start time' qualifier:

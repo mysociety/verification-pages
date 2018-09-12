@@ -39,8 +39,19 @@ RSpec.describe CreateVerification, type: :service do
     end
 
     it 'updates the statement with new_name, if relevant' do
+      expect(statement.person_name).to_not eq('baz')
       subject.run
-      expect(statement.person_name).to eq('baz')
+      expect { statement.reload }.to change(statement, :person_name).to('baz')
+    end
+
+    it 'updates the statement duplicate with new_name, if relevant' do
+      statement2 = create(
+        :statement,
+        statement_params.merge(transaction_id: '456', page: statement.page)
+      )
+      expect(statement2.person_name).to_not eq('baz')
+      subject.run
+      expect { statement2.reload }.to change(statement2, :person_name).to('baz')
     end
 
     it 'adds verification to duplicate statements' do

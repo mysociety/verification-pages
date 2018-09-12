@@ -38,5 +38,9 @@ module SuggestionsStore
     end
   end
 
-  Suggestion = Class.new(OpenStruct)
+  class Suggestion < OpenStruct
+    def verify!(data = {})
+      Request.post("/suggestions/#{transaction_id}/verifications", data)
+    end
+  end
 end

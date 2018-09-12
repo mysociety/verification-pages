@@ -9,11 +9,8 @@ class UpdateStatementVerification < ServiceBase
   end
 
   def run
-    uri = URI(ENV.fetch('SUGGESTIONS_STORE_URL'))
-    uri.path = "/suggestions/#{transaction_id}/verifications"
-    RestClient.post(uri.to_s, status: status)
-  rescue RestClient::Exception => e
-    raise "Suggestion store failed: #{e.message}"
+    SuggestionsStore::Suggestion.new(transaction_id: transaction_id)
+                                .verify!(status: status)
   end
 
   private

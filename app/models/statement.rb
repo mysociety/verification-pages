@@ -67,8 +67,9 @@ class Statement < ApplicationRecord
     return unless duplicate_verification
 
     verifications.create!(
-      user:   duplicate_verification.user,
-      status: duplicate_verification.status
+      user:          duplicate_verification.user,
+      status:        duplicate_verification.status,
+      reference_url: duplicate_verification.reference_url
     )
   end
 

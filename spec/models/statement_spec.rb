@@ -173,4 +173,26 @@ RSpec.describe Statement, type: :model do
       is_expected.to_not include(other)
     end
   end
+
+  describe '#verify_duplicates! after_create callback' do
+    let(:page) { build(:page) }
+
+    let(:attributes) { attributes_for(:statement_with_names) }
+
+    let!(:statement) do
+      create(:statement, attributes.merge(transaction_id: '123', page: page))
+    end
+
+    before do
+      statement.verifications.create!(
+        reference_url: 'http://example.com/members/',
+        user:          'TestUser'
+      )
+    end
+
+    it 'creates verifications for the duplicate' do
+      new_duplicate = create(:statement, attributes.merge(transaction_id: '456', page: page))
+      expect(new_duplicate.verifications.size).to be(1)
+    end
+  end
 end

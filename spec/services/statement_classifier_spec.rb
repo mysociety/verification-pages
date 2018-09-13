@@ -72,38 +72,6 @@ RSpec.describe StatementClassifier, type: :service do
       it { expect(classifier.reverted).to be_empty }
     end
 
-    context "when verifiable, but page requires a party which we don't have" do
-      before do
-        page.require_parliamentary_group = true
-        statement.parliamentary_group_name = nil
-        statement.parliamentary_group_item = nil
-      end
-
-      it { expect(classifier.verifiable).to be_empty }
-      it { expect(classifier.unverifiable).to eq(statements) }
-      it { expect(classifier.reconcilable).to be_empty }
-      it { expect(classifier.actionable).to be_empty }
-      it { expect(classifier.manually_actionable).to be_empty }
-      it { expect(classifier.done).to be_empty }
-      it { expect(classifier.reverted).to be_empty }
-    end
-
-    context 'when verifiable, and page requires a party which we have' do
-      before do
-        page.require_parliamentary_group = true
-        statement.parliamentary_group_name = nil
-        statement.parliamentary_group_item = 'Q3'
-      end
-
-      it { expect(classifier.verifiable).to eq(statements) }
-      it { expect(classifier.unverifiable).to be_empty }
-      it { expect(classifier.reconcilable).to be_empty }
-      it { expect(classifier.actionable).to be_empty }
-      it { expect(classifier.manually_actionable).to be_empty }
-      it { expect(classifier.done).to be_empty }
-      it { expect(classifier.reverted).to be_empty }
-    end
-
     context 'when unverifiable' do
       before do
         statement.verifications.build(status: false)

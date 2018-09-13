@@ -286,7 +286,7 @@ RSpec.describe StatementDecorator, type: :decorator do
       it { is_expected.to match_array([]) }
     end
 
-    context 'when the district hasn\'t be reconciled but there was no name to reconcile' do
+    context 'when the district hasn\'t been reconciled but there was no name to reconcile' do
       before do
         statement.electoral_district_item = nil
         statement.electoral_district_name = nil
@@ -294,7 +294,7 @@ RSpec.describe StatementDecorator, type: :decorator do
       it { is_expected.to match_array([]) }
     end
 
-    context 'when the district hasn\'t be reconciled but there was a name to reconcile' do
+    context 'when the district hasn\'t been reconciled but there was a name to reconcile' do
       before do
         statement.electoral_district_item = nil
         statement.electoral_district_name = 'Cambridge'
@@ -302,35 +302,31 @@ RSpec.describe StatementDecorator, type: :decorator do
       it { is_expected.to match_array(%w[district]) }
     end
 
-    context 'when page does not require a party' do
-      before { page.require_parliamentary_group = false }
-
-      context 'when party hasn\'t been reconciled' do
-        before { statement.parliamentary_group_item = nil }
-        it { is_expected.to match_array([]) }
+    context 'when the party hasn\'t been reconciled but there was no name to reconcile' do
+      before do
+        statement.parliamentary_group_item = nil
+        statement.parliamentary_group_name = nil
       end
+      it { is_expected.to match_array([]) }
     end
 
-    context 'when page requires a party' do
-      before { page.require_parliamentary_group = true }
-
-      context 'when party has been reconciled' do
-        before { statement.parliamentary_group_item = 'Q1' }
-        it { is_expected.to match_array([]) }
+    context 'when the party hasn\'t been reconciled but there was a name to reconcile' do
+      before do
+        statement.parliamentary_group_item = nil
+        statement.parliamentary_group_name = 'Greens'
       end
+      it { is_expected.to match_array(%w[party]) }
+    end
 
-      context 'when party hasn\'t been reconciled' do
-        before { statement.parliamentary_group_item = nil }
-        it { is_expected.to match_array(%w[party]) }
+    context 'when neither person, party or district have been reconciled' do
+      before do
+        statement.person_item = nil
+        statement.parliamentary_group_item = nil
+        statement.parliamentary_group_name = 'Greens'
+        statement.electoral_district_item = nil
+        statement.electoral_district_name = 'Cambridge'
       end
-
-      context 'when neither person or party have been reconciled' do
-        before do
-          statement.person_item = nil
-          statement.parliamentary_group_item = nil
-        end
-        it { is_expected.to match_array(%w[person party]) }
-      end
+      it { is_expected.to match_array(%w[person party district]) }
     end
   end
 

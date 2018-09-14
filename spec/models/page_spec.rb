@@ -70,13 +70,17 @@ RSpec.describe Page, type: :model do
   end
 
   describe '#from_suggestions_store?' do
+    before do
+      stub_const('SuggestionsStore::Request::URL', 'http://suggestions-store/')
+    end
+
     it 'knows that it came from suggestions-store' do
-      page = create(:page, csv_source_url: "#{ENV.fetch('SUGGESTIONS_STORE_URL')}/export/blah.csv")
+      page = create(:page, csv_source_url: 'http://suggestions-store/export/blah.csv')
       expect(page.from_suggestions_store?).to eq(true)
     end
 
     it 'know that it didn\'t come from suggestions-store' do
-      page = create(:page)
+      page = create(:page, csv_source_url: 'http://example.com')
       expect(page.from_suggestions_store?).to eq(false)
     end
   end

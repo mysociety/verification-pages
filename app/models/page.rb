@@ -14,7 +14,7 @@ class Page < ApplicationRecord
   before_validation :set_parliamentary_term_name, if: :parliamentary_term_item_changed?
 
   def from_suggestions_store?
-    /^#{Regexp.escape(ENV.fetch('SUGGESTIONS_STORE_URL'))}/.match?(csv_source_url)
+    URI.parse(csv_source_url).host == URI.parse(SuggestionsStore::Request::URL).host
   end
 
   private

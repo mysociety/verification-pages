@@ -23,8 +23,8 @@ The following environment variables will need to set and configured:
     WIKIDATA_SITE=test.wikidata.org OR www.wikidata.org
     WIKIDATA_USERNAME=...
     WIKIDATA_PASSWORD=...
-    SUGGESTIONS_STORE_URL=https://suggestions-store.mysociety.org/
-    ID_MAPPING_STORE_BASE_URL=https://id-mapping-store.mysociety.org/
+    SUGGESTIONS_STORE_URL=https://suggestions-store.mysociety.org
+    ID_MAPPING_STORE_BASE_URL=https://id-mapping-store.mysociety.org
     ID_MAPPING_STORE_API_KEY=...
     HOST_NAME=verification-pages.herokuapp.com
     FORCE_SSL=1

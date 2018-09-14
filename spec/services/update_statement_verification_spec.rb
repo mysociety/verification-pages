@@ -20,7 +20,9 @@ RSpec.describe UpdateStatementVerification, type: :service do
   end
 
   describe 'running update' do
-    before { ENV['SUGGESTIONS_STORE_URL'] = 'http://example.com/' }
+    before do
+      stub_const('SuggestionsStore::Request::URL', 'http://example.com/')
+    end
 
     context 'verified' do
       let(:status) { true }

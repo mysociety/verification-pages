@@ -31,8 +31,8 @@ RSpec.describe Page, type: :model do
     let(:page) { build(:page, position_held_item: 'Q2', parliamentary_term_item: 'Q3') }
 
     before do
-      allow(RetrievePageData).to receive(:run).with('Q2', 'Q3').and_return(
-        OpenStruct.new(position_name: 'Position', term_name: 'Term')
+      allow(RetrieveLabels).to receive(:run).with('Q2', 'Q3').and_return(
+        'Q2' => 'Position', 'Q3' => 'Term'
       )
     end
 

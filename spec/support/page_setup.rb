@@ -2,6 +2,6 @@
 
 RSpec.configure do |config|
   config.before do
-    allow(RetrievePageData).to receive(:run).and_return(nil)
+    allow(RetrieveLabels).to receive(:run).and_return({})
   end
 end

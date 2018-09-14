@@ -20,14 +20,14 @@ class Page < ApplicationRecord
   private
 
   def set_position_held_name
-    self.position_held_name = page_data&.position_name
+    self.position_held_name = labels[position_held_item]
   end
 
   def set_parliamentary_term_name
-    self.parliamentary_term_name = page_data&.term_name
+    self.parliamentary_term_name = labels[parliamentary_term_item]
   end
 
-  def page_data
-    @page_data ||= RetrievePageData.run(position_held_item, parliamentary_term_item)
+  def labels
+    @labels ||= RetrieveLabels.run(position_held_item, parliamentary_term_item)
   end
 end

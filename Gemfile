@@ -43,6 +43,8 @@ gem 'id-mapper', github: 'mysociety/id-mapper'
 gem 'mini_racer'
 # Mediawiki template replacable content
 gem 'mediawiki-page-replaceable_content'
+# Report exceptions to maintainers
+gem 'exception_notification'
 
 group :development, :test do
   gem 'dotenv-rails', '~> 2.5.0'

@@ -5,6 +5,7 @@ class PagesController < ApplicationController
   include AdminAuthentication
 
   before_action :set_page, only: %i[show edit update destroy load create_wikidata]
+  skip_before_action :authenticate, if: -> { params[:action] == 'index' && params[:format] == 'json' }
 
   # GET /pages
   def index

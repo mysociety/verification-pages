@@ -50,6 +50,10 @@ class StatementDecorator < SimpleDelegator
     !done? && (actioned_at? && data.present?)
   end
 
+  def done_or_reverted?
+    done? || reverted?
+  end
+
   def manually_actionable?
     !reverted? && (reconciled? && !problems.empty?)
   end

@@ -395,6 +395,18 @@ RSpec.describe StatementClassifier, type: :service do
       include_examples 'classified as', 'removed'
     end
 
+    context 'when statement is reverted but has been removed from source' do
+      before do
+        statement.removed_from_source = true
+        position_held.group = nil
+        allow(statement).to receive(:person_item).and_return('Q1')
+        allow(statement).to receive(:actioned_at).and_return(5.minutes.ago)
+        allow(statement).to receive(:actioned_at?).and_return(true)
+      end
+
+      include_examples 'classified as', 'removed'
+    end
+
     context 'when statement has been remvoed from source before being verified' do
       before { statement.removed_from_source = true }
       include_examples 'classified as', nil # not classified at all

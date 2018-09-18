@@ -73,9 +73,9 @@ class StatementClassifier
   end
 
   def statement_type(statement)
-    if statement.removed_from_source? && !statement.done?
+    if statement.removed_from_source? && !statement.done_or_reverted?
       nil
-    elsif statement.removed_from_source? && statement.done?
+    elsif statement.removed_from_source? && statement.done_or_reverted?
       :removed
     elsif statement.unverifiable?
       :unverifiable

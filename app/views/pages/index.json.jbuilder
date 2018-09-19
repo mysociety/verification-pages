@@ -11,6 +11,5 @@ json.pages(
   :reference_url_language,
   :created_at, :updated_at,
   :from_suggestions_store?,
-  :require_parliamentary_group,
   :country
 )

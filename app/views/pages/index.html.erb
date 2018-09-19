@@ -12,7 +12,6 @@
       <th><%= model_class.human_attribute_name(:parliamentary_term_item) %></th>
       <th><%= model_class.human_attribute_name(:reference_url) %></th>
       <th><%= model_class.human_attribute_name(:csv_source_url) %></th>
-      <th><%= model_class.human_attribute_name(:require_parliamentary_group) %></th>
       <th><%= model_class.human_attribute_name(:executive_position) %></th>
       <th><%= t '.actions', default: t("helpers.actions") %></th>
     </tr>
@@ -27,7 +26,6 @@
         <td><%= page.parliamentary_term_item %></td>
         <td><%= page.reference_url %></td>
         <td><%= page.csv_source_url %></td>
-        <td><%= page.require_parliamentary_group %></td>
         <td><%= page.executive_position %></td>
         <td>
           <%= link_to t('.show', default: t("helpers.links.show")),

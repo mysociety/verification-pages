@@ -30,8 +30,7 @@ class StatementDecorator < SimpleDelegator
   end
 
   def unverifiable?
-    unverifiable_due_to_party? ||
-      latest_verification && latest_verification.status == false
+    latest_verification && latest_verification.status == false
   end
 
   def recently_actioned?
@@ -126,8 +125,7 @@ class StatementDecorator < SimpleDelegator
   end
 
   def party_reconciliations
-    return [] if !page.require_parliamentary_group? ||
-                 parliamentary_group_item.present?
+    return [] if parliamentary_group_item.present? || parliamentary_group_name.blank?
     ['party']
   end
 
@@ -143,10 +141,6 @@ class StatementDecorator < SimpleDelegator
   private
 
   attr_reader :matching_position_held_data
-
-  def unverifiable_due_to_party?
-    page.require_parliamentary_group? && parliamentary_group_name.blank? && parliamentary_group_item.blank?
-  end
 
   def merged_then_deleted
     return [] if data&.merged_then_deleted.blank?

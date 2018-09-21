@@ -4,7 +4,21 @@ require 'rails_helper'
 
 describe StatementsStatistics do
   describe '#statistics' do
-    let! (:page) { create(:page, position_held_item: 'Q15964890') }
+    let! (:page) do
+      create(
+        :page,
+        position_held_item: 'Q15964890',
+        csv_source_url:     'http://suggestions-store/export/ca.csv'
+      )
+    end
+
+    let! (:non_suggestions_store_page) do
+      create(
+        :page,
+        position_held_item: 'Q15964890',
+        csv_source_url:     'http://example.com/ca.csv'
+      )
+    end
 
     before do
       stub_const('SuggestionsStore::Request::URL', 'http://suggestions-store/')
@@ -48,7 +62,15 @@ describe StatementsStatistics do
       expect(position_stats.correct).to eq(2)
       expect(position_stats.incorrect).to eq(1)
       expect(position_stats.unchecked).to eq(0)
-      expect(position_stats.pages).to eq([page.title])
+    end
+
+    it 'only shows suggestions-store pages' do
+      statement_statistics = StatementsStatistics.new
+      statistics = statement_statistics.statistics['ca']
+      position_stats = statistics.first.first
+      expect(position_stats.pages.size).to eq(1)
+      expect(position_stats.pages).to include(page.title)
+      expect(position_stats.pages).to_not include(non_suggestions_store_page.title)
     end
   end
 end

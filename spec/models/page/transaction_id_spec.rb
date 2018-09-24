@@ -27,5 +27,16 @@ RSpec.describe Page::TransactionID, type: :model do
         is_expected.to eq 'md5:abc'
       end
     end
+
+    context 'with hash_epoch = 2' do
+      before { page.hash_epoch = 2 }
+
+      it 'should merge the country code and page ID then MD5 stored hash data string' do
+        page.id = 1
+        data_string = 'bar:bar;country:ca;foo:foo;page:1'
+        expect(Digest::MD5).to receive(:hexdigest).with(data_string) { 'def' }
+        is_expected.to eq 'md5:def'
+      end
+    end
   end
 end

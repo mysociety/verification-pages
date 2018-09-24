@@ -16,6 +16,7 @@ class Page
       # sources are next fetched
       case hash_epoch
       when 1 then { country: country.code }
+      when 2 then { country: country.code, page: id }
       else raise UnknownHashEpochError
       end
     end

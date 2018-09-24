@@ -2,10 +2,26 @@
 
 class Page
   module TransactionID
-    def generate_transaction_id(data)
-      pairs = data.merge(country: country.code).sort
+    UnknownHashEpochError = Class.new(StandardError)
 
-      transation_string = pairs.each_with_object([]) do |(k, v), a|
+    def generate_transaction_id(data)
+      hash(data.merge(hash_data))
+    end
+
+    private
+
+    def hash_data
+      # These hashes should not be modified. it will change existing transaction
+      # IDs resulting in duplicate Statements being created when page CSV
+      # sources are next fetched
+      case hash_epoch
+      when 1 then { country: country.code }
+      else raise UnknownHashEpochError
+      end
+    end
+
+    def hash(pairs)
+      transation_string = pairs.sort.each_with_object([]) do |(k, v), a|
         a << "#{k}:#{v}"
       end.join(';')
 

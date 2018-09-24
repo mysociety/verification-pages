@@ -7,9 +7,10 @@ RSpec.describe LoadStatements do
 
   describe '#run' do
     let(:suggestions_store_response) { '' }
-    let(:page) { create(:page, csv_source_url: 'http://example.com/export.csv') }
+    let(:page) { build(:page, csv_source_url: 'http://example.com/export.csv') }
 
     before do
+      allow(Page).to receive(:find_by!).with(title: page.title).and_return(page)
       stub_request(:get, 'http://example.com/export.csv').to_return(status: 200, body: suggestions_store_response, headers: {})
     end
 
@@ -17,8 +18,8 @@ RSpec.describe LoadStatements do
       let(:suggestions_store_response) do
         <<~CSV
           transaction_id,person_name,electoral_district_name,electoral_district_item,fb_identifier
-          489434391472318,Alice,Ambridge,Q1234,10987654321
-          1656343594481923,Bob,Bambridge,Q4321,10987654322
+          1234,Alice,Ambridge,Q1234,10987654321
+          4321,Bob,Bambridge,Q4321,10987654322
         CSV
       end
 
@@ -27,14 +28,14 @@ RSpec.describe LoadStatements do
       end
 
       let!(:existing_statement) do
-        create(:statement, transaction_id: '489434391472318', person_name: 'Arthur', page: page)
+        create(:statement, transaction_id: '1234', person_name: 'Arthur', page: page)
       end
 
       it 'creates a missing statement' do
         load_statements = LoadStatements.new(page.title)
         expect { load_statements.run }.to change(Statement, :count).by(1)
         last_statement = Statement.last
-        expect(last_statement.transaction_id).to eq('1656343594481923')
+        expect(last_statement.transaction_id).to eq('4321')
         expect(last_statement.person_name).to eq('Bob')
         expect(last_statement.electoral_district_name).to eq('Bambridge')
         expect(last_statement.electoral_district_item).to eq('Q4321')
@@ -45,7 +46,7 @@ RSpec.describe LoadStatements do
         load_statements = LoadStatements.new(page.title)
         load_statements.run
         existing_statement.reload
-        expect(existing_statement.transaction_id).to eq('489434391472318')
+        expect(existing_statement.transaction_id).to eq('1234')
         expect(existing_statement.person_name).to eq('Alice')
         expect(existing_statement.electoral_district_name).to eq('Ambridge')
         expect(existing_statement.electoral_district_item).to eq('Q1234')
@@ -63,14 +64,28 @@ RSpec.describe LoadStatements do
       end
 
       let!(:existing_statement) do
-        create(:statement, transaction_id: 'md5:9e2547c61ebf3d08dc7bb67dc69a8d22', person_name: 'Arthur', page: page)
+        create(:statement, transaction_id: '1234', person_name: 'Arthur', page: page)
+      end
+
+      before do
+        allow(page).to receive(:generate_transaction_id).with(
+          electoral_district_item: 'Q1234', electoral_district_name: 'Ambridge',
+          parliamentary_group_item: 'Q555', parliamentary_group_name: 'Aparty',
+          person_item: 'Q987', person_name: 'Alice'
+        ).and_return('1234')
+
+        allow(page).to receive(:generate_transaction_id).with(
+          electoral_district_item: 'Q4321', electoral_district_name: 'Bambridge',
+          parliamentary_group_item: 'Q666', parliamentary_group_name: 'Bparty',
+          person_item: 'Q876', person_name: 'Bob'
+        ).and_return('4321')
       end
 
       it 'creates a missing statement' do
         load_statements = LoadStatements.new(page.title)
         expect { load_statements.run }.to change(Statement, :count).by(1)
         last_statement = Statement.last
-        expect(last_statement.transaction_id).to eq('md5:0d30667ad6f4d72a9a47b54cb054975b')
+        expect(last_statement.transaction_id).to eq('4321')
         expect(last_statement.person_name).to eq('Bob')
         expect(last_statement.person_item).to eq('Q876')
         expect(last_statement.electoral_district_name).to eq('Bambridge')
@@ -83,7 +98,7 @@ RSpec.describe LoadStatements do
         load_statements = LoadStatements.new(page.title)
         load_statements.run
         existing_statement.reload
-        expect(existing_statement.transaction_id).to eq('md5:9e2547c61ebf3d08dc7bb67dc69a8d22')
+        expect(existing_statement.transaction_id).to eq('1234')
         expect(existing_statement.person_name).to eq('Alice')
         expect(existing_statement.person_item).to eq('Q987')
         expect(existing_statement.electoral_district_name).to eq('Ambridge')
@@ -165,6 +180,10 @@ RSpec.describe LoadStatements do
 
       let!(:other_statement) do
         create(:statement, removed_from_source: false)
+      end
+
+      before do
+        allow(page).to receive(:generate_transaction_id).and_return('1234')
       end
 
       it 'should mark existing statements as being removed from the source' do

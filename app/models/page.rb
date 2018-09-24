@@ -2,6 +2,8 @@
 
 # Verification page object
 class Page < ApplicationRecord
+  include TransactionID
+
   has_many :statements, dependent: :destroy
   belongs_to :country
 

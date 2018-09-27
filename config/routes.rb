@@ -2,7 +2,12 @@
 
 Rails.application.routes.draw do
   # Admin
-  resources :countries
+  resources :countries do
+    member do
+      post :load
+    end
+  end
+
   resources :pages do
     member do
       post :load

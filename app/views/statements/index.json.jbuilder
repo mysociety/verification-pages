@@ -18,8 +18,7 @@ json.statements @classifier.to_a do |statement|
     :electoral_district_name,
     :parliamentary_term_name,
     :problems,
-    :problem_reported?,
-    :reconciliations
+    :problem_reported?
   )
 
   if statement.latest_verification

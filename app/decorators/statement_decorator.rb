@@ -41,11 +41,17 @@ class StatementDecorator < SimpleDelegator
   end
 
   def done?
-    verified? && matches_wikidata?
+    recently_actioned? ||
+      (verified? && matches_wikidata?) ||
+      (!from_suggestions_store? && matches_but_not_checked?)
   end
 
   def reverted?
     !done? && (actioned_at? && data.present?)
+  end
+
+  def done_or_reverted?
+    done? || reverted?
   end
 
   def manually_actionable?
@@ -61,7 +67,7 @@ class StatementDecorator < SimpleDelegator
   end
 
   def reconciled?
-    reconciliations.empty?
+    reconciliations_required.empty?
   end
 
   def problems
@@ -115,7 +121,7 @@ class StatementDecorator < SimpleDelegator
     reported_at.present?
   end
 
-  def reconciliations
+  def reconciliations_required
     person_reconciliations + party_reconciliations + district_reconciliations
   end
 

@@ -21,9 +21,15 @@ class LoadStatements < ServiceBase
       # We need to be careful not wipe out any manually reconciled
       # items when refreshing from the upstream CSV file, so don't
       # overwrite the *_item attributes if that'd make them blank:
-      %i[person_item electoral_district_item parliamentary_group_item].each do |item_attribute|
-        statement.public_send("#{item_attribute}=", result[item_attribute]) if result[item_attribute].present?
+      Reconciliation.resource_mappings.each do |type, attributes|
+        attribute = attributes[:item]
+        reconciliation = statement.reconciliations
+                                  .where(resource_type: type)
+                                  .last
+        value = reconciliation ? reconciliation.item : result[attribute]
+        statement.public_send("#{attribute}=", value) if value.present?
       end
+
       # The other attributes we always update from the upstream CSV:
       statement.update!(
         page:                     page,

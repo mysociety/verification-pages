@@ -19,7 +19,7 @@ class LoadStatements < ServiceBase
   private
 
   def parse_result(result)
-    result[:transaction_id] ||= generate_transaction_id(result)
+    result[:transaction_id] ||= page.generate_transaction_id(result.to_h)
 
     statement = page.statements.find_or_initialize_by(
       transaction_id: result[:transaction_id]
@@ -61,15 +61,5 @@ class LoadStatements < ServiceBase
     RestClient.get(page.csv_source_url).body
   rescue RestClient::Exception => e
     raise "Suggestion store failed: #{e.message}"
-  end
-
-  def generate_transaction_id(result)
-    pairs = result.to_h.merge(country: page.country.code).sort
-
-    transation_string = pairs.each_with_object([]) do |(k, v), a|
-      a << "#{k}:#{v}"
-    end.join(';')
-
-    'md5:' + Digest::MD5.hexdigest(transation_string)
   end
 end

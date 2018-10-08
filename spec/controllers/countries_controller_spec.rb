@@ -157,4 +157,25 @@ RSpec.describe CountriesController, type: :controller do
       expect(response).to redirect_to(countries_url)
     end
   end
+
+  describe 'POST #load' do
+    before do
+      suggestions_store_response = [
+        %w[transaction_id],
+        %w[489434391472318],
+        %w[1656343594481923],
+      ].map(&:to_csv).join
+
+      stub_request(:get, 'http://example.com/export.csv')
+        .to_return(status: 200, body: suggestions_store_response, headers: {})
+    end
+
+    it 'loads statements for the given country' do
+      country = Country.create! valid_attributes
+      page = create(:page, csv_source_url: 'http://example.com/export.csv', country: country)
+      expect do
+        post :load, params: { id: country.to_param }, session: valid_session
+      end.to change(page.statements, :count).by(2)
+    end
+  end
 end

@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2018_09_13_111831) do
+ActiveRecord::Schema.define(version: 2018_09_24_102808) do
 
   create_table "countries", options: "ENGINE=InnoDB DEFAULT CHARSET=utf8", force: :cascade do |t|
     t.string "name"
@@ -36,6 +36,7 @@ ActiveRecord::Schema.define(version: 2018_09_13_111831) do
     t.string "reference_url_language"
     t.string "position_held_name"
     t.string "parliamentary_term_name"
+    t.integer "hash_epoch", default: 2
     t.index ["country_id"], name: "index_pages_on_country_id"
   end
 
@@ -70,6 +71,7 @@ ActiveRecord::Schema.define(version: 2018_09_13_111831) do
     t.timestamp "reported_at"
     t.date "position_start"
     t.date "position_end"
+    t.boolean "removed_from_source", default: false
     t.index ["page_id"], name: "index_statements_on_page_id"
   end
 

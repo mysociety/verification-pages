@@ -3,7 +3,7 @@
 class CountriesController < ApplicationController
   include AdminAuthentication
 
-  before_action :set_country, only: %i[show edit update destroy]
+  before_action :set_country, only: %i[show edit update destroy load]
 
   # GET /countries
   # GET /countries.json
@@ -61,6 +61,13 @@ class CountriesController < ApplicationController
       format.html { redirect_to countries_url, notice: 'Country was successfully destroyed.' }
       format.json { head :no_content }
     end
+  end
+
+  def load
+    @country.pages.find_each do |page|
+      LoadStatements.run(page.title)
+    end
+    redirect_to @country, notice: "Statements loaded for #{@country.pages.count} page(s)"
   end
 
   private

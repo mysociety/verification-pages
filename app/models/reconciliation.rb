@@ -12,6 +12,14 @@ class Reconciliation < ApplicationRecord
 
   after_commit :update_statement, :create_equivalence_claim
 
+  def self.resource_mappings
+    {
+      'person'   => { item: :person_item,              name: :person_name },
+      'party'    => { item: :parliamentary_group_item, name: :parliamentary_group_name },
+      'district' => { item: :electoral_district_item,  name: :electoral_district_name },
+    }
+  end
+
   def possibly_updated_statements
     return Statement.where(id: statement.id) if single
     Statement.where(id: statement.id).or(Statement.where(where_condition_matching_name))
@@ -42,11 +50,7 @@ class Reconciliation < ApplicationRecord
   end
 
   def resource_attrs
-    {
-      'person'   => { item: :person_item,              name: :person_name },
-      'party'    => { item: :parliamentary_group_item, name: :parliamentary_group_name },
-      'district' => { item: :electoral_district_item,  name: :electoral_district_name },
-    }[resource_type]
+    self.class.resource_mappings[resource_type]
   end
 
   def where_condition_matching_name

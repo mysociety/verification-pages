@@ -75,13 +75,6 @@ Naming/UncommunicativeMethodParamName:
     - 'app/models/sparql_result.rb'
 
 # Offense count: 1
-# Configuration parameters: EnforcedStyle.
-# SupportedStyles: slashes, arguments
-Rails/FilePath:
-  Exclude:
-    - 'spec/rails_helper.rb'
-
-# Offense count: 1
 # Configuration parameters: Include.
 # Include: app/models/**/*.rb
 Rails/HasManyOrHasOneDependent:
@@ -97,20 +90,7 @@ Rails/Output:
     - 'app/services/update_verification_templates.rb'
     - 'db/seeds/pages.rb'
 
-# Offense count: 3
-# Configuration parameters: EnforcedStyle.
-# SupportedStyles: strict, flexible
-Rails/TimeZone:
-  Exclude:
-    - 'app/models/statement.rb'
-    - 'spec/services/statement_classifier_spec.rb'
-
 # Offense count: 1
 Security/Open:
   Exclude:
     - 'db/seeds/pages.rb'
-
-# Offense count: 2
-Style/DateTime:
-  Exclude:
-    - 'spec/services/statement_classifier_spec.rb'

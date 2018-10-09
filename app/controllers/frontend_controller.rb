@@ -12,7 +12,7 @@ class FrontendController < ApplicationController
 
     @classifier = StatementClassifier.new(
       page.title,
-      statements.map(&:transaction_id)
+      transaction_ids: statements.map(&:transaction_id)
     )
 
     respond_to do |format|

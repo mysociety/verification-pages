@@ -1,5 +1,7 @@
 # frozen_string_literal: true
 
+require 'membership_comparison'
+
 # Service to classify statements into actionable, manually_actionable or done groups
 class NewStatementClassifier
   attr_reader :page, :statements, :transaction_id
@@ -95,8 +97,8 @@ class NewStatementClassifier
   end
 
   def decorate_statement(statement)
-    data = matching_position_held_data(statement)
-    NewStatementDecorator.new(statement, data).tap do |s|
+    comparison = comparison_for_statement(statement)
+    NewStatementDecorator.new(statement, comparison).tap do |s|
       s.type = statement_type(s)
     end
   end
@@ -114,13 +116,54 @@ class NewStatementClassifier
     )
   end
 
+  def comparison_for_statement(statement)
+    MembershipComparison.new(
+      existing:      existing_statements(statement),
+      suggestion:    mapped_statement(statement),
+      require_party: false
+    )
+  end
+
   def merged_then_deleted(data)
     data.merged_then_deleted.split.map { |item| item.split('/').last }
   end
 
-  def matching_position_held_data(statement)
-    position_held_data.select do |data|
-      ([data.person] + merged_then_deleted(data)).include?(statement.person_item)
+  def existing_statements(statement)
+    position_held_data.each_with_object({}) do |data, memo|
+      person_items = [data.person] + merged_then_deleted(data)
+      next unless person_items.include?(statement.person_item)
+
+      memo[data.position] = {
+        position: { id: page.position_held_item },
+        start:    data.position_start,
+        end:      data.position_end,
+        term:     {
+          id:    data.term,
+          start: data.term_start,
+          end:   data.term_end,
+        },
+        party:    { id: data.group },
+        district: { id: data.district },
+        data:     {
+          statement_uuid: data.position,
+          revision:       data.revision,
+        },
+      }
     end
+  end
+
+  def mapped_statement(statement)
+    {
+      position: { id: page.position_held_item },
+      term:     {
+        id:    page.parliamentary_term_item,
+        start: '2015-12-03', # FIXME
+        end:   nil, # FIXME
+      },
+      party:    { id: statement.parliamentary_group_item },
+      district: { id: statement.electoral_district_item },
+      start:    statement.position_start,
+      end:      statement.position_end,
+    }
   end
 end

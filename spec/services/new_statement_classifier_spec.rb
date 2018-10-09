@@ -18,9 +18,24 @@ RSpec.describe NewStatementClassifier, type: :service do
   let(:statements) { [statement].compact }
   let(:statement_relation) { double(:relation, to_a: statements) }
 
-  let(:wikidata_data) { { person: 'Q1', merged_then_deleted: '' } }
+  let(:wikidata_data) do
+    { person: 'Q1', merged_then_deleted: '', position: 'UUID' }
+  end
   let(:position_held) { OpenStruct.new(wikidata_data) }
   let(:position_held_data) { [position_held] }
+
+  let(:exact_matches) { [] }
+  let(:conflicts) { [] }
+  let(:partial_matches) { [] }
+  let(:problems) { {} }
+  let(:comparison) do
+    OpenStruct.new(
+      exact_matches:   exact_matches,
+      conflicts:       conflicts,
+      partial_matches: partial_matches,
+      problems:        problems
+    )
+  end
 
   let(:classifier) { NewStatementClassifier.new('page_title') }
 
@@ -34,9 +49,12 @@ RSpec.describe NewStatementClassifier, type: :service do
       .and_return(page)
     allow(page).to receive(:statements)
       .and_return(statement_relation)
+
     allow(NewRetrievePositionData).to receive(:run)
       .with(page.position_held_item, page.parliamentary_term_item, nil)
       .and_return(position_held_data)
+    allow(MembershipComparison).to receive(:new)
+      .and_return(comparison)
   end
 
   describe 'initialisation' do
@@ -81,6 +99,8 @@ RSpec.describe NewStatementClassifier, type: :service do
     end
 
     context 'when the statements are reconciled but not verified' do
+      let(:partial_matches) { ['UUID'] }
+
       before do
         allow(statement).to receive(:person_item).and_return('Q1')
       end
@@ -89,6 +109,8 @@ RSpec.describe NewStatementClassifier, type: :service do
     end
 
     context 'when the statement is from suggestions-store and is already correct (apart from the reference) in Wikidata' do
+      let(:partial_matches) { ['UUID'] }
+
       before do
         allow(statement).to receive(:person_item).and_return('Q1')
       end
@@ -112,11 +134,15 @@ RSpec.describe NewStatementClassifier, type: :service do
     end
 
     context 'when verified' do
+      let(:partial_matches) { ['UUID'] }
+
       before { statement.verifications.build(status: true) }
       include_examples 'classified as', 'reconcilable'
     end
 
     context 'when statement is actionable' do
+      let(:partial_matches) { ['UUID'] }
+
       before do
         position_held.group = nil
         statement.verifications.build(status: true)
@@ -126,28 +152,12 @@ RSpec.describe NewStatementClassifier, type: :service do
       include_examples 'classified as', 'actionable'
     end
 
-    context 'when district qualifier contradict' do
+    context 'when conflicting Wikidata statement' do
+      let(:conflicts) { ['UUID'] }
+      let(:problems) { { 'UUID' => ['A problem'] } }
+
       before do
-        position_held.district = 'other-district'
-        allow(statement).to receive(:person_item).and_return('Q1')
-      end
-
-      include_examples 'classified as', 'manually_actionable'
-    end
-
-    context 'when group qualifier contradict' do
-      before do
-        position_held.group = 'other-group'
-        allow(statement).to receive(:person_item).and_return('Q1')
-      end
-
-      include_examples 'classified as', 'manually_actionable'
-    end
-
-    context 'when position start is more than 31 days before term start' do
-      before do
-        position_held.group = nil
-        position_held.position_start = '2017-11-05'
+        statement.verifications.build(status: true)
         allow(statement).to receive(:person_item).and_return('Q1')
       end
 
@@ -156,6 +166,7 @@ RSpec.describe NewStatementClassifier, type: :service do
 
     context 'when statement has been reported' do
       before do
+        statement.verifications.build(status: true)
         allow(statement).to receive(:error_reported).and_return('Error!')
         allow(statement).to receive(:reported_at).and_return(Time.zone.now)
         allow(statement).to receive(:person_item).and_return('Q1')
@@ -170,6 +181,7 @@ RSpec.describe NewStatementClassifier, type: :service do
       before do
         statement.verifications.build(status: true)
         allow(statement).to receive(:person_item).and_return('Q1')
+        allow(statement).to receive(:actioned_at).and_return(5.minutes.ago)
         allow(statement).to receive(:actioned_at?).and_return(true)
       end
 
@@ -190,6 +202,8 @@ RSpec.describe NewStatementClassifier, type: :service do
     end
 
     context 'when the statement has been actioned' do
+      let(:exact_matches) { ['UUID'] }
+
       before do
         statement.verifications.build(status: true)
         allow(statement).to receive(:person_item).and_return('Q1')
@@ -199,6 +213,8 @@ RSpec.describe NewStatementClassifier, type: :service do
     end
 
     context 'when the reconciled person has since been merged into someone else' do
+      let(:exact_matches) { ['UUID'] }
+
       # Let's assume that Q1 was merged into Q200, so the position
       # held data (from the SPARQL query in the real situation)
       # includes person: Q200 but also merged_then_deleted: Q1. That
@@ -223,6 +239,8 @@ RSpec.describe NewStatementClassifier, type: :service do
     end
 
     context 'when the statement is not from suggestions-store and is already correct in Wikidata' do
+      let(:exact_matches) { ['UUID'] }
+
       let(:page) do
         build(:page, parliamentary_term_item: 'Q2', csv_source_url: 'http://example.com/politicians.csv')
       end
@@ -235,6 +253,8 @@ RSpec.describe NewStatementClassifier, type: :service do
     end
 
     context "when the Wikidata item has no district and the statement's page has executive_position = true set" do
+      let(:exact_matches) { ['UUID'] }
+
       let(:page) do
         build(:page, parliamentary_term_item: 'Q2', executive_position: true)
       end
@@ -257,6 +277,8 @@ RSpec.describe NewStatementClassifier, type: :service do
     end
 
     context "when the Wikidata item has no group and the statement's page has executive_position = true set" do
+      let(:exact_matches) { ['UUID'] }
+
       let(:page) do
         build(:page, parliamentary_term_item: 'Q2', executive_position: true)
       end
@@ -279,6 +301,8 @@ RSpec.describe NewStatementClassifier, type: :service do
     end
 
     context 'when statement has no parliamentary group but Wikidata does and everything else matches' do
+      let(:exact_matches) { ['UUID'] }
+
       let(:page) do
         build(:page, parliamentary_term_item: 'Q2', csv_source_url: 'http://example.com/politicians.csv')
       end
@@ -302,6 +326,8 @@ RSpec.describe NewStatementClassifier, type: :service do
     end
 
     context 'when statement has no district but Wikidata does and everything else matches' do
+      let(:exact_matches) { ['UUID'] }
+
       let(:page) do
         build(:page, parliamentary_term_item: 'Q2', csv_source_url: 'http://example.com/politicians.csv')
       end
@@ -326,6 +352,8 @@ RSpec.describe NewStatementClassifier, type: :service do
     end
 
     context 'when statement page has no term and everything else matches' do
+      let(:exact_matches) { ['UUID'] }
+
       let(:page) do
         build(:page, parliamentary_term_item: '', csv_source_url: 'http://example.com/politicians.csv')
       end
@@ -348,13 +376,14 @@ RSpec.describe NewStatementClassifier, type: :service do
 
       before do
         statement.verifications.build(status: true)
-        allow(statement).to receive(:actioned_at?).and_return(true)
       end
 
       include_examples 'classified as', 'done'
     end
 
     context 'when statement would be actionable, but has been actioned over 5 minutes ago' do
+      let(:partial_matches) { ['UUID'] }
+
       around { |example| freeze_time { example.run } }
 
       before do
@@ -368,6 +397,8 @@ RSpec.describe NewStatementClassifier, type: :service do
     end
 
     context 'when statement is done but has been removed from source' do
+      let(:exact_matches) { ['UUID'] }
+
       before do
         statement.removed_from_source = true
         statement.verifications.build(status: true)
@@ -378,6 +409,8 @@ RSpec.describe NewStatementClassifier, type: :service do
     end
 
     context 'when statement is reverted but has been removed from source' do
+      let(:partial_matches) { ['UUID'] }
+
       before do
         statement.removed_from_source = true
         position_held.group = nil

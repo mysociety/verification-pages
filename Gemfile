@@ -46,6 +46,8 @@ gem 'mediawiki-page-replaceable_content'
 # Report exceptions to maintainers
 gem 'exception_notification'
 
+gem 'membership-comparison', github: 'everypolitician/membership-comparison'
+
 group :development, :test do
   gem 'dotenv-rails', '~> 2.5.0'
   gem 'factory_bot_rails', '~> 4.11.1'

@@ -13,7 +13,7 @@ class SparqlResult
     super
   end
 
-  def method_missing(attr)
+  def method_missing(attr, *args)
     return super unless @variables.include?(attr.to_s)
 
     h = @raw[attr]

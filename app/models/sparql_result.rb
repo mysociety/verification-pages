@@ -7,6 +7,12 @@ class SparqlResult
     @variables = variables
   end
 
+  def [](attr)
+    value = @raw[attr]
+    return nil unless value
+    map_value(value)
+  end
+
   private
 
   def respond_to_missing?(*args)
@@ -15,11 +21,7 @@ class SparqlResult
 
   def method_missing(attr, *args)
     return super unless @variables.include?(attr.to_s)
-
-    h = @raw[attr]
-    return nil unless h
-
-    map_value(h)
+    self[attr]
   end
 
   def map_value(h)

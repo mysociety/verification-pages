@@ -5,12 +5,12 @@ class Page
     UnknownHashEpochError = Class.new(StandardError)
 
     def generate_transaction_id(data)
-      hash(data.merge(hash_data))
+      transaction_id_hash(data.merge(transaction_id_hash_data))
     end
 
     private
 
-    def hash_data
+    def transaction_id_hash_data
       # These hashes should not be modified. it will change existing transaction
       # IDs resulting in duplicate Statements being created when page CSV
       # sources are next fetched
@@ -21,7 +21,7 @@ class Page
       end
     end
 
-    def hash(pairs)
+    def transaction_id_hash(pairs)
       transation_string = pairs.sort.each_with_object([]) do |(k, v), a|
         a << "#{k}:#{v}"
       end.join(';')

@@ -9,7 +9,7 @@ class PagesController < ApplicationController
 
   # GET /pages
   def index
-    @pages = Page.all
+    @pages = Page.includes(:country).all
   end
 
   # GET /pages/1

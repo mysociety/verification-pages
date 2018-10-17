@@ -18,10 +18,10 @@ module SparqlQuery
   private
 
   def sparql(query)
-    result = RestClient.get(
+    result = RestClient.post(
       WIKIDATA_SPARQL_URL,
-      accept: 'application/sparql-results+json',
-      params: { query: query }
+      { query: query },
+      accept: 'application/sparql-results+json'
     )
     JSON.parse(result, symbolize_names: true)
   rescue RestClient::Exception => e

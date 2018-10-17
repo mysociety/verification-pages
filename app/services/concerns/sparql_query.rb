@@ -8,7 +8,11 @@ module SparqlQuery
 
   def run_query(query)
     @json = sparql(query)
-    bindings.map { |r| SparqlResult.new(r, variables) }
+    bindings.map do |r|
+      result = r.extend(SparqlResult)
+      result.variables = variables
+      result
+    end
   end
 
   private

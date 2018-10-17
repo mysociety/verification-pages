@@ -23,7 +23,9 @@ RSpec.describe SparqlResult, type: :model do
     JSON
   end
   let(:result) do
-    SparqlResult.new(JSON.parse(json, symbolize_names: true), variables)
+    hash = JSON.parse(json, symbolize_names: true).extend(SparqlResult)
+    hash.variables = variables
+    hash
   end
 
   it 'can return literal values' do

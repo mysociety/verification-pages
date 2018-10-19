@@ -86,7 +86,7 @@ export default template({
   methods: {
     loadStatements: function () {
       Axios.get(ENV.url + '/statements.json', {
-        params: { title: wikidataClient.page }
+        params: { title: wikidataClient.page, classifier: this.classifierVersion }
       }).then(response => {
         this.statements = response.data.statements
         this.sortStatements(this.sortBy)
@@ -158,6 +158,9 @@ export default template({
   computed: {
     localStorageKey: function () {
       return wikidataClient.page + '.reference_url'
+    },
+    classifierVersion: function () {
+      return localStorage.getItem('classifierVersion')
     }
   }
 })

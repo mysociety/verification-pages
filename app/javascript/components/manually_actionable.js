@@ -13,7 +13,7 @@ export default template({
       this.$parent.$emit('statement-update', () => {
         return Axios.get(
           ENV.url + '/statements/' + this.statement.transaction_id + '.json',
-          { params: { force_type: 'actionable' } }
+          { params: { force_type: 'actionable', classifier: this.$parent.classifierVersion } }
         )
       })
     }

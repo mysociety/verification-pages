@@ -20,6 +20,9 @@ export default template({
   },
   props: ['statement', 'page', 'country'],
   computed: {
+    classifierVersion: function () {
+      return this.$parent.classifierVersion
+    },
     currentView: function () {
       if (this.submitting) { return loadingComponent }
       switch (this.statement.type) {

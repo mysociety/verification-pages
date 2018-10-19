@@ -118,7 +118,7 @@ export default template({
         that.$parent.$emit('statement-update', () => {
           return Axios.get(
             ENV.url + '/statements/' + that.statement.transaction_id + '.json',
-            { params: { force_type: 'done' } }
+            { params: { force_type: 'done', classifier: this.$parent.classifierVersion } }
           )
         })
       }).catch(function (error) {
@@ -136,6 +136,7 @@ export default template({
           ENV.url + '/statements/' + this.statement.transaction_id + '.json',
           { params: {
             force_type: 'manually_actionable',
+            classifier: this.$parent.classifierVersion,
             error_message: this.updateError
           } }
         )

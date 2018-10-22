@@ -115,6 +115,12 @@ class NewStatementClassifier
     )
   end
 
+  def parliamentary_term_data
+    @parliamentary_term_data ||= RetrieveTermData.run(
+      page.parliamentary_term_item
+    )
+  end
+
   def comparison_for_statement(statement)
     MembershipComparison.new(
       existing:      existing_statements_for_person(statement.person_item),
@@ -156,8 +162,8 @@ class NewStatementClassifier
       position: { id: page.position_held_item },
       term:     {
         id:    page.parliamentary_term_item,
-        start: '2015-12-03', # FIXME
-        end:   nil, # FIXME
+        start: parliamentary_term_data.start,
+        end:   parliamentary_term_data.end,
       },
       party:    { id: statement.parliamentary_group_item },
       district: { id: statement.electoral_district_item },

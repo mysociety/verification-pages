@@ -46,6 +46,9 @@ RSpec.describe NewStatementClassifier, type: :service do
     allow(page).to receive(:statements)
       .and_return(statement_relation)
 
+    allow(RetrieveTermData).to receive(:run)
+      .with(page.parliamentary_term_item)
+      .and_return(OpenStruct.new(start: '2018-01-01', end: '2019-01-01'))
     allow(NewRetrievePositionData).to receive(:run)
       .with(page.position_held_item, nil)
       .and_return(position_held_data)

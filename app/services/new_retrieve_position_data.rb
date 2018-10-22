@@ -4,11 +4,10 @@
 class NewRetrievePositionData < ServiceBase
   include SparqlQuery
 
-  attr_reader :position_held_item, :parliamentary_term_item, :person_item
+  attr_reader :position_held_item, :person_item
 
-  def initialize(position_held_item, parliamentary_term_item = nil, person_item = nil)
+  def initialize(position_held_item, person_item = nil)
     @position_held_item = position_held_item
-    @parliamentary_term_item = parliamentary_term_item
     @person_item = person_item
   end
 
@@ -17,9 +16,8 @@ class NewRetrievePositionData < ServiceBase
   end
 
   def query
-    query_format % { position_held_item:      position_held_item,
-                     parliamentary_term_item: parliamentary_term_item,
-                     person_bind:             person_bind, }
+    query_format % { position_held_item: position_held_item,
+                     person_bind:        person_bind, }
   end
 
   private
@@ -35,7 +33,6 @@ class NewRetrievePositionData < ServiceBase
       WHERE {
         %<person_bind>s
 
-        BIND(wd:%<parliamentary_term_item>s AS ?page_term)
         BIND(wd:%<position_held_item>s AS ?position_held)
 
         ?position ps:P39 ?position_held .

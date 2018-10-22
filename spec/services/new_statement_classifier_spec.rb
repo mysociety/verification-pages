@@ -6,11 +6,7 @@ RSpec.describe NewStatementClassifier, type: :service do
   include ActiveSupport::Testing::TimeHelpers
 
   let(:page) do
-    build(
-      :page,
-      parliamentary_term_item: 'Q2',
-      csv_source_url:          'http://suggestions-store/export/ca.csv'
-    )
+    build(:page, csv_source_url: 'http://suggestions-store/export/ca.csv')
   end
 
   let(:data) { { person_item: 'Q1' } }
@@ -51,7 +47,7 @@ RSpec.describe NewStatementClassifier, type: :service do
       .and_return(statement_relation)
 
     allow(NewRetrievePositionData).to receive(:run)
-      .with(page.position_held_item, page.parliamentary_term_item, nil)
+      .with(page.position_held_item, nil)
       .and_return(position_held_data)
     allow(MembershipComparison).to receive(:new)
       .and_return(comparison)
@@ -242,7 +238,7 @@ RSpec.describe NewStatementClassifier, type: :service do
       let(:exact_matches) { ['UUID'] }
 
       let(:page) do
-        build(:page, parliamentary_term_item: 'Q2', csv_source_url: 'http://example.com/politicians.csv')
+        build(:page, csv_source_url: 'http://example.com/politicians.csv')
       end
 
       before do
@@ -256,7 +252,7 @@ RSpec.describe NewStatementClassifier, type: :service do
       let(:exact_matches) { ['UUID'] }
 
       let(:page) do
-        build(:page, parliamentary_term_item: 'Q2', executive_position: true)
+        build(:page, executive_position: true)
       end
 
       let(:wikidata_data) do
@@ -280,7 +276,7 @@ RSpec.describe NewStatementClassifier, type: :service do
       let(:exact_matches) { ['UUID'] }
 
       let(:page) do
-        build(:page, parliamentary_term_item: 'Q2', executive_position: true)
+        build(:page, executive_position: true)
       end
 
       let(:wikidata_data) do
@@ -304,7 +300,7 @@ RSpec.describe NewStatementClassifier, type: :service do
       let(:exact_matches) { ['UUID'] }
 
       let(:page) do
-        build(:page, parliamentary_term_item: 'Q2', csv_source_url: 'http://example.com/politicians.csv')
+        build(:page, csv_source_url: 'http://example.com/politicians.csv')
       end
 
       let(:data) do
@@ -329,7 +325,7 @@ RSpec.describe NewStatementClassifier, type: :service do
       let(:exact_matches) { ['UUID'] }
 
       let(:page) do
-        build(:page, parliamentary_term_item: 'Q2', csv_source_url: 'http://example.com/politicians.csv')
+        build(:page, csv_source_url: 'http://example.com/politicians.csv')
       end
 
       let(:data) do
@@ -355,7 +351,7 @@ RSpec.describe NewStatementClassifier, type: :service do
       let(:exact_matches) { ['UUID'] }
 
       let(:page) do
-        build(:page, parliamentary_term_item: '', csv_source_url: 'http://example.com/politicians.csv')
+        build(:page, csv_source_url: 'http://example.com/politicians.csv')
       end
 
       let(:data) do

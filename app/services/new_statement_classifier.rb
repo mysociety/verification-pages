@@ -118,7 +118,7 @@ class NewStatementClassifier
 
   def comparison_for_statement(statement)
     MembershipComparison.new(
-      existing:      existing_statements(statement),
+      existing:      existing_statements_for_person(statement.person_item),
       suggestion:    mapped_statement(statement),
       require_party: false
     )
@@ -128,10 +128,10 @@ class NewStatementClassifier
     data.merged_then_deleted.split.map { |item| item.split('/').last }
   end
 
-  def existing_statements(statement)
+  def existing_statements_for_person(person_item)
     position_held_data.each_with_object({}) do |data, memo|
       person_items = [data.person] + merged_then_deleted(data)
-      next unless person_items.include?(statement.person_item)
+      next unless person_items.include?(person_item)
 
       memo[data.position] = {
         position: { id: page.position_held_item },

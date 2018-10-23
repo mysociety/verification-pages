@@ -10,13 +10,18 @@ class FrontendController < ApplicationController
     page = statement.page
     statements ||= [statement]
 
-    @classifier = StatementClassifier.new(
-      page.title,
-      statements.map(&:transaction_id)
-    )
+    @classifier = classify_page(page, statements)
 
     respond_to do |format|
       format.json { render file: 'statements/index' }
+    end
+  end
+
+  def classify_page(page, statements = [])
+    if params[:new].present?
+      NewStatementClassifier.new(page.title, transaction_ids: statements.map(&:transaction_id))
+    else
+      StatementClassifier.new(page.title, transaction_ids: statements.map(&:transaction_id))
     end
   end
 end

@@ -3,7 +3,7 @@
 class StatementsController < FrontendController
   def index
     page = Page.find_by!(title: params.require(:title))
-    @classifier = StatementClassifier.new(page.title)
+    @classifier = classify_page(page)
 
     respond_to do |format|
       format.json { render }

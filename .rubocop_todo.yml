@@ -27,6 +27,7 @@ Lint/ParenthesesAsGroupedExpression:
 Lint/SafeNavigationChain:
   Exclude:
     - 'app/decorators/statement_decorator.rb'
+    - 'app/decorators/new_statement_decorator.rb'
 
 # Offense count: 1
 Lint/UselessAssignment:

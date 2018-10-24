@@ -160,7 +160,7 @@ class NewStatementClassifier
     {
       position: { id: page.position_held_item },
       term:     {
-        id:    page.parliamentary_term_item,
+        id:    page.parliamentary_term_item.presence,
         start: parliamentary_term_data.start,
         end:   parliamentary_term_data.end,
       },

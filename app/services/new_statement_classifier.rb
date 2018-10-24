@@ -160,12 +160,12 @@ class NewStatementClassifier
     {
       position: { id: page.position_held_item },
       term:     {
-        id:    page.parliamentary_term_item,
+        id:    page.parliamentary_term_item.presence,
         start: parliamentary_term_data.start,
         end:   parliamentary_term_data.end,
       },
       party:    { id: statement.parliamentary_group_item },
-      district: { id: statement.electoral_district_item },
+      district: { id: !page.executive_position? ? statement.electoral_district_item : nil },
       start:    statement.position_start,
       end:      statement.position_end,
     }

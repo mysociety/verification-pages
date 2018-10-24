@@ -3,8 +3,12 @@
   <h1><%= t '.title', default: model_class.model_name.human.titleize %></h1>
 </div>
 
+<% if @page.archived? %>
+  <p class="alert alert-warning">This page has been archived.</p>
+<% end %>
+
 <% if flash[:notice] %>
-  <p class="flash flash-notice"><%= flash[:notice] %></p>
+  <p class="alert alert-success"><%= flash[:notice] %></p>
 <% end %>
 
 <dl class="dl-horizontal">
@@ -28,6 +32,8 @@
   <dd><%= link_to @page.country.name, @page.country %></dd>
   <dt><strong><%= model_class.human_attribute_name(:executive_position) %>:</strong></dt>
   <dd><%= @page.executive_position %></dd>
+  <dt><strong><%= model_class.human_attribute_name(:archived) %>:</strong></dt>
+  <dd><%= @page.archived %></dd>
   <dt><strong>Statements</strong></dt>
   <dd><%= @page.statements.count %></dd>
 </dl>

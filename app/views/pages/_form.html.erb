@@ -78,6 +78,11 @@
     <%= f.label :executive_position, class: 'form-check-label' %>
     <%= f.error_span(:executive_position) %>
   </div>
+  <div class="form-check">
+    <%= f.check_box :archived %>
+    <%= f.label :archived, class: 'form-check-label' %>
+    <%= f.error_span(:archived) %>
+  </div>
 
   <div class="form-group">
     <div class="col-lg-offset-2 col-lg-10">

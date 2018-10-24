@@ -123,9 +123,8 @@ class NewStatementClassifier
 
   def comparison_for_statement(statement)
     MembershipComparison.new(
-      existing:      existing_statements_for_person(statement.person_item),
-      suggestion:    mapped_statement(statement),
-      require_party: false
+      existing:   existing_statements_for_person(statement.person_item),
+      suggestion: mapped_statement(statement)
     )
   end
 

@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2018_10_24_075747) do
+ActiveRecord::Schema.define(version: 2018_10_25_094234) do
 
   create_table "countries", options: "ENGINE=InnoDB DEFAULT CHARSET=utf8", force: :cascade do |t|
     t.string "name"
@@ -73,6 +73,7 @@ ActiveRecord::Schema.define(version: 2018_10_24_075747) do
     t.date "position_start"
     t.date "position_end"
     t.boolean "removed_from_source", default: false
+    t.integer "classifier_version", default: 1
     t.index ["page_id"], name: "index_statements_on_page_id"
   end
 

@@ -76,6 +76,12 @@ RSpec.describe Statement, type: :model do
         change(statement, :actioned_at).from(nil).to(Time.zone.now)
       )
     end
+
+    it 'assigns classifier_version' do
+      expect { statement.record_actioned!('v2') }.to(
+        change(statement, :classifier_version).from(1).to(2)
+      )
+    end
   end
 
   describe '#report_error!' do

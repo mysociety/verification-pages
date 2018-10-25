@@ -23,8 +23,9 @@ class Statement < ApplicationRecord
     reconciliations.last
   end
 
-  def record_actioned!
+  def record_actioned!(classifier_version = nil)
     self.actioned_at = Time.zone.now
+    self.classifier_version = classifier_version.sub(/^v/, '') if classifier_version
     save!
   end
 

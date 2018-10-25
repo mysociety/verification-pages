@@ -41,7 +41,7 @@ class NewStatementDecorator < SimpleDelegator
 
   def recently_actioned?
     # Was this statement actioned in the last 5 minutes?
-    return false unless actioned_at?
+    return false unless actioned?
     time_difference_seconds = Time.zone.now - actioned_at
     (time_difference_seconds / 60.0) < 5
   end
@@ -53,7 +53,7 @@ class NewStatementDecorator < SimpleDelegator
   end
 
   def reverted?
-    !done? && actioned_at? && statement_uuid
+    !done? && actioned? && statement_uuid
   end
 
   def done_or_reverted?
@@ -91,7 +91,7 @@ class NewStatementDecorator < SimpleDelegator
   end
 
   def actioned_but_no_statement_problem
-    return [] unless actioned_at? && !statement_uuid
+    return [] unless actioned? && !statement_uuid
     ["There were no 'position held' (P39) statements on Wikidata that match the actioned suggestion"]
   end
 
@@ -120,5 +120,9 @@ class NewStatementDecorator < SimpleDelegator
 
   def verified_on
     latest_verification.try(:created_at).try(:to_date)
+  end
+
+  def actioned?
+    actioned_at? && classifier_version == 2
   end
 end

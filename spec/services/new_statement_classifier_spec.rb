@@ -182,6 +182,7 @@ RSpec.describe NewStatementClassifier, type: :service do
         allow(statement).to receive(:person_item).and_return('Q1')
         allow(statement).to receive(:actioned_at).and_return(5.minutes.ago)
         allow(statement).to receive(:actioned_at?).and_return(true)
+        allow(statement).to receive(:classifier_version).and_return(2)
       end
 
       include_examples 'classified as', 'manually_actionable'
@@ -195,6 +196,7 @@ RSpec.describe NewStatementClassifier, type: :service do
         allow(statement).to receive(:person_item).and_return('Q1')
         allow(statement).to receive(:actioned_at).and_return((5.minutes - 1.second).ago)
         allow(statement).to receive(:actioned_at?).and_return(true)
+        allow(statement).to receive(:classifier_version).and_return(2)
       end
 
       include_examples 'classified as', 'done'
@@ -390,6 +392,7 @@ RSpec.describe NewStatementClassifier, type: :service do
         allow(statement).to receive(:person_item).and_return('Q1')
         allow(statement).to receive(:actioned_at).and_return(5.minutes.ago)
         allow(statement).to receive(:actioned_at?).and_return(true)
+        allow(statement).to receive(:classifier_version).and_return(2)
       end
 
       include_examples 'classified as', 'reverted'
@@ -416,6 +419,7 @@ RSpec.describe NewStatementClassifier, type: :service do
         allow(statement).to receive(:person_item).and_return('Q1')
         allow(statement).to receive(:actioned_at).and_return(5.minutes.ago)
         allow(statement).to receive(:actioned_at?).and_return(true)
+        allow(statement).to receive(:classifier_version).and_return(2)
       end
 
       include_examples 'classified as', 'removed'

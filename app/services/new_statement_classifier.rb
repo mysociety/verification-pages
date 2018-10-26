@@ -163,6 +163,8 @@ class NewStatementClassifier
         id:    page.parliamentary_term_item.presence,
         start: parliamentary_term_data.start,
         end:   parliamentary_term_data.end,
+        eopt:  parliamentary_term_data.previous_term_end,
+        sont:  parliamentary_term_data.next_term_start,
       },
       party:    { id: statement.parliamentary_group_item },
       district: { id: !page.executive_position? ? statement.electoral_district_item : nil },

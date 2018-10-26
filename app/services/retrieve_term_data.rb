@@ -23,17 +23,24 @@ class RetrieveTermData < ServiceBase
   def query_format
     <<~SPARQL
       SELECT DISTINCT
-        ?term ?start ?end
+        ?term ?start ?end ?previous_term_end ?next_term_start
       WHERE {
         BIND(wd:%<parliamentary_term_item>s AS ?term)
 
-        # page term start/end dates
-        OPTIONAL { ?term wdt:P580 ?_start }
-        OPTIONAL { ?term wdt:P571 ?_inception}
-        BIND(COALESCE(?_start, ?_inception) AS ?start)
-        OPTIONAL { ?term wdt:P582 ?_end }
-        OPTIONAL { ?term wdt:P576 ?_dissolved }
-        BIND(COALESCE(?_end, ?_dissolved) AS ?end)
+        OPTIONAL { ?term wdt:P580 ?start. }
+        OPTIONAL { ?term wdt:P571 ?start. }
+        OPTIONAL { ?term wdt:P582 ?end. }
+        OPTIONAL { ?term wdt:P576 ?end. }
+
+        OPTIONAL { ?term wdt:P155 ?previous_term. }
+        OPTIONAL { ?term wdt:P1365 ?previous_term. }
+        OPTIONAL { ?previous_term wdt:P582 ?previous_term_end. }
+        OPTIONAL { ?previous_term wdt:P576 ?previous_term_end. }
+
+        OPTIONAL { ?term wdt:P156 ?next_term. }
+        OPTIONAL { ?term wdt:P1366 ?next_term. }
+        OPTIONAL { ?next_term wdt:P580 ?next_term_start. }
+        OPTIONAL { ?next_term wdt:P571 ?next_term_start. }
       }
       LIMIT 1
     SPARQL

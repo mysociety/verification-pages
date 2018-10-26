@@ -74,35 +74,28 @@ class RetrieveAllPositionData < ServiceBase
         ?person schema:version ?revision .
 
         # position start/end dates
-        OPTIONAL { ?position pq:P580 ?_position_start }
-        OPTIONAL { ?position pq:P571 ?position_inception}
-        BIND(COALESCE(?_position_start, ?position_inception) AS ?position_start)
-        OPTIONAL { ?position pq:P582 ?_position_end }
-        OPTIONAL { ?position pq:P576 ?position_dissolved }
-        BIND(COALESCE(?_position_end, ?position_dissolved) AS ?position_end)
+        OPTIONAL { ?position pq:P580 ?position_start }
+        OPTIONAL { ?position pq:P571 ?position_start }
+        OPTIONAL { ?position pq:P582 ?position_end }
+        OPTIONAL { ?position pq:P576 ?position_end }
 
         OPTIONAL {
           ?position pq:P2937 ?term .
 
           # term start/end dates
-          OPTIONAL { ?term wdt:P580 ?_term_start }
-          OPTIONAL { ?term wdt:P571 ?_term_inception}
-          BIND(COALESCE(?_term_start, ?_term_inception) AS ?term_start)
-          OPTIONAL { ?term wdt:P582 ?_term_end }
-          OPTIONAL { ?term wdt:P576 ?_term_dissolved }
-          BIND(COALESCE(?_term_end, ?_term_dissolved) AS ?term_end)
+          OPTIONAL { ?term wdt:P580 ?term_start }
+          OPTIONAL { ?term wdt:P571 ?term_start }
+          OPTIONAL { ?term wdt:P582 ?term_end }
+          OPTIONAL { ?term wdt:P576 ?term_end }
 
-          OPTIONAL {
-            ?term wdt:P155 ?previous_term .
+          OPTIONAL { ?term wdt:P155 ?previous_term }
+          OPTIONAL { ?term wdt:P1365 ?previous_term }
 
-            # previous term start/end dates
-            OPTIONAL { ?previous_term wdt:P580 ?_previous_term_start }
-            OPTIONAL { ?previous_term wdt:P571 ?_previous_term_inception}
-            BIND(COALESCE(?_previous_term_start, ?_previous_term_inception) AS ?previous_term_start)
-            OPTIONAL { ?previous_term wdt:P582 ?_previous_term_end }
-            OPTIONAL { ?previous_term wdt:P576 ?_previous_term_dissolved }
-            BIND(COALESCE(?_previous_term_end, ?_previous_term_dissolved) AS ?previous_term_end)
-          }
+          # previous term start/end dates
+          OPTIONAL { ?previous_term wdt:P580 ?previous_term_start }
+          OPTIONAL { ?previous_term wdt:P571 ?previous_term_start }
+          OPTIONAL { ?previous_term wdt:P582 ?previous_term_end }
+          OPTIONAL { ?previous_term wdt:P576 ?previous_term_end }
         }
 
         OPTIONAL { ?position pq:P4100 ?group . }

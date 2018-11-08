@@ -24,11 +24,6 @@ class FrontendController < ApplicationController
   end
 
   def classifier_klass
-    case params[:classifier]
-    when 'v1'
-      StatementClassifier
-    else
-      NewStatementClassifier
-    end
+    NewStatementClassifier
   end
 end

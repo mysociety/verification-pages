@@ -4,6 +4,8 @@
 class StatementClassifier
   attr_reader :page, :statements, :transaction_id
 
+  VERSION = 'v1'
+
   def initialize(page_title, transaction_ids: [])
     @page = Page.find_by!(title: page_title)
     @statements = page.statements.original

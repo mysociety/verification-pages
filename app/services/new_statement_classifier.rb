@@ -6,6 +6,8 @@ require 'membership_comparison'
 class NewStatementClassifier
   attr_reader :page, :statements, :transaction_id
 
+  VERSION = 'v2'
+
   def initialize(page_title, transaction_ids: [])
     @page = Page.find_by!(title: page_title)
     @statements = page.statements.original

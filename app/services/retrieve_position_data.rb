@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 
 # Fetches position held data from Wikidata.
-class NewRetrievePositionData < ServiceBase
+class RetrievePositionData < ServiceBase
   include SparqlQuery
 
   attr_reader :position_held_item, :person_item

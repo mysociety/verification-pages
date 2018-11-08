@@ -24,6 +24,6 @@ class FrontendController < ApplicationController
   end
 
   def classifier_klass
-    NewStatementClassifier
+    StatementClassifier
   end
 end

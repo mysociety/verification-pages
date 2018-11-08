@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 
 # Decorator with merges statements with up-to-date position held data
-class NewStatementDecorator < SimpleDelegator
+class StatementDecorator < SimpleDelegator
   attr_accessor :comparison, :type
 
   def initialize(statement, comparison)

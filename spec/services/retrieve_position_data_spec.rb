@@ -2,8 +2,8 @@
 
 require 'rails_helper'
 
-RSpec.describe NewRetrievePositionData, type: :service do
-  let(:service) { NewRetrievePositionData.new('Q1', 'Q2') }
+RSpec.describe RetrievePositionData, type: :service do
+  let(:service) { RetrievePositionData.new('Q1', 'Q2') }
 
   describe 'initialisation' do
     it 'assigns position_held_item instance variable' do
@@ -31,7 +31,7 @@ RSpec.describe NewRetrievePositionData, type: :service do
     end
 
     context 'without person_item' do
-      let(:service) { NewRetrievePositionData.new('Q1') }
+      let(:service) { RetrievePositionData.new('Q1') }
 
       it 'calls run_query with no person_bind' do
         allow(service).to receive(:query_format).and_return('%<person_bind>s')

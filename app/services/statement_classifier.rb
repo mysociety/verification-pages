@@ -3,7 +3,7 @@
 require 'membership_comparison'
 
 # Service to classify statements into actionable, manually_actionable or done groups
-class NewStatementClassifier
+class StatementClassifier
   attr_reader :page, :statements, :transaction_id
 
   VERSION = 'v2'
@@ -100,7 +100,7 @@ class NewStatementClassifier
 
   def decorate_statement(statement)
     comparison = comparison_for_statement(statement)
-    NewStatementDecorator.new(statement, comparison).tap do |s|
+    StatementDecorator.new(statement, comparison).tap do |s|
       s.type = statement_type(s)
     end
   end
@@ -111,7 +111,7 @@ class NewStatementClassifier
   end
 
   def position_held_data
-    @position_held_data ||= NewRetrievePositionData.run(
+    @position_held_data ||= RetrievePositionData.run(
       page.position_held_item,
       person_item_from_transaction_id
     )

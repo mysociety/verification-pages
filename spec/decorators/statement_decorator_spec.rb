@@ -2,7 +2,7 @@
 
 require 'rails_helper'
 
-RSpec.describe NewStatementDecorator, type: :decorator do
+RSpec.describe StatementDecorator, type: :decorator do
   let(:object) { build(:statement, person_item: 'Q1') }
   let(:comparisons) do
     OpenStruct.new(
@@ -11,7 +11,7 @@ RSpec.describe NewStatementDecorator, type: :decorator do
       partial_matches: ['UUID-3']
     )
   end
-  let(:statement) { NewStatementDecorator.new(object, comparisons) }
+  let(:statement) { StatementDecorator.new(object, comparisons) }
 
   describe 'initialisation' do
     it 'does not replace existing values' do

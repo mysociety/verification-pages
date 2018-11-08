@@ -2,7 +2,7 @@
 
 require 'rails_helper'
 
-RSpec.describe NewStatementClassifier, type: :service do
+RSpec.describe StatementClassifier, type: :service do
   include ActiveSupport::Testing::TimeHelpers
 
   let(:page) do
@@ -33,7 +33,7 @@ RSpec.describe NewStatementClassifier, type: :service do
     )
   end
 
-  let(:classifier) { NewStatementClassifier.new('page_title') }
+  let(:classifier) { StatementClassifier.new('page_title') }
 
   before do
     stub_const('SuggestionsStore::Request::URL', 'http://suggestions-store/')
@@ -49,7 +49,7 @@ RSpec.describe NewStatementClassifier, type: :service do
     allow(RetrieveTermData).to receive(:run)
       .with(page.parliamentary_term_item)
       .and_return(OpenStruct.new(start: '2018-01-01', end: '2019-01-01'))
-    allow(NewRetrievePositionData).to receive(:run)
+    allow(RetrievePositionData).to receive(:run)
       .with(page.position_held_item, nil)
       .and_return(position_held_data)
     allow(MembershipComparison).to receive(:new)
@@ -67,7 +67,7 @@ RSpec.describe NewStatementClassifier, type: :service do
     subject { classifier.to_a }
 
     it 'should return decorated statements' do
-      is_expected.to include(a_kind_of(NewStatementDecorator))
+      is_expected.to include(a_kind_of(StatementDecorator))
     end
 
     it 'should not return items without types' do

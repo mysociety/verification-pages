@@ -18,7 +18,7 @@ RSpec.describe ReconciliationsController, type: :controller do
         before do
           allow(Statement).to receive(:find_by!).and_return(statement)
           allow(statement).to receive(:reconciliations).and_return(relation)
-          allow(StatementClassifier).to receive(:new).and_return(classifier)
+          allow(NewStatementClassifier).to receive(:new).and_return(classifier)
         end
 
         it 'finds statement and creates reconciliation' do
@@ -53,7 +53,7 @@ RSpec.describe ReconciliationsController, type: :controller do
         before do
           allow(Statement).to receive(:find_by!).and_return(statement)
           allow(statement).to receive(:reconciliations).and_return(relation)
-          allow(StatementClassifier).to receive(:new).and_return(classifier)
+          allow(NewStatementClassifier).to receive(:new).and_return(classifier)
         end
 
         it 'finds statement and creates reconciliation' do

@@ -14,10 +14,7 @@ class PagesController < ApplicationController
 
   # GET /pages/1
   def show
-    @query = RetrievePositionData.new(
-      @page.position_held_item,
-      @page.parliamentary_term_item
-    ).query
+    @query = NewRetrievePositionData.new(@page.position_held_item).query
   end
 
   # GET /pages/new

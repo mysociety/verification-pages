@@ -20,12 +20,12 @@ RSpec.describe GenerateVerificationPage, type: :service do
   describe '#run' do
     it 'calls render with page and classified statements' do
       position_held_data = double(:position_held_data)
-      allow(RetrievePositionData).to receive(:run)
+      allow(NewRetrievePositionData).to receive(:run)
         .with(page.position_held_item)
         .and_return(position_held_data)
 
       classified_statements = double(:classified_statements)
-      expect(StatementClassifier).to receive(:new)
+      expect(NewStatementClassifier).to receive(:new)
         .with('page_title')
         .and_return(classified_statements)
 

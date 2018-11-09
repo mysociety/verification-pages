@@ -140,7 +140,6 @@ class StatementClassifier
       next unless person_items.include?(person_item)
 
       memo[data.position] = {
-        position: { id: page.position_held_item },
         start:    data.position_start,
         end:      data.position_end,
         term:     {
@@ -156,7 +155,6 @@ class StatementClassifier
 
   def mapped_statement(statement)
     {
-      position: { id: page.position_held_item },
       term:     {
         id:    page.parliamentary_term_item.presence,
         start: parliamentary_term_data.start,

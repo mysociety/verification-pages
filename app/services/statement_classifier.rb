@@ -62,6 +62,8 @@ class StatementClassifier
   end
 
   def to_a
+    update_page_position_if_merged
+
     statements.to_a
               .map { |s| decorate_statement(s) }
               .select(&:type) # remove statements without a type
@@ -108,6 +110,10 @@ class StatementClassifier
   def person_item_from_transaction_id
     return unless transaction_id
     statements.first.person_item
+  end
+
+  def update_page_position_if_merged
+    page.update(position_held_item: position.real_item) if position&.merged?
   end
 
   def position

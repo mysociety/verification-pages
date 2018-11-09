@@ -77,6 +77,20 @@ RSpec.describe StatementClassifier, type: :service do
       allow(classifier).to receive(:statement_type).and_return(nil)
       is_expected.to match_array([])
     end
+
+    it 'should update page position_held_item if merged' do
+      position = OpenStruct.new(
+        item:      page.position_held_item,
+        real_item: 'Q123',
+        merged?:   true
+      )
+
+      allow(RetrieveItems).to receive(:one)
+        .with(page.position_held_item)
+        .and_return(position)
+
+      expect { subject }.to change(page, :position_held_item).to('Q123')
+    end
   end
 
   describe 'statement classification' do

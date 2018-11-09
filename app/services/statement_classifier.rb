@@ -110,9 +110,15 @@ class StatementClassifier
     statements.first.person_item
   end
 
+  def position
+    @position ||= RetrieveItems.one(page.position_held_item)
+  end
+
   def position_held_data
+    return [] unless position&.item
+
     @position_held_data ||= RetrievePositionData.run(
-      page.position_held_item,
+      position.item,
       person_item_from_transaction_id
     )
   end

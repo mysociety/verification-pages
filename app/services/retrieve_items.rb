@@ -7,6 +7,10 @@ class RetrieveItems < ServiceBase
 
   attr_reader :items
 
+  def self.one(arg)
+    run(arg)[arg]
+  end
+
   def initialize(*items)
     @items = items
   end

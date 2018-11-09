@@ -14,7 +14,7 @@ class StatementsController < FrontendController
     @country_statements = StatementsStatistics.new.statistics
     @country_lookup = Country.all.map { |c| [c.code, c] }.to_h
     positions = @country_statements.values.map(&:first).flatten.map(&:position)
-    @position_name_mapping = RetrieveLabels.run(*positions)
+    @position_name_mapping = RetrieveItems.run(*positions)
   end
 
   def show

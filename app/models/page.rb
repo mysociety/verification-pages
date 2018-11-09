@@ -29,7 +29,7 @@ class Page < ApplicationRecord
     self.parliamentary_term_name = labels[parliamentary_term_item]
   end
 
-  def labels
-    @labels ||= RetrieveLabels.run(position_held_item, parliamentary_term_item)
+  def item_data
+    @item_data ||= RetrieveItems.run(position_held_item, parliamentary_term_item)
   end
 end

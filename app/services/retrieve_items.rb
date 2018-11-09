@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 
 # Service to fetch labels of Wikidata items from a SPARQL query
-class RetrieveLabels < ServiceBase
+class RetrieveItems < ServiceBase
   include SparqlQuery
 
   attr_reader :items

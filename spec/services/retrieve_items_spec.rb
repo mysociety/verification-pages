@@ -2,8 +2,8 @@
 
 require 'rails_helper'
 
-RSpec.describe RetrieveLabels, type: :service do
-  let(:service) { RetrieveLabels.new('Q1', 'Q2') }
+RSpec.describe RetrieveItems, type: :service do
+  let(:service) { RetrieveItems.new('Q1', 'Q2') }
 
   describe 'initialisation' do
     it 'assigns items instance variable' do
@@ -29,7 +29,7 @@ RSpec.describe RetrieveLabels, type: :service do
     end
 
     context 'with invalid items' do
-      let(:service) { RetrieveLabels.new('Q1', 'abc', '', nil) }
+      let(:service) { RetrieveItems.new('Q1', 'abc', '', nil) }
 
       it 'ignores invalid items' do
         allow(service).to receive(:query_format).and_return('%<items>s')

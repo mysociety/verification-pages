@@ -31,7 +31,7 @@ RSpec.describe Page, type: :model do
     let(:page) { build(:page, position_held_item: 'Q2', parliamentary_term_item: 'Q3') }
 
     before do
-      allow(RetrieveLabels).to receive(:run).with('Q2', 'Q3').and_return(
+      allow(RetrieveItems).to receive(:run).with('Q2', 'Q3').and_return(
         'Q2' => 'Position', 'Q3' => 'Term'
       )
     end

@@ -150,10 +150,6 @@ class StatementClassifier
         },
         party:    { id: data.group },
         district: { id: data.district },
-        data:     {
-          statement_uuid: data.position,
-          revision:       data.revision,
-        },
       }
     end
   end

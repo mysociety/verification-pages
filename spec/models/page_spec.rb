@@ -32,7 +32,8 @@ RSpec.describe Page, type: :model do
 
     before do
       allow(RetrieveItems).to receive(:run).with('Q2', 'Q3').and_return(
-        'Q2' => 'Position', 'Q3' => 'Term'
+        'Q2' => OpenStruct.new(label: 'Position'),
+        'Q3' => OpenStruct.new(label: 'Term')
       )
     end
 

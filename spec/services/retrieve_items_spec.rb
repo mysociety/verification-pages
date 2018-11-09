@@ -19,13 +19,10 @@ RSpec.describe RetrieveItems, type: :service do
     end
 
     it 'returns hash with item and labels' do
-      allow(service).to receive(:run_query).and_return(
-        [
-          OpenStruct.new(item: 'Q1', label: 'Universe'),
-          OpenStruct.new(item: 'Q2', label: 'Earth'),
-        ]
-      )
-      expect(service.run).to eq('Q1' => 'Universe', 'Q2' => 'Earth')
+      q1 = OpenStruct.new(item: 'Q1', label: 'Universe')
+      q2 = OpenStruct.new(item: 'Q2', label: 'Earth')
+      allow(service).to receive(:run_query).and_return([q1, q2])
+      expect(service.run).to eq('Q1' => q1, 'Q2' => q2)
     end
 
     context 'with invalid items' do

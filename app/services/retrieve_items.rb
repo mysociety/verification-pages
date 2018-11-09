@@ -12,7 +12,7 @@ class RetrieveItems < ServiceBase
 
   def run
     run_query(query).each_with_object({}) do |result, memo|
-      memo[result.item] = result.label if result.label.present?
+      memo[result.item] = result
     end
   end
 

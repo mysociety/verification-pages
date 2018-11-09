@@ -4,7 +4,7 @@ namespace :data_check do
   desc 'Detect incorrect data in Wikidata'
   task report: :environment do
     Page.distinct.pluck(:position_held_item).each do |position_held|
-      name = RetrieveItems.new(position_held).run[position_held]
+      name = RetrieveItems.new(position_held).run[position_held]&.label
       puts "Position: #{name} (#{position_held})"
 
       query = RetrieveAllPositionData.new(position_held)

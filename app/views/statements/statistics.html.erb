@@ -22,7 +22,7 @@
       <tr>
         <td>
           <%= link_to "https://www.wikidata.org/wiki/#{statement.position}" do %>
-            <%= @position_name_mapping[statement.position] %>
+            <%= @position_name_mapping[statement.position]&.label %>
             <small>(<%= statement.position %>)</small>
           <% end %>
         </td>

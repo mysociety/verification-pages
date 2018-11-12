@@ -10,6 +10,11 @@ RSpec.describe SparqlResult, type: :model do
         "string": {
           "value": "ABC"
         },
+        "boolean": {
+          "datatype": "http://www.w3.org/2001/XMLSchema#boolean",
+          "type": "literal",
+          "value": "true"
+        },
         "datetime": {
           "datatype": "http://www.w3.org/2001/XMLSchema#dateTime",
           "type": "literal",
@@ -30,6 +35,11 @@ RSpec.describe SparqlResult, type: :model do
 
   it 'can return literal values' do
     expect(result.string).to eq 'ABC'
+  end
+
+  it 'can return boolean values' do
+    expect(result.boolean).to eq true
+    expect(result.boolean?).to eq true
   end
 
   it 'can return datetime values' do

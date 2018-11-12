@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-# Service to fetch labels of Wikidata items from a SPARQL query
+# Service to run a SPARQL query to fetch an multiple items' labels
 class RetrieveItems < ServiceBase
   include SparqlQuery
 
@@ -30,16 +30,16 @@ class RetrieveItems < ServiceBase
   def query_format
     <<~SPARQL
       SELECT
-        ?item ?label
+        ?item ?real_item ?label
       WHERE {
         VALUES (?item) {
           %<items>s
         }
-        OPTIONAL { ?item owl:sameAs ?mergedInTo }
-        BIND(COALESCE(?mergedInTo, ?item) AS ?realItem)
+        OPTIONAL { ?item owl:sameAs ?real_item }
+        BIND(COALESCE(?real_item, ?item) AS ?real_item)
         SERVICE wikibase:label {
           bd:serviceParam wikibase:language "[AUTO_LANGUAGE],en" .
-          ?realItem rdfs:label ?label .
+          ?real_item rdfs:label ?label .
         }
       }
     SPARQL

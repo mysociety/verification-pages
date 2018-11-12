@@ -17,7 +17,7 @@ class GenerateVerificationPage < ServiceBase
   private
 
   def classified_statements
-    @classified_statements ||= NewStatementClassifier.new(page.title)
+    @classified_statements ||= StatementClassifier.new(page.title)
   end
 
   def template

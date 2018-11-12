@@ -1,10 +1,12 @@
 # frozen_string_literal: true
 
+require 'membership_comparison'
+
 # Service to classify statements into actionable, manually_actionable or done groups
 class StatementClassifier
   attr_reader :page, :statements, :transaction_id
 
-  VERSION = 'v1'
+  VERSION = 'v2'
 
   def initialize(page_title, transaction_ids: [])
     @page = Page.find_by!(title: page_title)
@@ -97,8 +99,8 @@ class StatementClassifier
   end
 
   def decorate_statement(statement)
-    data = matching_position_held_data(statement)
-    StatementDecorator.new(statement, data).tap do |s|
+    comparison = comparison_for_statement(statement)
+    StatementDecorator.new(statement, comparison).tap do |s|
       s.type = statement_type(s)
     end
   end
@@ -111,8 +113,20 @@ class StatementClassifier
   def position_held_data
     @position_held_data ||= RetrievePositionData.run(
       page.position_held_item,
-      page.parliamentary_term_item,
       person_item_from_transaction_id
+    )
+  end
+
+  def parliamentary_term_data
+    @parliamentary_term_data ||= RetrieveTermData.run(
+      page.parliamentary_term_item
+    )
+  end
+
+  def comparison_for_statement(statement)
+    MembershipComparison.new(
+      existing:   existing_statements_for_person(statement.person_item),
+      suggestion: mapped_statement(statement)
     )
   end
 
@@ -120,9 +134,44 @@ class StatementClassifier
     data.merged_then_deleted.split.map { |item| item.split('/').last }
   end
 
-  def matching_position_held_data(statement)
-    position_held_data.select do |data|
-      ([data.person] + merged_then_deleted(data)).include?(statement.person_item)
+  def existing_statements_for_person(person_item)
+    position_held_data.each_with_object({}) do |data, memo|
+      person_items = [data.person] + merged_then_deleted(data)
+      next unless person_items.include?(person_item)
+
+      memo[data.position] = {
+        position: { id: page.position_held_item },
+        start:    data.position_start,
+        end:      data.position_end,
+        term:     {
+          id:    data.term,
+          start: data.term_start,
+          end:   data.term_end,
+        },
+        party:    { id: data.group },
+        district: { id: data.district },
+        data:     {
+          statement_uuid: data.position,
+          revision:       data.revision,
+        },
+      }
     end
+  end
+
+  def mapped_statement(statement)
+    {
+      position: { id: page.position_held_item },
+      term:     {
+        id:    page.parliamentary_term_item.presence,
+        start: parliamentary_term_data.start,
+        end:   parliamentary_term_data.end,
+        eopt:  parliamentary_term_data.previous_term_end,
+        sont:  parliamentary_term_data.next_term_start,
+      },
+      party:    { id: statement.parliamentary_group_item },
+      district: { id: !page.executive_position? ? statement.electoral_district_item : nil },
+      start:    statement.position_start,
+      end:      statement.position_end,
+    }
   end
 end

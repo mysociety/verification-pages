@@ -22,7 +22,7 @@ class StatementsController < FrontendController
 
     case params[:force_type]
     when 'done'
-      statement.record_actioned!(classifier_klass::VERSION)
+      statement.record_actioned!(StatementClassifier::VERSION)
     when 'manually_actionable'
       statement.report_error!(params[:error_message])
     when 'actionable'

@@ -20,15 +20,6 @@ class FrontendController < ApplicationController
   private
 
   def classify_page(page, statements = [])
-    classifier_klass.new(page.title, transaction_ids: statements.map(&:transaction_id))
-  end
-
-  def classifier_klass
-    case params[:classifier]
-    when 'v1'
-      StatementClassifier
-    else
-      NewStatementClassifier
-    end
+    StatementClassifier.new(page.title, transaction_ids: statements.map(&:transaction_id))
   end
 end

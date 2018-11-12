@@ -78,8 +78,8 @@ RSpec.describe Statement, type: :model do
     end
 
     it 'assigns classifier_version' do
-      expect { statement.record_actioned!('v2') }.to(
-        change(statement, :classifier_version).from(1).to(2)
+      expect { statement.record_actioned!('v3') }.to(
+        change(statement, :classifier_version).from(2).to(3)
       )
     end
   end

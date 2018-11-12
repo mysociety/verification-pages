@@ -5,6 +5,8 @@
 module SparqlResult
   attr_writer :variables
 
+  DATATYPE_DATETIME = 'http://www.w3.org/2001/XMLSchema#dateTime'
+
   def [](*args)
     value = super
     return nil unless value
@@ -27,7 +29,7 @@ module SparqlResult
   end
 
   def map_value(h)
-    return h[:value].to_s[0..9] if h[:datatype] == 'http://www.w3.org/2001/XMLSchema#dateTime'
+    return h[:value].to_s[0..9] if h[:datatype] == DATATYPE_DATETIME
     return h[:value].to_s.split('/').last if h[:type] == 'uri'
 
     h[:value]

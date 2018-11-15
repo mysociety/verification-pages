@@ -14,6 +14,7 @@ class LoadStatements < ServiceBase
     touched_statements = csv.map { |result| parse_result(result) }
     untouched_statements = page.statements.where.not(id: touched_statements)
     untouched_statements.update(removed_from_source: true)
+    touched_statements
   end
 
   private

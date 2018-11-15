@@ -199,6 +199,13 @@ RSpec.describe LoadStatements do
         other_statement.reload
         expect(other_statement.removed_from_source).to eq false
       end
+
+      it 'returns the active statements' do
+        load_statements = LoadStatements.new(page.title)
+        result = load_statements.run
+        new_statement = Statement.last
+        expect(result).to match_array([new_statement])
+      end
     end
   end
 end

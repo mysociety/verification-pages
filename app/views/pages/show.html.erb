@@ -35,7 +35,10 @@
   <dt><strong><%= model_class.human_attribute_name(:archived) %>:</strong></dt>
   <dd><%= @page.archived %></dd>
   <dt><strong>Statements</strong></dt>
-  <dd><%= @page.statements.count %></dd>
+  <dd>Active: <%= @page.statements.where(duplicate: false, removed_from_source: false).count %></dd>
+  <dd>Duplicates: <%= @page.statements.where(duplicate: true).count %></dd>
+  <dd>Removed from CSV source: <%= @page.statements.where(duplicate: false, removed_from_source: true).count %></dd>
+  <dd>Total: <%= @page.statements.count %></dd>
 </dl>
 
 <%= link_to t('.back', default: t("helpers.links.back")),

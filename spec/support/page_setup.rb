@@ -2,6 +2,6 @@
 
 RSpec.configure do |config|
   config.before do
-    allow(RetrieveLabels).to receive(:run).and_return({})
+    allow(RetrieveItems).to receive(:run).and_return({})
   end
 end

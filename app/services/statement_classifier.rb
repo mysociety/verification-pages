@@ -62,6 +62,8 @@ class StatementClassifier
   end
 
   def to_a
+    update_page_position_if_merged
+
     statements.to_a
               .map { |s| decorate_statement(s) }
               .select(&:type) # remove statements without a type
@@ -110,9 +112,19 @@ class StatementClassifier
     statements.first.person_item
   end
 
+  def update_page_position_if_merged
+    page.update(position_held_item: position.real_item) if position&.merged?
+  end
+
+  def position
+    @position ||= RetrieveItems.one(page.position_held_item)
+  end
+
   def position_held_data
+    return [] unless position&.item
+
     @position_held_data ||= RetrievePositionData.run(
-      page.position_held_item,
+      position.item,
       person_item_from_transaction_id
     )
   end
@@ -140,7 +152,6 @@ class StatementClassifier
       next unless person_items.include?(person_item)
 
       memo[data.position] = {
-        position: { id: page.position_held_item },
         start:    data.position_start,
         end:      data.position_end,
         term:     {
@@ -150,17 +161,12 @@ class StatementClassifier
         },
         party:    { id: data.group },
         district: { id: data.district },
-        data:     {
-          statement_uuid: data.position,
-          revision:       data.revision,
-        },
       }
     end
   end
 
   def mapped_statement(statement)
     {
-      position: { id: page.position_held_item },
       term:     {
         id:    page.parliamentary_term_item.presence,
         start: parliamentary_term_data.start,

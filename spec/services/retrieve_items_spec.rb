@@ -2,8 +2,8 @@
 
 require 'rails_helper'
 
-RSpec.describe RetrieveLabels, type: :service do
-  let(:service) { RetrieveLabels.new('Q1', 'Q2') }
+RSpec.describe RetrieveItems, type: :service do
+  let(:service) { RetrieveItems.new('Q1', 'Q2') }
 
   describe 'initialisation' do
     it 'assigns items instance variable' do
@@ -19,17 +19,14 @@ RSpec.describe RetrieveLabels, type: :service do
     end
 
     it 'returns hash with item and labels' do
-      allow(service).to receive(:run_query).and_return(
-        [
-          OpenStruct.new(item: 'Q1', label: 'Universe'),
-          OpenStruct.new(item: 'Q2', label: 'Earth'),
-        ]
-      )
-      expect(service.run).to eq('Q1' => 'Universe', 'Q2' => 'Earth')
+      q1 = OpenStruct.new(item: 'Q1', label: 'Universe')
+      q2 = OpenStruct.new(item: 'Q2', label: 'Earth')
+      allow(service).to receive(:run_query).and_return([q1, q2])
+      expect(service.run).to eq('Q1' => q1, 'Q2' => q2)
     end
 
     context 'with invalid items' do
-      let(:service) { RetrieveLabels.new('Q1', 'abc', '', nil) }
+      let(:service) { RetrieveItems.new('Q1', 'abc', '', nil) }
 
       it 'ignores invalid items' do
         allow(service).to receive(:query_format).and_return('%<items>s')

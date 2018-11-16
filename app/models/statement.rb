@@ -47,7 +47,8 @@ class Statement < ApplicationRecord
       person_name:             person_name,
       electoral_district_name: electoral_district_name,
       electoral_district_item: electoral_district_item,
-      fb_identifier:           fb_identifier
+      fb_identifier:           fb_identifier,
+      removed_from_source:     false
     )
   end
 

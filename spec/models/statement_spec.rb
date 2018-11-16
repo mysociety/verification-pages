@@ -136,6 +136,10 @@ RSpec.describe Statement, type: :model do
       create(:statement, attributes.merge(transaction_id: '789', page: page_2))
     end
 
+    let!(:removed) do
+      create(:statement, attributes.merge(transaction_id: 'ABC', page: page, removed_from_source: true))
+    end
+
     subject { statement.self_and_duplicate_statements }
 
     it 'returns self' do
@@ -148,6 +152,10 @@ RSpec.describe Statement, type: :model do
 
     it 'does not returns statements from other pages' do
       is_expected.to_not include(other)
+    end
+
+    it 'does not returns statements removed from source' do
+      is_expected.to_not include(removed)
     end
   end
 

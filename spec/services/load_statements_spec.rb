@@ -207,5 +207,31 @@ RSpec.describe LoadStatements do
         expect(result).to match_array([new_statement])
       end
     end
+
+    context 'items have been updated in upstream source' do
+      let(:suggestions_store_response) do
+        <<~CSV
+          person_name,person_item
+          Alice,Q1234
+        CSV
+      end
+
+      let!(:existing) { create(:statement, person_name: 'Alice', page: page) }
+      let(:statement) { Statement.last }
+
+      before do
+        load_statements = LoadStatements.new(page.title)
+        expect { load_statements.run }.to change(Statement, :count).by(1)
+      end
+
+      it 'should replace existing statement' do
+        existing.reload
+        expect(existing).to be_removed_from_source
+      end
+
+      it 'should not mark new statement as a duplicate' do
+        expect(statement).to_not be_duplicate
+      end
+    end
   end
 end

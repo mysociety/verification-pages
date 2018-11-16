@@ -15,6 +15,7 @@ class LoadStatements < ServiceBase
       touched_statements = csv.map { |result| parse_result(result) }
       untouched_statements = page.statements.where.not(id: touched_statements)
       untouched_statements.update(removed_from_source: true)
+      touched_statements.each(&:save!)
       touched_statements
     end
   end
@@ -41,7 +42,7 @@ class LoadStatements < ServiceBase
     end
 
     # The other attributes we always update from the upstream CSV:
-    statement.update!(
+    statement.assign_attributes(
       page:                     page,
       person_name:              result[:person_name],
       electoral_district_name:  result[:electoral_district_name],

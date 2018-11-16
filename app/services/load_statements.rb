@@ -11,10 +11,12 @@ class LoadStatements < ServiceBase
   end
 
   def run
-    touched_statements = csv.map { |result| parse_result(result) }
-    untouched_statements = page.statements.where.not(id: touched_statements)
-    untouched_statements.update(removed_from_source: true)
-    touched_statements
+    Statement.transaction do
+      touched_statements = csv.map { |result| parse_result(result) }
+      untouched_statements = page.statements.where.not(id: touched_statements)
+      untouched_statements.update(removed_from_source: true)
+      touched_statements
+    end
   end
 
   private

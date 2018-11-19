@@ -6,11 +6,10 @@ namespace :data_check do
     Page.distinct.pluck(:position_held_item).each do |position_held|
       log_lines = []
 
-      name = RetrieveItems.new(position_held).run[position_held]&.label
-      log_lines << "Position: #{name} (#{position_held})"
+      log_lines << "== {{Q|#{position_held.sub(/^Q/, '')}}} ==\n"
 
       query = RetrieveAllPositionData.new(position_held)
-      log_lines << "Number people with this P39s: #{query.people.count}"
+      log_lines << "Number people with this P39s: #{query.people.count}\n"
 
       total_errors = query.map do |(person, results)|
         # find statements which match the position held we're interested in
@@ -36,11 +35,9 @@ namespace :data_check do
 
         next if issues.empty?
 
-        name = results.first.personLabel
-        log_lines << "-> #{name} (#{person}) has #{matching.count} matching P39s"
-        log_lines << "-> https://www.wikidata.org/wiki/#{person}"
+        log_lines << "* {{Q|#{person.sub(/^Q/, '')}}} has #{matching.count} matching P39s"
         issues.each do |(position, (error, duplicate))|
-          log_lines << "---> #{error} (#{position}, #{duplicate.position})"
+          log_lines << "*# #{error} (#{position}, #{duplicate.position})"
         end
 
         issues.count
@@ -49,7 +46,7 @@ namespace :data_check do
       total_errors = total_errors.compact.sum
       if ENV['DATA_CHECK_DEBUG'] || !total_errors.zero?
         log_lines.each { |line| puts line }
-        puts "#{total_errors} errors detected\n\n"
+        puts "\n#{total_errors} errors detected\n\n"
       end
     end
   end

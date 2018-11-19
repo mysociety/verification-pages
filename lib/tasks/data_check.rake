@@ -1,6 +1,20 @@
 # frozen_string_literal: true
 
 namespace :data_check do
+  desc 'Update Wikidata page with the latest data check report'
+  task update: :environment do
+    page_title = "User:#{ENV.fetch('WIKIDATA_USERNAME')}/data_check"
+
+    s = StringIO.new
+    oldstdout = $stdout
+    $stdout = s
+    Rake.application['data_check:report'].invoke
+    $stdout = oldstdout
+    page_content = s.string
+
+    UpdateWikidataPage.run(page_title, page_content)
+  end
+
   desc 'Detect incorrect data in Wikidata'
   task report: :environment do
     Page.distinct.pluck(:position_held_item).each do |position_held|

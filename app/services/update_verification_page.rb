@@ -2,8 +2,6 @@
 
 # Service object to update MediaWiki page source
 class UpdateVerificationPage < ServiceBase
-  include WikiClient
-
   attr_reader :page_title
 
   def initialize(page_title)
@@ -11,7 +9,7 @@ class UpdateVerificationPage < ServiceBase
   end
 
   def run
-    client.create_page(page_title, page_content)
+    UpdateWikidataPage.run(page_title, page_content)
   end
 
   private

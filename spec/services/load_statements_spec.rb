@@ -258,5 +258,30 @@ RSpec.describe LoadStatements do
         expect(statement.electoral_district_item).to eq 'Q789'
       end
     end
+
+    context 'use an EveryPolitician CSV as the upstream source' do
+      let(:suggestions_store_response) do
+        <<~CSV
+          id,name,sort_name,email,twitter,facebook,group,group_id,area_id,area,chamber,term,start_date,end_date,image,gender,wikidata,wikidata_group,wikidata_area
+          c216f406-b11f-4f2b-a890-e9922293478e,Anthony Martinez,Anthony Martinez,,,,United Democratic Party,90ee4fde-68d6-4544-bb2a-2a58371b629f,7764e1c2-da2a-456f-9ab1-d66665df244d,Port Loyola,House of Representatives,9,,,http://nationalassembly.gov.bz/images/house_of_rep/a_martinez.jpg,male,Q4773030,Q1809323,Q16975862
+        CSV
+      end
+
+      let(:statement) { Statement.last }
+
+      before do
+        load_statements = LoadStatements.new(page.title)
+        expect { load_statements.run }.to change(Statement, :count).by(1)
+      end
+
+      it 'should map alternate columns' do
+        expect(statement.person_name).to eq 'Anthony Martinez'
+        expect(statement.person_item).to eq 'Q4773030'
+        expect(statement.parliamentary_group_name).to eq 'United Democratic Party'
+        expect(statement.parliamentary_group_item).to eq 'Q1809323'
+        expect(statement.electoral_district_name).to eq 'Port Loyola'
+        expect(statement.electoral_district_item).to eq 'Q16975862'
+      end
+    end
   end
 end

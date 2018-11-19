@@ -47,7 +47,7 @@ namespace :data_check do
       end
 
       total_errors = total_errors.compact.sum
-      unless total_errors.zero?
+      if ENV['DATA_CHECK_DEBUG'] || !total_errors.zero?
         log_lines.each { |line| puts line }
         puts "#{total_errors} errors detected\n\n"
       end

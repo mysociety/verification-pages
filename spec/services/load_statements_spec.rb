@@ -233,5 +233,30 @@ RSpec.describe LoadStatements do
         expect(statement).to_not be_duplicate
       end
     end
+
+    context 'items alternate columns in upstream source' do
+      let(:suggestions_store_response) do
+        <<~CSV
+          name,id,alliance,wikidata_alliance,constituency,constituency_id
+          Alice,Q123,Aparty,Q456,Ambridge,Q789
+        CSV
+      end
+
+      let(:statement) { Statement.last }
+
+      before do
+        load_statements = LoadStatements.new(page.title)
+        expect { load_statements.run }.to change(Statement, :count).by(1)
+      end
+
+      it 'should map alternate columns' do
+        expect(statement.person_name).to eq 'Alice'
+        expect(statement.person_item).to eq 'Q123'
+        expect(statement.parliamentary_group_name).to eq 'Aparty'
+        expect(statement.parliamentary_group_item).to eq 'Q456'
+        expect(statement.electoral_district_name).to eq 'Ambridge'
+        expect(statement.electoral_district_item).to eq 'Q789'
+      end
+    end
   end
 end

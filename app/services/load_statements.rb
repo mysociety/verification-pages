@@ -22,6 +22,17 @@ class LoadStatements < ServiceBase
 
   private
 
+  def csv
+    @csv ||= CSV.parse(raw_data, headers: true, header_converters: :symbol,
+                                 converters: nil)
+  end
+
+  def raw_data
+    RestClient.get(page.csv_source_url).body
+  rescue RestClient::Exception => e
+    raise "Suggestion store failed: #{e.message}"
+  end
+
   def parse_result(result)
     result[:transaction_id] ||= page.generate_transaction_id(result.to_h)
 
@@ -54,16 +65,5 @@ class LoadStatements < ServiceBase
     )
 
     statement
-  end
-
-  def csv
-    @csv ||= CSV.parse(raw_data, headers: true, header_converters: :symbol,
-                                 converters: nil)
-  end
-
-  def raw_data
-    RestClient.get(page.csv_source_url).body
-  rescue RestClient::Exception => e
-    raise "Suggestion store failed: #{e.message}"
   end
 end

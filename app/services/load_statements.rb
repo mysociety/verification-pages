@@ -52,7 +52,7 @@ class Row < OpenStruct
   end
 
   def electoral_district_item
-    super || area_id || constituency_id || district_id
+    find_qids(super, area_id, constituency_id, district_id).first
   end
 
   def parliamentary_group_name
@@ -60,7 +60,7 @@ class Row < OpenStruct
   end
 
   def parliamentary_group_item
-    super || alliance_id || coalition_id || faction_id || party_id || group_id
+    find_qids(super, alliance_id, coalition_id, faction_id, party_id, group_id).first
   end
 
   def person_name
@@ -68,7 +68,7 @@ class Row < OpenStruct
   end
 
   def person_item
-    super || id || wikidata
+    find_qids(super, wikidata, id).first
   end
 
   def position_start
@@ -116,34 +116,38 @@ class Row < OpenStruct
   end
 
   def area_id
-    super || area_wikidata || wikidata_area
+    find_qids(super, area_wikidata, wikidata_area).first
   end
 
   def constituency_id
-    super || constituency_wikidata || wikidata_constituency
+    find_qids(super, constituency_wikidata, wikidata_constituency).first
   end
 
   def district_id
-    super || district_wikidata || wikidata_district
+    find_qids(super, district_wikidata, wikidata_district).first
   end
 
   def alliance_id
-    super || alliance_wikidata || wikidata_alliance
+    find_qids(super, alliance_wikidata, wikidata_alliance).first
   end
 
   def coalition_id
-    super || coalition_wikidata || wikidata_coalition
+    find_qids(super, coalition_wikidata, wikidata_coalition).first
   end
 
   def faction_id
-    super || faction_wikidata || wikidata_faction
+    find_qids(super, faction_wikidata, wikidata_faction).first
   end
 
   def party_id
-    super || party_wikidata || wikidata_party
+    find_qids(super, party_wikidata, wikidata_party).first
   end
 
   def group_id
-    super || group_wikidata || wikidata_group
+    find_qids(super, group_wikidata, wikidata_group).first
+  end
+
+  def find_qids(*args)
+    args.select { |id| id && id =~ /^Q\d+$/ }
   end
 end

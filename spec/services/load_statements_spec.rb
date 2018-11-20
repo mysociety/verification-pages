@@ -258,5 +258,41 @@ RSpec.describe LoadStatements do
         expect(statement.electoral_district_item).to eq 'Q789'
       end
     end
+
+    context 'use an EveryPolitician CSV as the upstream source' do
+      let(:suggestions_store_response) do
+        <<~CSV
+          id,name,sort_name,email,twitter,facebook,group,group_id,area_id,area,chamber,term,start_date,end_date,image,gender,wikidata,wikidata_group,wikidata_area
+          c216f406-b11f-4f2b-a890-e9922293478e,Anthony Martinez,Anthony Martinez,,,,United Democratic Party,90ee4fde-68d6-4544-bb2a-2a58371b629f,7764e1c2-da2a-456f-9ab1-d66665df244d,Port Loyola,House of Representatives,9,,,http://nationalassembly.gov.bz/images/house_of_rep/a_martinez.jpg,male,Q4773030,Q1809323,Q16975862
+          5a76ebe1-9913-4008-83fd-f7ea1e95c26a,Dr. Marco Tulio Mendez,Dr. Marco Tulio Mendez,,,,People's United Party,8e327a03-68fd-4ea0-bd59-b59cb05ecfd6,78a91d5b-a813-4367-aab8-cf6aa6934ac1,Orange Walk East,House of Representatives,9,,,http://nationalassembly.gov.bz/images/house_of_rep/marco%20tulio.jpg,male,,Q1759613,Q25405052
+        CSV
+      end
+
+      let(:statement_1) { Statement.find_by(person_name: 'Anthony Martinez') }
+      let(:statement_2) { Statement.find_by(person_name: 'Dr. Marco Tulio Mendez') }
+
+      before do
+        load_statements = LoadStatements.new(page.title)
+        expect { load_statements.run }.to change(Statement, :count).by(2)
+      end
+
+      it 'should map alternate columns' do
+        expect(statement_1.person_name).to eq 'Anthony Martinez'
+        expect(statement_1.person_item).to eq 'Q4773030'
+        expect(statement_1.parliamentary_group_name).to eq 'United Democratic Party'
+        expect(statement_1.parliamentary_group_item).to eq 'Q1809323'
+        expect(statement_1.electoral_district_name).to eq 'Port Loyola'
+        expect(statement_1.electoral_district_item).to eq 'Q16975862'
+      end
+
+      it 'should map to nil if alternate columns are invalid' do
+        expect(statement_2.person_name).to eq 'Dr. Marco Tulio Mendez'
+        expect(statement_2.person_item).to be_nil
+        expect(statement_2.parliamentary_group_name).to eq "People's United Party"
+        expect(statement_2.parliamentary_group_item).to eq 'Q1759613'
+        expect(statement_2.electoral_district_name).to eq 'Orange Walk East'
+        expect(statement_2.electoral_district_item).to eq 'Q25405052'
+      end
+    end
   end
 end

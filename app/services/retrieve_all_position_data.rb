@@ -88,14 +88,16 @@ class RetrieveAllPositionData < ServiceBase
           OPTIONAL { ?term wdt:P582 ?term_end }
           OPTIONAL { ?term wdt:P576 ?term_end }
 
-          OPTIONAL { ?term wdt:P155 ?previous_term }
-          OPTIONAL { ?term wdt:P1365 ?previous_term }
+          OPTIONAL {
+            ?term wdt:P155 ?previous_term .
+            ?term wdt:P1365 ?previous_term .
 
-          # previous term start/end dates
-          OPTIONAL { ?previous_term wdt:P580 ?previous_term_start }
-          OPTIONAL { ?previous_term wdt:P571 ?previous_term_start }
-          OPTIONAL { ?previous_term wdt:P582 ?previous_term_end }
-          OPTIONAL { ?previous_term wdt:P576 ?previous_term_end }
+            # previous term start/end dates
+            OPTIONAL { ?previous_term wdt:P580 ?previous_term_start }
+            OPTIONAL { ?previous_term wdt:P571 ?previous_term_start }
+            OPTIONAL { ?previous_term wdt:P582 ?previous_term_end }
+            OPTIONAL { ?previous_term wdt:P576 ?previous_term_end }
+          }
         }
 
         OPTIONAL { ?position pq:P4100 ?group . }

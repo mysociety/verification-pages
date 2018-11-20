@@ -2,8 +2,6 @@
 
 # Service object to update MediaWiki javascript source
 class UpdateVerificationJavascript < ServiceBase
-  include WikiClient
-
   attr_reader :page_title
 
   def initialize(page_title)
@@ -12,7 +10,7 @@ class UpdateVerificationJavascript < ServiceBase
 
   def run
     print "Updating #{page_title}... "
-    client.create_page(page_title, source.read)
+    UpdateWikidataPage.run(page_title, source.read)
   rescue MediawikiApi::ApiError => ex
     puts "... error (#{ex.message})"
   else

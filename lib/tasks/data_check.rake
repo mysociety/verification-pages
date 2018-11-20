@@ -1,14 +1,29 @@
 # frozen_string_literal: true
 
 namespace :data_check do
+  desc 'Update Wikidata page with the latest data check report'
+  task update: :environment do
+    page_title = "User:#{ENV.fetch('WIKIDATA_USERNAME')}/data_check"
+
+    s = StringIO.new
+    oldstdout = $stdout
+    $stdout = s
+    Rake.application['data_check:report'].invoke
+    $stdout = oldstdout
+    page_content = s.string
+
+    UpdateWikidataPage.run(page_title, page_content)
+  end
+
   desc 'Detect incorrect data in Wikidata'
   task report: :environment do
     Page.distinct.pluck(:position_held_item).each do |position_held|
-      name = RetrieveItems.new(position_held).run[position_held]&.label
-      puts "Position: #{name} (#{position_held})"
+      log_lines = []
+
+      log_lines << "== {{Q|#{position_held.sub(/^Q/, '')}}} ==\n"
 
       query = RetrieveAllPositionData.new(position_held)
-      puts "Number people with this P39s: #{query.people.count}"
+      log_lines << "Number people with this P39s: #{query.people.count}\n"
 
       total_errors = query.map do |(person, results)|
         # find statements which match the position held we're interested in
@@ -34,21 +49,18 @@ namespace :data_check do
 
         next if issues.empty?
 
-        name = results.first.personLabel
-        puts "-> #{name} (#{person}) has #{matching.count} matching P39s"
-        puts "-> https://www.wikidata.org/wiki/#{person}"
+        log_lines << "* {{Q|#{person.sub(/^Q/, '')}}} has #{matching.count} matching P39s"
         issues.each do |(position, (error, duplicate))|
-          puts "---> #{error} (#{position}, #{duplicate.position})"
+          log_lines << "*# #{error} (#{position}, #{duplicate.position})"
         end
 
         issues.count
       end
 
       total_errors = total_errors.compact.sum
-      if total_errors.zero?
-        puts "No errors detected\n\n"
-      else
-        puts "#{total_errors} errors detected\n\n"
+      if ENV['DATA_CHECK_DEBUG'] || !total_errors.zero?
+        log_lines.each { |line| puts line }
+        puts "\n#{total_errors} errors detected\n\n"
       end
     end
   end

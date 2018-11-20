@@ -3,7 +3,6 @@
 # Service object to update MediaWiki templates source
 class UpdateVerificationTemplates < ServiceBase
   include Renderer
-  include WikiClient
 
   attr_reader :page_title
 
@@ -16,7 +15,7 @@ class UpdateVerificationTemplates < ServiceBase
       begin
         template_name = "#{page_title}/#{template.basename('.mediawiki.erb')}"
         print "Updating #{template_name}... "
-        client.create_page(template_name, render(template))
+        UpdateWikidataPage.run(template_name, render(template))
       rescue MediawikiApi::ApiError => ex
         puts "error (#{ex.message})"
       else

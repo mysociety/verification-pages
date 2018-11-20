@@ -9,3 +9,4 @@ source ./script/toolforge-setup
 # Add all the scripts that you want to be run daily here
 bin/rails verification_page:load:all
 bin/rails verification_page:generate:all
+bin/rails data_check:update

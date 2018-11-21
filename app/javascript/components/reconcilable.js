@@ -137,7 +137,7 @@ export default template({
         },
         {
           lang: 'en',
-          value: this.country.description_en
+          value: this.page.new_item_description_en || this.country.description_en
         }
       ).then(createdItemData => {
         this.reconcileWithItem(createdItemData.item)

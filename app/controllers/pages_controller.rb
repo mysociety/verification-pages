@@ -78,7 +78,7 @@ class PagesController < ApplicationController
                                  :country_id,
                                  :csv_source_url, :executive_position,
                                  :reference_url_title, :reference_url_language,
-                                 :archived)
+                                 :archived, :new_item_description_en)
   end
 
   def new_page_params

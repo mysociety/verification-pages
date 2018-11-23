@@ -25,6 +25,7 @@ class StatementClassifier
   def existing_statements
     @existing_statements.each_with_object({}) do |data, memo|
       memo[data.position] = {
+        position: data.position_held,
         start:    data.position_start,
         end:      data.position_end,
         term:     {
@@ -39,12 +40,20 @@ class StatementClassifier
   end
 
   def suggested_statement
-    {
+    suggested_positions.merge(
       term:     suggested_term,
       person:   suggested_person,
       party:    suggested_party,
-      district: suggested_dates,
-    }.merge(suggested_dates)
+      district: suggested_dates
+    ).merge(suggested_dates)
+  end
+
+  def suggested_positions
+    {
+      position:          @items[:position]&.item,
+      position_parent:   @items[:position]&.parent,
+      position_children: @items[:position]&.children&.map(&:item),
+    }
   end
 
   def suggested_term

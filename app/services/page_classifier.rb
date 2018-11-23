@@ -133,7 +133,7 @@ class PageClassifier
     return [] unless position&.item
 
     @position_held_data ||= RetrievePositionData.run(
-      position.item,
+      ([position.item, position.parent] + position.children.map(&:item)).compact,
       person_item_from_transaction_id
     )
   end

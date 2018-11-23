@@ -6,19 +6,27 @@ RSpec.describe RetrievePositionData, type: :service do
   let(:service) { RetrievePositionData.new('Q1', 'Q2') }
 
   describe 'initialisation' do
-    it 'assigns position_held_item instance variable' do
-      expect(service.position_held_item).to eq 'Q1'
+    it 'assigns position_held_items instance variable' do
+      expect(service.position_held_items).to match_array(['Q1'])
     end
 
     it 'assigns person_item instance variable' do
       expect(service.person_item).to eq 'Q2'
     end
+
+    context 'with more than one position_held_item' do
+      let(:service) { RetrievePositionData.new(%w[Q1 Q2]) }
+
+      it 'assigns position_held_items instance variable' do
+        expect(service.position_held_items).to match_array(%w[Q1 Q2])
+      end
+    end
   end
 
   describe '#run' do
-    it 'calls run_query with substituted position_held_item' do
-      allow(service).to receive(:query_format).and_return('%<position_held_item>s')
-      expect(service).to receive(:run_query).with('Q1')
+    it 'calls run_query with substituted position_held_items' do
+      allow(service).to receive(:query_format).and_return('%<position_held_items>s')
+      expect(service).to receive(:run_query).with('(wd:Q1)')
       service.run
     end
 

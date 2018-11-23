@@ -19,8 +19,8 @@ RSpec.describe RetrieveItems, type: :service do
     end
 
     it 'returns hash with item and labels' do
-      q1 = OpenStruct.new(item: 'Q1', label: 'Universe')
-      q2 = OpenStruct.new(item: 'Q2', label: 'Earth')
+      q1 = { item: 'Q1', label: 'Universe' }
+      q2 = { item: 'Q2', label: 'Earth' }
       allow(service).to receive(:run_query).and_return([q1, q2])
       expect(service.run).to eq('Q1' => q1, 'Q2' => q2)
     end
@@ -32,6 +32,31 @@ RSpec.describe RetrieveItems, type: :service do
         allow(service).to receive(:query_format).and_return('%<items>s')
         expect(service).to receive(:run_query).with('(wd:Q1)').and_return([])
         service.run
+      end
+    end
+
+    context 'with subclasses' do
+      let(:service) { RetrieveItems.new('Q1') } # not Universe
+
+      it 'combines into an array' do
+        p3 = { item: 'Q1', child: 'Q2', child_label: 'Earth' }
+        p4 = { item: 'Q1', child: 'Q111', child_label: 'Mars' }
+        allow(service).to receive(:run_query).and_return([p3, p4])
+
+        expect(service.run).to eq(
+          'Q1' => { item: 'Q1', children: [
+            { item: 'Q2', label: 'Earth' },
+            { item: 'Q111', label: 'Mars' },
+          ], }
+        )
+      end
+
+      it 'ignores blank subclass items' do
+        allow(service).to receive(:run_query).and_return(
+          [{ item: 'Q1', child: nil, child_label: nil }]
+        )
+
+        expect(service.run).to eq('Q1' => { item: 'Q1', children: [] })
       end
     end
   end

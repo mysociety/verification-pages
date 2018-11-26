@@ -23,7 +23,7 @@ export default template({
         ['firstName', 'First name'],
         ['district', 'District'],
         ['parliamentaryGroup', 'Parliamentary group'],
-        ['type', 'Type']
+        ['type', 'Status']
       ],
       page: null
     }

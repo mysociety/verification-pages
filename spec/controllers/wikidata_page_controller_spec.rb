@@ -14,6 +14,7 @@ RSpec.describe WikidataPageController, type: :controller do
           country:                 canada,
           parliamentary_term_item: 'Q456',
           csv_source_url:          'https://example.com/members.csv',
+          new_item_description_en: 'Canadian politician',
         },
         update_page:     true,
         wikidata_url:    wikidata_url
@@ -35,6 +36,13 @@ RSpec.describe WikidataPageController, type: :controller do
     it 'uses existing page if there is one' do
       create(:page, title: 'Test_Page')
       expect { get :setup, params: valid_params }.to_not change(Page, :count)
+    end
+
+    it 'updates page with new attributes' do
+      page = double(:page, title: 'Test_Page')
+      allow(Page).to receive(:find_or_initialize_by).with(title: 'Test_Page').and_return(page)
+      expect(page).to receive(:update).with(wikipage.page_attributes)
+      get :setup, params: valid_params
     end
 
     it 'redirect to the wikidata URL' do

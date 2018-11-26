@@ -21,6 +21,8 @@ class WikiPageTemplateTag
 
   def update_page(content)
     section.replace_output(content, 'Created or updated verification page')
+  rescue MediaWiki::Page::ReplaceableContent::TemplateNotFoundError
+    false
   end
 
   def wikidata_url

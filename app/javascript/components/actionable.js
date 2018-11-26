@@ -51,8 +51,8 @@ export default template({
         updateData.statement = this.statement.statement_uuid.replace(/^(Q\d+)[^\d]/, '$1$')
       }
 
-      references[wikidataClient.getReferencePropertyID(this.page.reference_url)] = {
-        value: this.page.reference_url, type: 'string'
+      references[wikidataClient.getReferencePropertyID(this.statement.reference_url)] = {
+        value: this.statement.reference_url, type: 'string'
       }
 
       references[wikidataClient.getPropertyID('reference retrieved')] = {

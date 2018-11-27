@@ -24,4 +24,16 @@ module ApplicationHelper # :nodoc:
   def wikidata_bot
     ENV.fetch('WIKIDATA_USERNAME')
   end
+
+  def link_to_wiki(title, item = nil)
+    if title && item
+      content_tag(:span, title) + ' (' + link_to(item, url_to_wiki(item)) + ')'
+    elsif title || item
+      link_to(title || item, url_to_wiki(title || item))
+    end
+  end
+
+  def url_to_wiki(title)
+    "https://#{ENV['WIKIDATA_SITE']}/wiki/#{title}"
+  end
 end

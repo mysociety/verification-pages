@@ -20,10 +20,10 @@
     <% @pages.each do |page| %>
       <tr>
         <td><%= link_to page.id, page_path(page) %></td>
-        <td><%= link_to page.title, "https://#{ENV['WIKIDATA_SITE']}/wiki/#{page.title}" %></td>
+        <td><%= link_to_wiki page.title %></td>
         <td><%= link_to page.country.name, page.country %></td>
-        <td><%= page.position_held_item %></td>
-        <td><%= page.parliamentary_term_item %></td>
+        <td><%= link_to_wiki page.position_held_name, page.position_held_item %></td>
+        <td><%= link_to_wiki page.parliamentary_term_name, page.parliamentary_term_item %></td>
         <td><%= page.reference_url %></td>
         <td><%= page.csv_source_url %></td>
         <td><%= page.executive_position %></td>

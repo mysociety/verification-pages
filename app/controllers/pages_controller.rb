@@ -3,6 +3,7 @@
 # Controller to manage verification pages
 class PagesController < ApplicationController
   include AdminAuthentication
+  include ApplicationHelper
 
   before_action :set_page, only: %i[show edit update destroy load create_wikidata]
   skip_before_action :authenticate, if: -> { params[:action] == 'index' && params[:format] == 'json' }
@@ -60,8 +61,7 @@ class PagesController < ApplicationController
   # POST /pages/1/create_wikidata
   def create_wikidata
     UpdateVerificationPage.run(@page.title)
-    redirect_to @page, notice: 'Verification page now visible at: ' \
-      "https://#{ENV['WIKIDATA_SITE']}/wiki/#{@page.title}"
+    redirect_to @page, notice: 'Verification page now visible at: ' + url_to_wiki(@page.title)
   end
 
   private

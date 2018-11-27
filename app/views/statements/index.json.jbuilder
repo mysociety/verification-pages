@@ -47,4 +47,4 @@ end
 
 json.page @classifier.page, :reference_url, :position_held_item, :executive_position, :reference_url_title, :reference_url_language, :new_item_description_en
 
-json.country @classifier.page.country
+json.country @classifier.page.country, :label_lang

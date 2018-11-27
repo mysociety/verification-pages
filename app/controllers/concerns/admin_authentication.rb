@@ -8,13 +8,19 @@ module AdminAuthentication
 
   included do
     before_action :authenticate
+    helper_method :authenticated?
   end
 
   def authenticate
-    return unless admin_password && admin_password
+    return unless admin_username && admin_password
     authenticate_or_request_with_http_basic do |username, password|
-      username == admin_username && password == admin_password
+      @authenticated = username == admin_username && password == admin_password
     end
+  end
+
+  def authenticated?
+    return true unless admin_username && admin_password
+    @authenticated
   end
 
   def admin_username

@@ -9,7 +9,9 @@
   </head>
 
   <body>
+    <%= render 'layouts/header' if authenticated? %>
     <div class="container">
+      <%= render 'layouts/flash' %>
       <%= yield %>
     </div>
   </body>

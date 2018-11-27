@@ -7,10 +7,6 @@
   <p class="alert alert-warning">This page has been archived.</p>
 <% end %>
 
-<% if flash[:notice] %>
-  <p class="alert alert-success"><%= flash[:notice] %></p>
-<% end %>
-
 <dl class="dl-horizontal">
   <dt><strong><%= model_class.human_attribute_name(:title) %>:</strong></dt>
   <dd><%= link_to_wiki @page.title %></dd>

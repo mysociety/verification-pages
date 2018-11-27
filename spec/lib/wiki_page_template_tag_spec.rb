@@ -12,6 +12,7 @@ RSpec.describe WikiPageTemplateTag, type: :service do
       |position_held_item=Q123
       |parliamentary_term_item=Q456
       |csv_source_url=https://example.com/members.csv
+      |new_item_description_en=Canadian politician
       }}
     TEMPLATE
   end
@@ -48,7 +49,8 @@ RSpec.describe WikiPageTemplateTag, type: :service do
         country:                 canada,
         position_held_item:      'Q123',
         parliamentary_term_item: 'Q456',
-        csv_source_url:          'https://example.com/members.csv'
+        csv_source_url:          'https://example.com/members.csv',
+        new_item_description_en: 'Canadian politician'
       )
     end
   end

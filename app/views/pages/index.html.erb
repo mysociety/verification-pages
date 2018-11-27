@@ -10,9 +10,9 @@
       <th><%= model_class.human_attribute_name(:country) %></th>
       <th><%= model_class.human_attribute_name(:position_held_item) %></th>
       <th><%= model_class.human_attribute_name(:parliamentary_term_item) %></th>
-      <th><%= model_class.human_attribute_name(:reference_url) %></th>
-      <th><%= model_class.human_attribute_name(:csv_source_url) %></th>
+      <th><%= model_class.human_attribute_name(:new_item_description_en) %></th>
       <th><%= model_class.human_attribute_name(:executive_position) %></th>
+      <th><%= model_class.human_attribute_name(:archived) %></th>
       <th><%= t '.actions', default: t("helpers.actions") %></th>
     </tr>
   </thead>
@@ -20,13 +20,13 @@
     <% @pages.each do |page| %>
       <tr>
         <td><%= link_to page.id, page_path(page) %></td>
-        <td><%= link_to page.title, "https://#{ENV['WIKIDATA_SITE']}/wiki/#{page.title}" %></td>
+        <td class="title"><%= link_to_wiki page.title %></td>
         <td><%= link_to page.country.name, page.country %></td>
-        <td><%= page.position_held_item %></td>
-        <td><%= page.parliamentary_term_item %></td>
-        <td><%= page.reference_url %></td>
-        <td><%= page.csv_source_url %></td>
+        <td><%= link_to_wiki page.position_held_name, page.position_held_item %></td>
+        <td><%= link_to_wiki page.parliamentary_term_name, page.parliamentary_term_item %></td>
+        <td><%= page.new_item_description_en %></td>
         <td><%= page.executive_position %></td>
+        <td><%= page.archived %></td>
         <td>
           <%= link_to t('.show', default: t("helpers.links.show")),
                       page_path(page), class: 'btn btn-default btn-xs' %>

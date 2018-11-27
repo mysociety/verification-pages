@@ -1,2 +1,2 @@
 <h1>Verification Pages</h1>
-<p>Please ensure you've logged in and added <code>importScript('User:<%= wikidata_bot %>/verification.js');</code> to your <a href="https://<%= ENV.fetch('WIKIDATA_SITE') %>/wiki/Special:MyPage/common.js">common.js</a>.</p>
+<p>Please ensure you've logged in and added <code>importScript('User:<%= wikidata_bot %>/verification.js');</code> to your <%= link_to_wiki 'common.js', 'Special:MyPage/common.js' %>.</p>

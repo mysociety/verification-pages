@@ -22,13 +22,11 @@ namespace :data_check do
 
       log_lines << "== {{Q|#{position_held.sub(/^Q/, '')}}} ==\n"
 
-      query = RetrieveAllPositionData.new(position_held)
-      log_lines << "Number people with this P39s: #{query.people.count}\n"
-
       Page.where(position_held_item: position_held).each do |page|
         log_lines << "[[#{page.title}]]\n"
       end
 
+      query = RetrieveAllPositionData.new(position_held)
       total_errors = query.map do |(person, results)|
         # find statements which match the position held we're interested in
         matching = results.select { |r| r.position_held == position_held }

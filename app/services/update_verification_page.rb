@@ -9,7 +9,8 @@ class UpdateVerificationPage < ServiceBase
   end
 
   def run
-    UpdateWikidataPage.run(page_title, page_content)
+    WikiPageTemplateTag.new(page_title).update_page(page_content) ||
+      UpdateWikidataPage.run(page_title, page_content)
   end
 
   private

@@ -24,6 +24,7 @@ json.statements @classifier.to_a do |statement|
   if statement.latest_verification
     json.verified_on "+#{statement.verified_on.iso8601}T00:00:00Z"
     json.verification_status statement.latest_verification.status
+    json.reference_url statement.latest_verification.reference_url
   else
     json.verified_on nil
     json.verification_status nil

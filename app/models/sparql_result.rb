@@ -11,7 +11,7 @@ module SparqlResult
   def [](*args)
     value = super
     return nil unless value
-    map_value(value)
+    return map_hash(value) if value.is_a?(Hash)
   end
 
   def datatype(attr)
@@ -37,11 +37,11 @@ module SparqlResult
     self[attr]
   end
 
-  def map_value(h)
-    return h[:value] == 'true' if h[:datatype] == DATATYPE_BOOLEAN
-    return h[:value].to_s[0..9] if h[:datatype] == DATATYPE_DATETIME
-    return h[:value].to_s.split('/').last if h[:type] == 'uri'
+  def map_hash(hash)
+    return hash[:value] == 'true' if hash[:datatype] == DATATYPE_BOOLEAN
+    return hash[:value].to_s[0..9] if hash[:datatype] == DATATYPE_DATETIME
+    return hash[:value].to_s.split('/').last if hash[:type] == 'uri'
 
-    h[:value]
+    hash[:value]
   end
 end

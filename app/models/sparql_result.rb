@@ -23,7 +23,7 @@ module SparqlResult
   private
 
   def variables
-    @variables || keys
+    (@variables || []).map(&:to_sym) | keys
   end
 
   def respond_to_missing?(*args)
@@ -35,7 +35,7 @@ module SparqlResult
     datatype = fetch(bool_attr, {})[:datatype]
 
     return self[bool_attr] if datatype == DATATYPE_BOOLEAN
-    return super unless variables.include?(attr.to_s)
+    return super unless variables.include?(attr)
 
     self[attr]
   end

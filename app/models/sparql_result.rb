@@ -11,7 +11,6 @@ module SparqlResult
   def [](*args)
     value = super
 
-    return nil unless value
     return map_hash(value) if value.is_a?(Hash)
 
     value

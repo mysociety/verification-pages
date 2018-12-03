@@ -12,6 +12,7 @@ module SparqlResult
     value = super
 
     return map_hash(value) if value.is_a?(Hash)
+    return extend_array(value) if value.is_a?(Array)
 
     value
   end
@@ -46,5 +47,9 @@ module SparqlResult
     return hash[:value].to_s.split('/').last if hash[:type] == 'uri'
 
     hash[:value]
+  end
+
+  def extend_array(array)
+    array.map { |item| item.extend(SparqlResult) }
   end
 end

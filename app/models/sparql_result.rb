@@ -17,7 +17,8 @@ module SparqlResult
   end
 
   def datatype(attr)
-    fetch(attr, {})[:datatype]
+    value = fetch(attr, {})
+    value[:datatype] if value.is_a?(Hash)
   end
 
   private
@@ -31,10 +32,9 @@ module SparqlResult
   end
 
   def method_missing(attr, *args)
-    bool_attr = attr.to_s.match(/(.*?)\??$/)[1].to_sym
-    datatype = fetch(bool_attr, {})[:datatype]
+    bool_attr = attr[/(.*?)\??$/, 1].to_sym
 
-    return self[bool_attr] if datatype == DATATYPE_BOOLEAN
+    return self[bool_attr] if datatype(bool_attr) == DATATYPE_BOOLEAN
     return super unless variables.include?(attr)
 
     self[attr]

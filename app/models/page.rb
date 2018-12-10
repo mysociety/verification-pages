@@ -20,7 +20,7 @@ class Page < ApplicationRecord
   end
 
   def new_item_description_en
-    super || country.description_en
+    super || country&.description_en
   end
 
   private

@@ -85,4 +85,28 @@ RSpec.describe Page, type: :model do
       expect(page.from_suggestions_store?).to eq(false)
     end
   end
+
+  describe '#new_item_description_en' do
+    let(:desc) { 'A description' }
+    let(:country) { build(:country, description_en: 'A country description') }
+    let(:page) { build(:page, new_item_description_en: desc, country: country) }
+
+    subject { page.new_item_description_en }
+
+    it { is_expected.to eq desc }
+
+    context 'without description' do
+      let(:desc) { nil }
+
+      it 'delegates to the Country#description_en' do
+        expect(page.new_item_description_en).to eq('A country description')
+      end
+    end
+
+    context 'without description or country' do
+      let(:desc) { nil }
+      let(:country) { nil }
+      it { is_expected.to be_nil }
+    end
+  end
 end

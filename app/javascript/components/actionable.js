@@ -33,6 +33,8 @@ export default template({
       this.$parent.$emit('log', data)
     },
     updatePositionHeld: function () {
+      this.$parent.$emit('loading', 'Saving')
+
       var personItem = this.statement.person_item
       var item = wikidataClient.setLogger(this.logger).item(personItem)
       var references = {}
@@ -105,8 +107,6 @@ export default template({
           value: this.statement.position_end, type: 'time'
         }
       }
-
-      this.$parent.$emit('loading', 'Saving')
 
       item.latestRevision().then(function (lastRevisionID) {
         return item.updateOrCreateClaim(lastRevisionID, updateData)

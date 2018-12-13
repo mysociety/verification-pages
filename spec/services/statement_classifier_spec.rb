@@ -71,7 +71,7 @@ RSpec.describe StatementClassifier, type: :service do
     end
 
     it 'should not return items without types' do
-      allow(classifier).to receive(:statement_type).and_return(nil)
+      allow_any_instance_of(StatementDecorator).to receive(:type).and_return(nil)
       is_expected.to match_array([])
     end
 

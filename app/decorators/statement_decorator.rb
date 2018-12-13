@@ -2,11 +2,33 @@
 
 # Decorator with merges statements with up-to-date position held data
 class StatementDecorator < SimpleDelegator
-  attr_accessor :comparison, :type
+  attr_accessor :comparison
 
   def initialize(statement, comparison)
     @comparison = comparison
     super(statement)
+  end
+
+  def type
+    if removed_from_source? && !done_or_reverted?
+      nil
+    elsif removed_from_source? && done_or_reverted?
+      :removed
+    elsif unverifiable?
+      :unverifiable
+    elsif done?
+      :done
+    elsif reverted?
+      :reverted
+    elsif manually_actionable?
+      :manually_actionable
+    elsif actionable?
+      :actionable
+    elsif verified?
+      :reconcilable
+    else
+      :verifiable
+    end
   end
 
   def statement_uuid

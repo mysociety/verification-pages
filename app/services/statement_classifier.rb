@@ -106,33 +106,9 @@ class StatementClassifier
     )
   end
 
-  def statement_type(statement)
-    if statement.removed_from_source? && !statement.done_or_reverted?
-      nil
-    elsif statement.removed_from_source? && statement.done_or_reverted?
-      :removed
-    elsif statement.unverifiable?
-      :unverifiable
-    elsif statement.done?
-      :done
-    elsif statement.reverted?
-      :reverted
-    elsif statement.manually_actionable?
-      :manually_actionable
-    elsif statement.actionable?
-      :actionable
-    elsif statement.verified?
-      :reconcilable
-    else
-      :verifiable
-    end
-  end
-
   def decorate_statement(statement)
     comparison = comparison_for_statement(statement)
-    StatementDecorator.new(statement, comparison).tap do |s|
-      s.type = statement_type(s)
-    end
+    StatementDecorator.new(statement, comparison)
   end
 
   def comparison_for_statement(statement)

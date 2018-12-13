@@ -74,7 +74,9 @@ class PageClassifier
 
       item_data = item_data_for_statement(statement)
 
-      items = { term: parliamentary_term_data, group: item_data[statement.parliamentary_group_item] }
+      items = { term:   parliamentary_term_data,
+                person: item_data[statement.person_item],
+                group:  item_data[statement.parliamentary_group_item], }
       items[:district] = item_data[statement.electoral_district_item] unless page.executive_position?
 
       decorated_statement = StatementClassifier.new(
@@ -113,6 +115,7 @@ class PageClassifier
   def items
     @items ||= begin
       item_values = @statements.each_with_object([]) do |statement, memo|
+        memo << statement.person_item
         memo << statement.parliamentary_group_item
         memo << statement.electoral_district_item
       end.compact.uniq << page.position_held_item

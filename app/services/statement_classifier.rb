@@ -47,8 +47,9 @@ class StatementClassifier
         eopt:  @items[:term]&.previous_term_end,
         sont:  @items[:term]&.next_term_start,
       },
-      party:    { id: @items[:group]&.item },
-      district: { id: @items[:district]&.item },
+      person:   { disambiguation: @items[:person]&.disambiguation },
+      party:    { id: @items[:group]&.item, disambiguation: @items[:group]&.disambiguation },
+      district: { id: @items[:district]&.item, disambiguation: @items[:district]&.disambiguation },
       start:    @statement.position_start,
       end:      @statement.position_end,
     }

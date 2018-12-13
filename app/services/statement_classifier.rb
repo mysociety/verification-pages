@@ -78,6 +78,34 @@ class StatementClassifier
     end
   end
 
+  def person_item_from_transaction_id
+    return unless transaction_id
+    statements.first.person_item
+  end
+
+  def update_page_position_if_merged
+    page.update(position_held_item: position.real_item) if position&.merged?
+  end
+
+  def position
+    @position ||= RetrieveItems.one(page.position_held_item)
+  end
+
+  def position_held_data
+    return [] unless position&.item
+
+    @position_held_data ||= RetrievePositionData.run(
+      position.item,
+      person_item_from_transaction_id
+    )
+  end
+
+  def parliamentary_term_data
+    @parliamentary_term_data ||= RetrieveTermData.run(
+      page.parliamentary_term_item
+    )
+  end
+
   def statement_type(statement)
     if statement.removed_from_source? && !statement.done_or_reverted?
       nil
@@ -105,34 +133,6 @@ class StatementClassifier
     StatementDecorator.new(statement, comparison).tap do |s|
       s.type = statement_type(s)
     end
-  end
-
-  def person_item_from_transaction_id
-    return unless transaction_id
-    statements.first.person_item
-  end
-
-  def update_page_position_if_merged
-    page.update(position_held_item: position.real_item) if position&.merged?
-  end
-
-  def position
-    @position ||= RetrieveItems.one(page.position_held_item)
-  end
-
-  def position_held_data
-    return [] unless position&.item
-
-    @position_held_data ||= RetrievePositionData.run(
-      position.item,
-      person_item_from_transaction_id
-    )
-  end
-
-  def parliamentary_term_data
-    @parliamentary_term_data ||= RetrieveTermData.run(
-      page.parliamentary_term_item
-    )
   end
 
   def comparison_for_statement(statement)

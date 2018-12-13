@@ -12,7 +12,6 @@ RSpec.describe StatementClassifier, type: :service do
   let(:data) { { person_item: 'Q1' } }
   let(:statement) { build(:statement, data.merge(page: page)) }
   let(:statements) { [statement].compact }
-  let(:statement_relation) { double(:relation, to_a: statements) }
 
   let(:wikidata_data) do
     { person: 'Q1', merged_then_deleted: '', position: 'UUID' }
@@ -37,14 +36,12 @@ RSpec.describe StatementClassifier, type: :service do
 
   before do
     stub_const('SuggestionsStore::Request::URL', 'http://suggestions-store/')
-    allow(statement_relation).to receive_message_chain(
-      :original, :includes, :references, :order
-    ).and_return(statement_relation)
     allow(Page).to receive(:find_by!)
       .with(title: 'page_title')
       .and_return(page)
-    allow(page).to receive(:statements)
-      .and_return(statement_relation)
+    allow(page).to receive_message_chain(
+      :statements, :original, :includes, :references, :order
+    ).and_return(statements)
 
     allow(RetrieveItems).to receive(:one)
       .with(page.position_held_item)
@@ -62,7 +59,7 @@ RSpec.describe StatementClassifier, type: :service do
   describe 'initialisation' do
     it 'assigns instance variables' do
       expect(classifier.page).to eq page
-      expect(classifier.statements).to eq statement_relation
+      expect(classifier.statements).to eq statements
     end
   end
 

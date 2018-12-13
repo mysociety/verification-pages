@@ -11,13 +11,13 @@ class GenerateVerificationPage < ServiceBase
   end
 
   def run
-    render template, page: page, statements: classified_statements
+    render template, page: page, statements: classify_page
   end
 
   private
 
-  def classified_statements
-    @classified_statements ||= StatementClassifier.new(page.title)
+  def classify_page
+    @classify_page ||= PageClassifier.new(page.title)
   end
 
   def template

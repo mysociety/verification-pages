@@ -2,7 +2,7 @@
 
 require 'rails_helper'
 
-RSpec.describe StatementClassifier, type: :service do
+RSpec.describe PageClassifier, type: :service do
   include ActiveSupport::Testing::TimeHelpers
 
   let(:page) do
@@ -32,7 +32,7 @@ RSpec.describe StatementClassifier, type: :service do
     )
   end
 
-  let(:classifier) { StatementClassifier.new('page_title') }
+  let(:classifier) { PageClassifier.new('page_title') }
 
   before do
     stub_const('SuggestionsStore::Request::URL', 'http://suggestions-store/')

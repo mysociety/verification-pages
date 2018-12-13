@@ -25,7 +25,7 @@ RSpec.describe GenerateVerificationPage, type: :service do
         .and_return(position_held_data)
 
       classified_statements = double(:classified_statements)
-      expect(StatementClassifier).to receive(:new)
+      expect(PageClassifier).to receive(:new)
         .with('page_title')
         .and_return(classified_statements)
 

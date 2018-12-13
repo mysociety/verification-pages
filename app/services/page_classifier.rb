@@ -3,7 +3,7 @@
 require 'membership_comparison'
 
 # Service to classify statements into actionable, manually_actionable or done groups
-class StatementClassifier
+class PageClassifier
   attr_reader :page, :statements, :transaction_id
 
   VERSION = 'v2'

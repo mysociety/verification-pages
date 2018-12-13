@@ -20,6 +20,6 @@ class FrontendController < ApplicationController
   private
 
   def classify_page(page, statements = [])
-    StatementClassifier.new(page.title, transaction_ids: statements.map(&:transaction_id))
+    PageClassifier.new(page.title, transaction_ids: statements.map(&:transaction_id))
   end
 end

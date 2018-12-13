@@ -35,14 +35,19 @@ class RetrieveItems < ServiceBase
   def query_format
     <<~SPARQL
       SELECT
-        ?item ?real_item ?label ?merged
+        ?item ?real_item ?label ?merged ?disambiguation
       WHERE {
         VALUES (?item) {
           %<items>s
         }
+        BIND(wd:Q4167410 AS ?disambiguation_page)
+
         OPTIONAL { ?item owl:sameAs ?real_item }
         BIND(COALESCE(?real_item, ?item) AS ?real_item)
         BIND (?real_item != $item AS ?merged)
+        OPTIONAL { ?real_item wdt:P31 ?instance_of }
+        BIND(?instance_of = ?disambiguation_page AS ?disambiguation) .
+
         SERVICE wikibase:label {
           bd:serviceParam wikibase:language "[AUTO_LANGUAGE],en" .
           ?real_item rdfs:label ?label .

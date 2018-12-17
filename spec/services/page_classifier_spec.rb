@@ -81,9 +81,8 @@ RSpec.describe PageClassifier, type: :service do
         merged?:   true
       )
 
-      allow(RetrieveItems).to receive(:one)
-        .with(page.position_held_item)
-        .and_return(position)
+      allow(RetrieveItems).to receive(:run)
+        .and_return(page.position_held_item => position)
 
       expect { subject }.to change(page, :position_held_item).to('Q123')
     end

@@ -65,15 +65,26 @@ class PageClassifier
     update_page_position_if_merged
     return [] unless @statements
 
-    @statements.map do |statement|
-      StatementClassifier.new(
-        page:                    page,
-        statement:               statement,
-        position:                position,
-        position_held_data:      position_held_data,
-        parliamentary_term_data: parliamentary_term_data
+    @statements.each_with_object([]) do |statement, memo|
+      existing_statements = position_held_data.select do |data|
+        person_items = [data.person] + merged_then_deleted(data)
+        person_items.include?(statement.person_item)
+      end
+
+      item_data = item_data_for_statement(statement)
+
+      items = { term: parliamentary_term_data, group: item_data[statement.parliamentary_group_item] }
+      items[:district] = item_data[statement.electoral_district_item] unless page.executive_position?
+
+      decorated_statement = StatementClassifier.new(
+        statement:           statement,
+        existing_statements: existing_statements,
+        items:               items
       ).decorate
-    end.select(&:type) # remove statements without a type
+
+      # skip statements without a type
+      memo << decorated_statement if decorated_statement.type
+    end
   end
 
   private
@@ -95,7 +106,23 @@ class PageClassifier
   end
 
   def position
-    @position ||= RetrieveItems.one(page.position_held_item)
+    @position ||= items[page.position_held_item]
+  end
+
+  def items
+    @items ||= begin
+      item_values = @statements.each_with_object([]) do |statement, memo|
+        memo << statement.parliamentary_group_item
+        memo << statement.electoral_district_item
+      end.compact.uniq << page.position_held_item
+
+      RetrieveItems.run(*item_values)
+    end
+  end
+
+  def item_data_for_statement(statement)
+    item_values = [statement.person_item, statement.parliamentary_group_item, statement.electoral_district_item]
+    items.select { |k| item_values.include?(k) }
   end
 
   def position_held_data
@@ -112,21 +139,21 @@ class PageClassifier
       page.parliamentary_term_item
     )
   end
+
+  def merged_then_deleted(data)
+    data.merged_then_deleted.split.map { |item| item.split('/').last }
+  end
 end
 
 class StatementClassifier
-  attr_reader :page, :statement, :position_held_data, :parliamentary_term_data
-
-  def initialize(page:, statement:, position:, position_held_data:, parliamentary_term_data:)
-    @page = page
+  def initialize(statement:, existing_statements:, items:)
     @statement = statement
-    @position = position
-    @position_held_data = position_held_data
-    @parliamentary_term_data = parliamentary_term_data
+    @existing_statements = existing_statements
+    @items = items
   end
 
   def decorate
-    StatementDecorator.new(statement, comparison)
+    StatementDecorator.new(@statement, comparison)
   end
 
   private
@@ -138,15 +165,8 @@ class StatementClassifier
     )
   end
 
-  def merged_then_deleted(data)
-    data.merged_then_deleted.split.map { |item| item.split('/').last }
-  end
-
   def existing_statements
-    position_held_data.each_with_object({}) do |data, memo|
-      person_items = [data.person] + merged_then_deleted(data)
-      next unless person_items.include?(statement.person_item)
-
+    @existing_statements.each_with_object({}) do |data, memo|
       memo[data.position] = {
         start:    data.position_start,
         end:      data.position_end,
@@ -164,16 +184,16 @@ class StatementClassifier
   def suggested_statement
     {
       term:     {
-        id:    page.parliamentary_term_item.presence,
-        start: parliamentary_term_data.start,
-        end:   parliamentary_term_data.end,
-        eopt:  parliamentary_term_data.previous_term_end,
-        sont:  parliamentary_term_data.next_term_start,
+        id:    @items[:term]&.term,
+        start: @items[:term]&.start,
+        end:   @items[:term]&.end,
+        eopt:  @items[:term]&.previous_term_end,
+        sont:  @items[:term]&.next_term_start,
       },
-      party:    { id: statement.parliamentary_group_item },
-      district: { id: !page.executive_position? ? statement.electoral_district_item : nil },
-      start:    statement.position_start,
-      end:      statement.position_end,
+      party:    { id: @items[:group]&.item },
+      district: { id: @items[:district]&.item },
+      start:    @statement.position_start,
+      end:      @statement.position_end,
     }
   end
 end

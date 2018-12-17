@@ -4,7 +4,7 @@ require 'membership_comparison'
 
 # Service to classify statements into actionable, manually_actionable or done groups
 class PageClassifier
-  attr_reader :page, :statements, :transaction_id
+  attr_reader :page, :transaction_id
 
   VERSION = 'v2'
 
@@ -61,18 +61,18 @@ class PageClassifier
     classified_statements.fetch(:removed, [])
   end
 
-  def to_a
+  def statements
     update_page_position_if_merged
 
-    statements.to_a
-              .map { |s| decorate_statement(s) }
-              .select(&:type) # remove statements without a type
+    @statements.to_a
+               .map { |s| decorate_statement(s) }
+               .select(&:type) # remove statements without a type
   end
 
   private
 
   def classified_statements
-    @classified_statements ||= to_a.each_with_object({}) do |statement, h|
+    @classified_statements ||= statements.each_with_object({}) do |statement, h|
       h[statement.type] ||= []
       h[statement.type] << statement
     end
@@ -80,7 +80,7 @@ class PageClassifier
 
   def person_item_from_transaction_id
     return unless transaction_id
-    statements.first.person_item
+    @statements.first.person_item
   end
 
   def update_page_position_if_merged

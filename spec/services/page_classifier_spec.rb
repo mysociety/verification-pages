@@ -57,14 +57,13 @@ RSpec.describe PageClassifier, type: :service do
   end
 
   describe 'initialisation' do
-    it 'assigns instance variables' do
+    it 'assigns #page instance variables' do
       expect(classifier.page).to eq page
-      expect(classifier.statements).to eq statements
     end
   end
 
-  describe '#to_a' do
-    subject { classifier.to_a }
+  describe '#statements' do
+    subject { classifier.statements }
 
     it 'should return decorated statements' do
       is_expected.to include(a_kind_of(StatementDecorator))

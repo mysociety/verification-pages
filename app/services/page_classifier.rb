@@ -2,7 +2,8 @@
 
 require 'membership_comparison'
 
-# Service to classify statements into actionable, manually_actionable or done groups
+# Service to classify a page's statements into groups based on if we can submit
+# data to Wikidata or not
 class PageClassifier
   attr_reader :page, :transaction_id
 
@@ -142,58 +143,5 @@ class PageClassifier
 
   def merged_then_deleted(data)
     data.merged_then_deleted.split.map { |item| item.split('/').last }
-  end
-end
-
-class StatementClassifier
-  def initialize(statement:, existing_statements:, items:)
-    @statement = statement
-    @existing_statements = existing_statements
-    @items = items
-  end
-
-  def decorate
-    StatementDecorator.new(@statement, comparison)
-  end
-
-  private
-
-  def comparison
-    MembershipComparison.new(
-      existing:   existing_statements,
-      suggestion: suggested_statement
-    )
-  end
-
-  def existing_statements
-    @existing_statements.each_with_object({}) do |data, memo|
-      memo[data.position] = {
-        start:    data.position_start,
-        end:      data.position_end,
-        term:     {
-          id:    data.term,
-          start: data.term_start,
-          end:   data.term_end,
-        },
-        party:    { id: data.group },
-        district: { id: data.district },
-      }
-    end
-  end
-
-  def suggested_statement
-    {
-      term:     {
-        id:    @items[:term]&.term,
-        start: @items[:term]&.start,
-        end:   @items[:term]&.end,
-        eopt:  @items[:term]&.previous_term_end,
-        sont:  @items[:term]&.next_term_start,
-      },
-      party:    { id: @items[:group]&.item },
-      district: { id: @items[:district]&.item },
-      start:    @statement.position_start,
-      end:      @statement.position_end,
-    }
   end
 end

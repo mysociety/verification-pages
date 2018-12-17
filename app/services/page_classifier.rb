@@ -63,10 +63,17 @@ class PageClassifier
 
   def statements
     update_page_position_if_merged
+    return [] unless @statements
 
-    @statements.to_a
-               .map { |s| decorate_statement(s) }
-               .select(&:type) # remove statements without a type
+    @statements.map do |statement|
+      StatementClassifier.new(
+        page:                    page,
+        statement:               statement,
+        position:                position,
+        position_held_data:      position_held_data,
+        parliamentary_term_data: parliamentary_term_data
+      ).decorate
+    end.select(&:type) # remove statements without a type
   end
 
   private
@@ -105,16 +112,29 @@ class PageClassifier
       page.parliamentary_term_item
     )
   end
+end
 
-  def decorate_statement(statement)
-    comparison = comparison_for_statement(statement)
+class StatementClassifier
+  attr_reader :page, :statement, :position_held_data, :parliamentary_term_data
+
+  def initialize(page:, statement:, position:, position_held_data:, parliamentary_term_data:)
+    @page = page
+    @statement = statement
+    @position = position
+    @position_held_data = position_held_data
+    @parliamentary_term_data = parliamentary_term_data
+  end
+
+  def decorate
     StatementDecorator.new(statement, comparison)
   end
 
-  def comparison_for_statement(statement)
+  private
+
+  def comparison
     MembershipComparison.new(
-      existing:   existing_statements_for_person(statement.person_item),
-      suggestion: mapped_statement(statement)
+      existing:   existing_statements,
+      suggestion: suggested_statement
     )
   end
 
@@ -122,10 +142,10 @@ class PageClassifier
     data.merged_then_deleted.split.map { |item| item.split('/').last }
   end
 
-  def existing_statements_for_person(person_item)
+  def existing_statements
     position_held_data.each_with_object({}) do |data, memo|
       person_items = [data.person] + merged_then_deleted(data)
-      next unless person_items.include?(person_item)
+      next unless person_items.include?(statement.person_item)
 
       memo[data.position] = {
         start:    data.position_start,
@@ -141,7 +161,7 @@ class PageClassifier
     end
   end
 
-  def mapped_statement(statement)
+  def suggested_statement
     {
       term:     {
         id:    page.parliamentary_term_item.presence,

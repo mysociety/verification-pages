@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-json.statements @classifier.to_a do |statement|
+json.statements @classifier.statements do |statement|
   json.call(
     statement,
     :type,

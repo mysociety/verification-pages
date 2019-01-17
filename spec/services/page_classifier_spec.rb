@@ -2,7 +2,7 @@
 
 require 'rails_helper'
 
-RSpec.describe StatementClassifier, type: :service do
+RSpec.describe PageClassifier, type: :service do
   include ActiveSupport::Testing::TimeHelpers
 
   let(:page) do
@@ -12,7 +12,6 @@ RSpec.describe StatementClassifier, type: :service do
   let(:data) { { person_item: 'Q1' } }
   let(:statement) { build(:statement, data.merge(page: page)) }
   let(:statements) { [statement].compact }
-  let(:statement_relation) { double(:relation, to_a: statements) }
 
   let(:wikidata_data) do
     { person: 'Q1', merged_then_deleted: '', position: 'UUID' }
@@ -33,18 +32,16 @@ RSpec.describe StatementClassifier, type: :service do
     )
   end
 
-  let(:classifier) { StatementClassifier.new('page_title') }
+  let(:classifier) { PageClassifier.new('page_title') }
 
   before do
     stub_const('SuggestionsStore::Request::URL', 'http://suggestions-store/')
-    allow(statement_relation).to receive_message_chain(
-      :original, :includes, :references, :order
-    ).and_return(statement_relation)
     allow(Page).to receive(:find_by!)
       .with(title: 'page_title')
       .and_return(page)
-    allow(page).to receive(:statements)
-      .and_return(statement_relation)
+    allow(page).to receive_message_chain(
+      :statements, :original, :includes, :references, :order
+    ).and_return(statements)
 
     allow(RetrieveItems).to receive(:one)
       .with(page.position_held_item)
@@ -60,21 +57,20 @@ RSpec.describe StatementClassifier, type: :service do
   end
 
   describe 'initialisation' do
-    it 'assigns instance variables' do
+    it 'assigns #page instance variables' do
       expect(classifier.page).to eq page
-      expect(classifier.statements).to eq statement_relation
     end
   end
 
-  describe '#to_a' do
-    subject { classifier.to_a }
+  describe '#statements' do
+    subject { classifier.statements }
 
     it 'should return decorated statements' do
       is_expected.to include(a_kind_of(StatementDecorator))
     end
 
     it 'should not return items without types' do
-      allow(classifier).to receive(:statement_type).and_return(nil)
+      allow_any_instance_of(StatementDecorator).to receive(:type).and_return(nil)
       is_expected.to match_array([])
     end
 
@@ -85,9 +81,8 @@ RSpec.describe StatementClassifier, type: :service do
         merged?:   true
       )
 
-      allow(RetrieveItems).to receive(:one)
-        .with(page.position_held_item)
-        .and_return(position)
+      allow(RetrieveItems).to receive(:run)
+        .and_return(page.position_held_item => position)
 
       expect { subject }.to change(page, :position_held_item).to('Q123')
     end

@@ -57,4 +57,12 @@ RSpec.describe SparqlResult, type: :model do
   it 'will raise NoMethodError for other methods' do
     expect { result.other }.to raise_error(NoMethodError)
   end
+
+  context 'without variables' do
+    let(:variables) { nil }
+
+    it 'returns values based on hash key' do
+      expect(result.string).to eq 'ABC'
+    end
+  end
 end

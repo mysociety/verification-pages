@@ -40,18 +40,39 @@ class StatementClassifier
 
   def suggested_statement
     {
-      term:     {
-        id:    @items[:term]&.term,
-        start: @items[:term]&.start,
-        end:   @items[:term]&.end,
-        eopt:  @items[:term]&.previous_term_end,
-        sont:  @items[:term]&.next_term_start,
-      },
-      person:   { disambiguation: @items[:person]&.disambiguation },
-      party:    { id: @items[:group]&.item, disambiguation: @items[:group]&.disambiguation },
-      district: { id: @items[:district]&.item, disambiguation: @items[:district]&.disambiguation },
-      start:    @statement.position_start,
-      end:      @statement.position_end,
+      term:     suggested_term,
+      person:   suggested_person,
+      party:    suggested_party,
+      district: suggested_dates,
+    }.merge(suggested_dates)
+  end
+
+  def suggested_term
+    {
+      id:    @items[:term]&.term,
+      start: @items[:term]&.start,
+      end:   @items[:term]&.end,
+      eopt:  @items[:term]&.previous_term_end,
+      sont:  @items[:term]&.next_term_start,
+    }
+  end
+
+  def suggested_person
+    { disambiguation: @items[:person]&.disambiguation }
+  end
+
+  def suggested_party
+    { id: @items[:group]&.item, disambiguation: @items[:group]&.disambiguation }
+  end
+
+  def suggested_district
+    { id: @items[:district]&.item, disambiguation: @items[:district]&.disambiguation }
+  end
+
+  def suggested_dates
+    {
+      start: @statement.position_start,
+      end:   @statement.position_end,
     }
   end
 end

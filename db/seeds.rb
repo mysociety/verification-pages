@@ -225,7 +225,7 @@ Page.create_with(
   title: 'User:Graemebp/verification/it/regionalcouncillor/sardinia'
 ).find_or_create_by(
   position_held_item:      'Q47530393',
-  parliamentary_term_item: 'Q48797313 ?'
+  parliamentary_term_item: 'Q48797313'
 )
 
 Page.create_with(

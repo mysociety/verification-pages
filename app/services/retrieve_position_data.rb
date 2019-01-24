@@ -4,10 +4,10 @@
 class RetrievePositionData < ServiceBase
   include SparqlQuery
 
-  attr_reader :position_held_item, :person_item
+  attr_reader :position_held_items, :person_item
 
-  def initialize(position_held_item, person_item = nil)
-    @position_held_item = position_held_item
+  def initialize(position_held_items, person_item = nil)
+    @position_held_items = [position_held_items].flatten
     @person_item = person_item
   end
 
@@ -16,8 +16,8 @@ class RetrievePositionData < ServiceBase
   end
 
   def query
-    query_format % { position_held_item: position_held_item,
-                     person_bind:        person_bind, }
+    query_format % { position_held_items: position_held_values,
+                     person_bind:         person_bind, }
   end
 
   private
@@ -25,6 +25,7 @@ class RetrievePositionData < ServiceBase
   def query_format
     <<~SPARQL
       SELECT DISTINCT
+        ?position_held
         ?person ?revision
         ?position ?position_start ?position_end
         ?term ?term_start ?term_end
@@ -33,7 +34,7 @@ class RetrievePositionData < ServiceBase
       WHERE {
         %<person_bind>s
 
-        BIND(wd:%<position_held_item>s AS ?position_held)
+        VALUES (?position_held) { %<position_held_items>s }
 
         ?position ps:P39 ?position_held .
 
@@ -61,8 +62,12 @@ class RetrievePositionData < ServiceBase
 
         OPTIONAL { ?merged_then_deleted owl:sameAs ?person }
       }
-      GROUP BY ?person ?revision ?position ?position_start ?position_end ?term ?term_start ?term_end ?group ?district
+      GROUP BY ?position_held ?person ?revision ?position ?position_start ?position_end ?term ?term_start ?term_end ?group ?district
     SPARQL
+  end
+
+  def position_held_values
+    position_held_items.compact.map { |item| "(wd:#{item})" }.join(' ')
   end
 
   def person_bind

@@ -45,12 +45,12 @@ RSpec.describe PageClassifier, type: :service do
 
     allow(RetrieveItems).to receive(:one)
       .with(page.position_held_item)
-      .and_return(OpenStruct.new(item: page.position_held_item))
+      .and_return(OpenStruct.new(item: page.position_held_item, parent: nil, children: []))
     allow(RetrieveTermData).to receive(:run)
       .with(page.parliamentary_term_item)
       .and_return(OpenStruct.new(start: '2018-01-01', end: '2019-01-01'))
     allow(RetrievePositionData).to receive(:run)
-      .with(page.position_held_item, nil)
+      .with([page.position_held_item], nil)
       .and_return(position_held_data)
     allow(MembershipComparison).to receive(:new)
       .and_return(comparison)
@@ -78,7 +78,9 @@ RSpec.describe PageClassifier, type: :service do
       position = OpenStruct.new(
         item:      page.position_held_item,
         real_item: 'Q123',
-        merged?:   true
+        merged?:   true,
+        parent:    nil,
+        children:  []
       )
 
       allow(RetrieveItems).to receive(:run)

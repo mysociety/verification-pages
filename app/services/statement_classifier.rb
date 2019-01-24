@@ -25,6 +25,7 @@ class StatementClassifier
   def existing_statements
     @existing_statements.each_with_object({}) do |data, memo|
       memo[data.position] = {
+        position: data.position_held,
         start:    data.position_start,
         end:      data.position_end,
         term:     {
@@ -39,19 +40,48 @@ class StatementClassifier
   end
 
   def suggested_statement
+    suggested_positions.merge(
+      term:     suggested_term,
+      person:   suggested_person,
+      party:    suggested_party,
+      district: suggested_dates
+    ).merge(suggested_dates)
+  end
+
+  def suggested_positions
     {
-      term:     {
-        id:    @items[:term]&.term,
-        start: @items[:term]&.start,
-        end:   @items[:term]&.end,
-        eopt:  @items[:term]&.previous_term_end,
-        sont:  @items[:term]&.next_term_start,
-      },
-      person:   { disambiguation: @items[:person]&.disambiguation },
-      party:    { id: @items[:group]&.item, disambiguation: @items[:group]&.disambiguation },
-      district: { id: @items[:district]&.item, disambiguation: @items[:district]&.disambiguation },
-      start:    @statement.position_start,
-      end:      @statement.position_end,
+      position:          @items[:position]&.item,
+      position_parent:   @items[:position]&.parent,
+      position_children: @items[:position]&.children&.map(&:item),
+    }
+  end
+
+  def suggested_term
+    {
+      id:    @items[:term]&.term,
+      start: @items[:term]&.start,
+      end:   @items[:term]&.end,
+      eopt:  @items[:term]&.previous_term_end,
+      sont:  @items[:term]&.next_term_start,
+    }
+  end
+
+  def suggested_person
+    { disambiguation: @items[:person]&.disambiguation }
+  end
+
+  def suggested_party
+    { id: @items[:group]&.item, disambiguation: @items[:group]&.disambiguation }
+  end
+
+  def suggested_district
+    { id: @items[:district]&.item, disambiguation: @items[:district]&.disambiguation }
+  end
+
+  def suggested_dates
+    {
+      start: @statement.position_start,
+      end:   @statement.position_end,
     }
   end
 end

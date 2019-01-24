@@ -74,9 +74,10 @@ class PageClassifier
 
       item_data = item_data_for_statement(statement)
 
-      items = { term:   parliamentary_term_data,
-                person: item_data[statement.person_item],
-                group:  item_data[statement.parliamentary_group_item], }
+      items = { position: item_data[page.position_held_item],
+                term:     parliamentary_term_data,
+                person:   item_data[statement.person_item],
+                group:    item_data[statement.parliamentary_group_item], }
       items[:district] = item_data[statement.electoral_district_item] unless page.executive_position?
 
       decorated_statement = StatementClassifier.new(
@@ -133,7 +134,7 @@ class PageClassifier
     return [] unless position&.item
 
     @position_held_data ||= RetrievePositionData.run(
-      position.item,
+      ([position.item, position.parent] + position.children.map(&:item)).compact,
       person_item_from_transaction_id
     )
   end

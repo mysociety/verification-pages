@@ -110,11 +110,11 @@ class PageClassifier
   end
 
   def position
-    @position ||= items[page.position_held_item]
+    @position ||= item_data[page.position_held_item]
   end
 
-  def items
-    @items ||= begin
+  def item_data
+    @item_data ||= begin
       item_values = @statements.each_with_object([]) do |statement, memo|
         memo << statement.person_item
         memo << statement.parliamentary_group_item
@@ -127,7 +127,7 @@ class PageClassifier
 
   def item_data_for_statement(statement)
     item_values = [statement.person_item, statement.parliamentary_group_item, statement.electoral_district_item]
-    items.select { |k| item_values.include?(k) }
+    item_data.select { |k| item_values.include?(k) }
   end
 
   def position_held_data

@@ -72,8 +72,6 @@ class PageClassifier
         person_items.include?(statement.person_item)
       end
 
-      item_data = item_data_for_statement(statement)
-
       items = { position: item_data[page.position_held_item],
                 term:     parliamentary_term_data,
                 person:   item_data[statement.person_item],
@@ -123,11 +121,6 @@ class PageClassifier
 
       RetrieveItems.run(*item_values)
     end
-  end
-
-  def item_data_for_statement(statement)
-    item_values = [statement.person_item, statement.parliamentary_group_item, statement.electoral_district_item]
-    item_data.select { |k| item_values.include?(k) }
   end
 
   def position_held_data

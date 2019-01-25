@@ -72,11 +72,9 @@ class PageClassifier
         person_items.include?(statement.person_item)
       end
 
-      items = { position: item_data[page.position_held_item],
-                term:     parliamentary_term_data,
-                person:   item_data[statement.person_item],
-                group:    item_data[statement.parliamentary_group_item], }
-      items[:district] = item_data[statement.electoral_district_item] unless page.executive_position?
+      items = items_for_statement(statement).merge(
+        position: position, term: term
+      )
 
       decorated_statement = StatementClassifier.new(
         statement:           statement,
@@ -111,6 +109,19 @@ class PageClassifier
     @position ||= item_data[page.position_held_item]
   end
 
+  def term
+    @term ||= RetrieveTermData.run(page.parliamentary_term_item)
+  end
+
+  def items_for_statement(statement)
+    items = {
+      person: item_data[statement.person_item],
+      group:  item_data[statement.parliamentary_group_item],
+    }
+    items[:district] = item_data[statement.electoral_district_item] unless page.executive_position?
+    items
+  end
+
   def item_data
     @item_data ||= begin
       item_values = @statements.each_with_object([]) do |statement, memo|
@@ -129,12 +140,6 @@ class PageClassifier
     @position_held_data ||= RetrievePositionData.run(
       ([position.item, position.parent] + position.children.map(&:item)).compact,
       person_item_from_transaction_id
-    )
-  end
-
-  def parliamentary_term_data
-    @parliamentary_term_data ||= RetrieveTermData.run(
-      page.parliamentary_term_item
     )
   end
 

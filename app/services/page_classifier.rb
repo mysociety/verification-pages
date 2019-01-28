@@ -72,13 +72,9 @@ class PageClassifier
         person_items.include?(statement.person_item)
       end
 
-      item_data = item_data_for_statement(statement)
-
-      items = { position: item_data[page.position_held_item],
-                term:     parliamentary_term_data,
-                person:   item_data[statement.person_item],
-                group:    item_data[statement.parliamentary_group_item], }
-      items[:district] = item_data[statement.electoral_district_item] unless page.executive_position?
+      items = items_for_statement(statement).merge(
+        position: position, term: term
+      )
 
       decorated_statement = StatementClassifier.new(
         statement:           statement,
@@ -110,11 +106,24 @@ class PageClassifier
   end
 
   def position
-    @position ||= items[page.position_held_item]
+    @position ||= item_data[page.position_held_item]
   end
 
-  def items
-    @items ||= begin
+  def term
+    @term ||= RetrieveTermData.run(page.parliamentary_term_item)
+  end
+
+  def items_for_statement(statement)
+    items = {
+      person: item_data[statement.person_item],
+      group:  item_data[statement.parliamentary_group_item],
+    }
+    items[:district] = item_data[statement.electoral_district_item] unless page.executive_position?
+    items
+  end
+
+  def item_data
+    @item_data ||= begin
       item_values = @statements.each_with_object([]) do |statement, memo|
         memo << statement.person_item
         memo << statement.parliamentary_group_item
@@ -125,23 +134,12 @@ class PageClassifier
     end
   end
 
-  def item_data_for_statement(statement)
-    item_values = [statement.person_item, statement.parliamentary_group_item, statement.electoral_district_item]
-    items.select { |k| item_values.include?(k) }
-  end
-
   def position_held_data
     return [] unless position&.item
 
     @position_held_data ||= RetrievePositionData.run(
       ([position.item, position.parent] + position.children.map(&:item)).compact,
       person_item_from_transaction_id
-    )
-  end
-
-  def parliamentary_term_data
-    @parliamentary_term_data ||= RetrieveTermData.run(
-      page.parliamentary_term_item
     )
   end
 

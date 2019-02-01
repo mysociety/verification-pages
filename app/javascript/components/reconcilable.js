@@ -132,7 +132,7 @@ export default template({
     createPerson: function () {
       wikidataClient.createPerson(
         {
-          lang: this.country.label_lang,
+          lang: this.page.new_item_label_language,
           value: this.searchTerm
         },
         {

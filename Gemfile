@@ -50,7 +50,7 @@ gem 'membership-comparison', github: 'everypolitician/membership-comparison'
 
 group :development, :test do
   gem 'dotenv-rails', '~> 2.6.0'
-  gem 'factory_bot_rails', '~> 4.11.1'
+  gem 'factory_bot_rails', '~> 5.0.1'
   gem 'foreman', '~> 0.85.0'
   gem 'rails-controller-testing', '~> 1.0.4'
   gem 'rspec-rails', '~> 3.8'

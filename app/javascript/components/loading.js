@@ -6,7 +6,7 @@ export default template({
       message: null
     }
   },
-  props: ['statement', 'page', 'country'],
+  props: ['statement', 'page'],
   created: function () {
     this.$parent.$on('log', data => {
       this.message = data

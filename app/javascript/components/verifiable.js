@@ -13,7 +13,7 @@ export default template({
       referenceURLScope: 'this-statement'
     }
   },
-  props: ['statement', 'page', 'country'],
+  props: ['statement', 'page'],
   created: function () {
     this.statement.bulk_update = false
   },

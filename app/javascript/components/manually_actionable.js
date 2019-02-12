@@ -4,7 +4,7 @@ import template from './manually_actionable.html'
 
 export default template({
   data () { return {} },
-  props: ['statement', 'page', 'country'],
+  props: ['statement', 'page'],
   created: function () {
     this.statement.bulk_update = false
   },

@@ -31,21 +31,17 @@ RSpec.describe CountriesController, type: :controller do
   # adjust the attributes here as well.
   let(:valid_attributes) do
     {
-      name:           'Canada',
-      code:           'ca',
-      description_en: 'Canadian Politican',
-      label_lang:     'en',
-      wikidata_id:    'Q38',
+      name:        'Canada',
+      code:        'ca',
+      wikidata_id: 'Q38',
     }
   end
 
   let(:invalid_attributes) do
     {
-      name:           '',
-      code:           'werr',
-      description_en: '',
-      label_lang:     'en_us',
-      wikidata_id:    '1234',
+      name:        '',
+      code:        'werr',
+      wikidata_id: '1234',
     }
   end
 
@@ -111,11 +107,9 @@ RSpec.describe CountriesController, type: :controller do
     context 'with valid params' do
       let(:new_attributes) do
         {
-          name:           'Canada',
-          code:           'ca',
-          description_en: 'Canadian politican',
-          label_lang:     'en-ca',
-          wikidata_id:    'Q38',
+          name:        'Canada',
+          code:        'ca',
+          wikidata_id: 'Q42',
         }
       end
 
@@ -123,8 +117,7 @@ RSpec.describe CountriesController, type: :controller do
         country = Country.create! valid_attributes
         put :update, params: { id: country.to_param, country: new_attributes }, session: valid_session
         country.reload
-        expect(country.description_en).to eq('Canadian politican')
-        expect(country.label_lang).to eq('en-ca')
+        expect(country.wikidata_id).to eq('Q42')
       end
 
       it 'redirects to the country' do

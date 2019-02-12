@@ -15,10 +15,6 @@ RSpec.describe 'countries/new', type: :view do
 
       assert_select 'input[name=?]', 'country[code]'
 
-      assert_select 'input[name=?]', 'country[description_en]'
-
-      assert_select 'input[name=?]', 'country[label_lang]'
-
       assert_select 'input[name=?]', 'country[wikidata_id]'
     end
   end

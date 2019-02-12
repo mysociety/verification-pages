@@ -14,8 +14,6 @@ RSpec.describe 'countries/index', type: :view do
     render
     assert_select 'tr>td', text: 'Canada', count: 2
     assert_select 'tr>td', text: 'ca', count: 2
-    assert_select 'tr>td', text: 'Canadian politician', count: 2
-    assert_select 'tr>td', text: 'en', count: 2
     assert_select 'tr>td', text: 'Q16', count: 2
   end
 end

@@ -10,5 +10,7 @@ FactoryBot.define do
     reference_url { 'http://example.com' }
     csv_source_url { 'https://example.com/export.csv' }
     country
+    country_item { 'Q16' }
+    country_code { 'ca' }
   end
 end

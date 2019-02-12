@@ -12,7 +12,7 @@ class WikiPageTemplateTag
 
   def page_attributes
     {
-      country:                 country,
+      country_item:            params[:country_item],
       position_held_item:      params[:position_held_item],
       parliamentary_term_item: params[:parliamentary_term_item],
       csv_source_url:          params[:csv_source_url],
@@ -34,10 +34,6 @@ class WikiPageTemplateTag
   private
 
   attr_reader :wiki_page_title
-
-  def country
-    @country ||= Country.find_by(code: params[:country_code])
-  end
 
   def params
     section.params

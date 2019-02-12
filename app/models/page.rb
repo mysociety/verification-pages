@@ -9,6 +9,7 @@ class Page < ApplicationRecord
 
   validates :title, presence: true, uniqueness: true
   validates :position_held_item, presence: true
+  validates :country_code, presence: true, if: ->(p) { p.hash_epoch <= 2 }
   validates :reference_url, length: { maximum: 2000 }
   validates :csv_source_url, presence: true
 

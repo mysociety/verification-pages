@@ -25,6 +25,18 @@ RSpec.describe Page, type: :model do
     it 'requires csv_source_url' do
       expect(page.errors).to include(:csv_source_url)
     end
+
+    context 'hash epoch eq 2' do
+      let(:page) { Page.new(hash_epoch: 2) }
+
+      it 'requires country_code' do
+        expect(page.errors).to include(:country_code)
+      end
+
+      it 'does not requires country_item' do
+        expect(page.errors).not_to include(:country_item)
+      end
+    end
   end
 
   describe 'before validation' do

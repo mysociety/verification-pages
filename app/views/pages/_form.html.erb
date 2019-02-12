@@ -43,6 +43,7 @@
     </div>
     <%= f.error_span(:country_item) %>
   </div>
+  <% if @page.hash_epoch <= 2 %>
   <div class="form-group">
     <%= f.label :country_code, class: 'control-label col-lg-2' %>
     <div class="col-lg-10">
@@ -50,6 +51,7 @@
     </div>
     <%= f.error_span(:country_code) %>
   </div>
+  <% end %>
   <div class="form-group">
     <%= f.label :reference_url, class: 'control-label col-lg-2' %>
     <div class="col-lg-10">

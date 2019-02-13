@@ -10,6 +10,8 @@ RSpec.describe StatementsController, type: :controller do
   end
 
   before do
+    allow(Page).to receive(:find_by!).with(title: statement.page.title)
+                                     .and_return(statement.page)
     allow(Statement).to receive(:find_by!).with(transaction_id: '123')
                                           .and_return(statement)
   end

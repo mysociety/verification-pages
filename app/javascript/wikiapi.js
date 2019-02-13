@@ -331,7 +331,7 @@ var wikidataItem = function (spec) {
         if (!statement) {
           throw new Error('Creating the new statement failed')
         }
-        return my.updateClaim(Object.assign({}, claimData, {statement: statement}))
+        return my.updateClaim(Object.assign({}, claimData, { statement: statement }))
       })
     }
   }
@@ -428,7 +428,7 @@ var wikidata = function (spec) {
   }
 
   that.ajaxAPI = function (writeOperation, action, data) {
-    var completeData = Object.assign({}, data, {action: action})
+    var completeData = Object.assign({}, data, { action: action })
     console.log(completeData)
     if (writeOperation && !that.neverUseToken) {
       return that.tokenDeferred.then(function (token) {
@@ -447,7 +447,7 @@ var wikidata = function (spec) {
 
   that.item = function (itemID) {
     // Get the current revision ID for the item
-    return wikidataItem({wikidata: that, item: itemID})
+    return wikidataItem({ wikidata: that, item: itemID })
   }
 
   that.getReferencePropertyID = function (referenceURL) {

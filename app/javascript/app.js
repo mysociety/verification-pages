@@ -55,7 +55,7 @@ export default template({
       })
     })
     this.$on('find-matching-statements', (data, cb) => {
-      const {resourceType, statement, nameAttr, itemAttr, newItem} = data
+      const { resourceType, statement, nameAttr, itemAttr, newItem } = data
       if (resourceType === 'person') {
         cb(null, 0)
         return

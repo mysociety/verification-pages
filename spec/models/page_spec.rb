@@ -37,6 +37,18 @@ RSpec.describe Page, type: :model do
         expect(page.errors).not_to include(:country_item)
       end
     end
+
+    context 'hash epoch eq 3' do
+      let(:page) { Page.new(hash_epoch: 3) }
+
+      it 'does not requires country_code' do
+        expect(page.errors).not_to include(:country_code)
+      end
+
+      it 'requires country_item' do
+        expect(page.errors).to include(:country_item)
+      end
+    end
   end
 
   describe 'before validation' do

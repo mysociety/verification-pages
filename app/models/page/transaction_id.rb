@@ -17,6 +17,7 @@ class Page
       case hash_epoch
       when 1 then { country: country_code }
       when 2 then { country: country_code, page: id }
+      when 3 then { country: country_item, page: id }
       else raise UnknownHashEpochError
       end
     end

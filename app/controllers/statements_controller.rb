@@ -12,7 +12,9 @@ class StatementsController < FrontendController
 
   def statistics
     @country_statements = StatementsStatistics.new.statistics
-    @country_lookup = Country.all.map { |c| [c.code, c] }.to_h
+    @country_lookup = Page.select(:country_code, :country_name).distinct.each_with_object({}) do |p, memo|
+      memo[p.country_code] ||= p.country_name
+    end
     positions = @country_statements.values.map(&:first).flatten.map(&:position)
     @position_name_mapping = RetrieveItems.run(*positions)
   end

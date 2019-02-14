@@ -1,10 +1,9 @@
 <% @country_statements.each do |country_code, (statements, invalid_statements)| %>
   <h2>
     <% if country = @country_lookup[country_code.downcase] %>
-      <%= link_to country.name, country %>
+      <%= country %>
     <% else %>
       <%= country_code %>
-      <%= link_to '(create country)', new_country_path %>
     <% end %>
   </h2>
   <table class="wikitable">

@@ -8,7 +8,6 @@ RSpec.describe WikiPageTemplateTag, type: :service do
   let(:wiki_template) do
     <<~TEMPLATE
       {{#{subject.send(:wiki_template_name)}
-      |country_item=Q16
       |position_held_item=Q123
       |parliamentary_term_item=Q456
       |csv_source_url=https://example.com/members.csv
@@ -43,7 +42,6 @@ RSpec.describe WikiPageTemplateTag, type: :service do
   describe '#page_attributes' do
     it 'parses the correct attributes from the template' do
       expect(subject.page_attributes).to eq(
-        country_item:            'Q16',
         position_held_item:      'Q123',
         parliamentary_term_item: 'Q456',
         csv_source_url:          'https://example.com/members.csv',

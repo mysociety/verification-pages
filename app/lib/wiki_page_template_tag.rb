@@ -12,7 +12,6 @@ class WikiPageTemplateTag
 
   def page_attributes
     {
-      country_item:            params[:country_item],
       position_held_item:      params[:position_held_item],
       parliamentary_term_item: params[:parliamentary_term_item],
       csv_source_url:          params[:csv_source_url],

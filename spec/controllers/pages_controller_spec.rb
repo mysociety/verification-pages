@@ -10,7 +10,7 @@ RSpec.describe PagesController, type: :controller do
   let(:valid_attributes) do
     { title: 'Page title', position_held_item: 'Q1',
       parliamentary_term_item: 'Q2', reference_url: 'http://example.com',
-      country_id: country.id, country_item: 'Q16', country_code: 'ca',
+      country_item: 'Q16', country_code: 'ca',
       csv_source_url: 'http://example.com/export.csv', executive_position: false,
       reference_url_title: 'Example site', reference_url_language: 'en', }
   end
@@ -23,8 +23,6 @@ RSpec.describe PagesController, type: :controller do
   # in order to pass any filters (e.g. authentication) defined in
   # PagesController. Be sure to keep this updated too.
   let(:valid_session) { {} }
-
-  let(:country) { create(:country) }
 
   describe 'GET #index' do
     it 'returns a success response' do

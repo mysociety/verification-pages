@@ -10,8 +10,6 @@
 <dl class="dl-horizontal">
   <dt><strong><%= model_class.human_attribute_name(:title) %>:</strong></dt>
   <dd><%= link_to_wiki @page.title %></dd>
-  <dt><strong><%= model_class.human_attribute_name(:country_id) %>:</strong></dt>
-  <dd><%= link_to @page.country.name, @page.country %></dd>
   <dt><strong><%= model_class.human_attribute_name(:position_held_item) %>:</strong></dt>
   <dd><%= link_to_wiki @page.position_held_name, @page.position_held_item %></dd>
   <dt><strong><%= model_class.human_attribute_name(:parliamentary_term_item) %>:</strong></dt>

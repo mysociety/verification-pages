@@ -4,14 +4,12 @@ require 'rails_helper'
 
 RSpec.describe WikidataPageController, type: :controller do
   describe 'GET /setup' do
-    let!(:canada) { create(:country, code: 'ca') }
     let(:wikidata_url) { 'https://www.wikidata.org/wiki/Test_Page' }
     let(:wikipage) do
       double(
         WikiPageTemplateTag,
         page_attributes: {
           position_held_item:      'Q123',
-          country:                 canada,
           country_item:            'Q16',
           country_code:            'ca',
           parliamentary_term_item: 'Q456',

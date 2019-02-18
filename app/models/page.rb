@@ -5,7 +5,6 @@ class Page < ApplicationRecord
   include TransactionID
 
   has_many :statements, dependent: :destroy
-  belongs_to :country
 
   validates :title, presence: true, uniqueness: true
   validates :position_held_item, presence: true

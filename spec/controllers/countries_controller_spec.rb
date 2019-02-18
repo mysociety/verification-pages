@@ -165,7 +165,7 @@ RSpec.describe CountriesController, type: :controller do
 
     it 'loads statements for the given country' do
       country = Country.create! valid_attributes
-      page = create(:page, csv_source_url: 'http://example.com/export.csv', country: country)
+      page = create(:page, csv_source_url: 'http://example.com/export.csv', country_id: country.id)
       expect do
         post :load, params: { id: country.to_param }, session: valid_session
       end.to change(page.statements, :count).by(2)

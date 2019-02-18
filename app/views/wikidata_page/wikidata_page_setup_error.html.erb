@@ -6,14 +6,6 @@
     <% @page.errors.messages.each do |field, messages| %>
       <li>
         <code><%= field %></code>: <%= messages.join(', ') %>
-        <% if field == :country %>
-          <p>Valid <code>country_code</code> options:</p>
-          <ul>
-            <% Country.all.each do |country| %>
-              <li><%= country.code %> (<%= country.name %>)</li>
-            <% end %>
-          </ul>
-        <% end %>
       </li>
     <% end %>
     </ul>

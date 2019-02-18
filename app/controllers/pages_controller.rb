@@ -10,7 +10,7 @@ class PagesController < ApplicationController
 
   # GET /pages
   def index
-    @pages = Page.includes(:country).all
+    @pages = Page.all
   end
 
   # GET /pages/1
@@ -75,7 +75,7 @@ class PagesController < ApplicationController
   def page_params
     params.require(:page).permit(:title, :position_held_item,
                                  :parliamentary_term_item, :reference_url,
-                                 :country_id, :country_item, :country_code,
+                                 :country_item, :country_code,
                                  :csv_source_url, :executive_position,
                                  :reference_url_title, :reference_url_language,
                                  :archived, :new_item_description_en,
@@ -83,6 +83,6 @@ class PagesController < ApplicationController
   end
 
   def new_page_params
-    params.permit(:title, :position_held_item, :csv_source_url, :country_id)
+    params.permit(:title, :position_held_item, :csv_source_url)
   end
 end

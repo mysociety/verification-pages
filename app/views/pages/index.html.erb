@@ -7,7 +7,6 @@
     <tr>
       <th><%= model_class.human_attribute_name(:id) %></th>
       <th><%= model_class.human_attribute_name(:title) %></th>
-      <th><%= model_class.human_attribute_name(:country) %></th>
       <th><%= model_class.human_attribute_name(:position_held_item) %></th>
       <th><%= model_class.human_attribute_name(:parliamentary_term_item) %></th>
       <th><%= model_class.human_attribute_name(:country_item) %></th>
@@ -23,7 +22,6 @@
       <tr>
         <td><%= link_to page.id, page_path(page) %></td>
         <td class="title"><%= link_to_wiki page.title %></td>
-        <td><%= link_to page.country.name, page.country %></td>
         <td><%= link_to_wiki page.position_held_name, page.position_held_item %></td>
         <td><%= link_to_wiki page.parliamentary_term_name, page.parliamentary_term_item %></td>
         <td><%= link_to_wiki page.country_name, page.country_item %></td>

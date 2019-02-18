@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2019_02_14_152100) do
+ActiveRecord::Schema.define(version: 2019_02_14_154547) do
 
   create_table "countries", options: "ENGINE=InnoDB DEFAULT CHARSET=utf8", force: :cascade do |t|
     t.string "name"
@@ -27,7 +27,7 @@ ActiveRecord::Schema.define(version: 2019_02_14_152100) do
     t.string "reference_url", limit: 2000, default: "", null: false
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
-    t.bigint "country_id", null: false
+    t.bigint "country_id"
     t.string "csv_source_url", limit: 2000, null: false
     t.boolean "executive_position", default: false, null: false
     t.string "reference_url_title"

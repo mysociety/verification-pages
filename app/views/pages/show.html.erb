@@ -16,6 +16,10 @@
   <dd><%= link_to_wiki @page.position_held_name, @page.position_held_item %></dd>
   <dt><strong><%= model_class.human_attribute_name(:parliamentary_term_item) %>:</strong></dt>
   <dd><%= link_to_wiki @page.parliamentary_term_name, @page.parliamentary_term_item %></dd>
+  <dt><strong><%= model_class.human_attribute_name(:country_item) %>:</strong></dt>
+  <dd><%= link_to_wiki @page.country_name, @page.country_item %></dd>
+  <dt><strong><%= model_class.human_attribute_name(:country_code) %>:</strong></dt>
+  <dd><%= @page.country_code %></dd>
   <dt><strong><%= model_class.human_attribute_name(:reference_url) %>:</strong></dt>
   <dd><%= link_to @page.reference_url %></dd>
   <!--

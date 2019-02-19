@@ -28,12 +28,15 @@ RSpec.describe Page, type: :model do
   end
 
   describe 'before validation' do
-    let(:page) { build(:page, position_held_item: 'Q2', parliamentary_term_item: 'Q3') }
+    let(:page) do
+      build(:page, position_held_item: 'Q2', parliamentary_term_item: 'Q3', country_item: 'Q4')
+    end
 
     before do
-      allow(RetrieveItems).to receive(:run).with('Q2', 'Q3').and_return(
+      allow(RetrieveItems).to receive(:run).with('Q2', 'Q3', 'Q4').and_return(
         'Q2' => OpenStruct.new(label: 'Position'),
-        'Q3' => OpenStruct.new(label: 'Term')
+        'Q3' => OpenStruct.new(label: 'Term'),
+        'Q4' => OpenStruct.new(label: 'Country')
       )
     end
 
@@ -66,6 +69,22 @@ RSpec.describe Page, type: :model do
 
       it 'should not set position held name' do
         expect { page.valid? }.to_not change(page, :parliamentary_term_name)
+      end
+    end
+
+    context 'country item changed' do
+      before { allow(page).to receive(:country_item_changed?) { true } }
+
+      it 'should set country name' do
+        expect { page.valid? }.to change(page, :country_name).to('Country')
+      end
+    end
+
+    context 'position held item is unchanged' do
+      before { allow(page).to receive(:country_item_changed?) { false } }
+
+      it 'should not set position held name' do
+        expect { page.valid? }.to_not change(page, :country_name)
       end
     end
   end

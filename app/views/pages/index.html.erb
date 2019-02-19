@@ -10,6 +10,7 @@
       <th><%= model_class.human_attribute_name(:country) %></th>
       <th><%= model_class.human_attribute_name(:position_held_item) %></th>
       <th><%= model_class.human_attribute_name(:parliamentary_term_item) %></th>
+      <th><%= model_class.human_attribute_name(:country_item) %></th>
       <th><%= model_class.human_attribute_name(:new_item_description_en) %></th>
       <th><%= model_class.human_attribute_name(:new_item_label_language) %></th>
       <th><%= model_class.human_attribute_name(:executive_position) %></th>
@@ -25,6 +26,7 @@
         <td><%= link_to page.country.name, page.country %></td>
         <td><%= link_to_wiki page.position_held_name, page.position_held_item %></td>
         <td><%= link_to_wiki page.parliamentary_term_name, page.parliamentary_term_item %></td>
+        <td><%= link_to_wiki page.country_name, page.country_item %></td>
         <td><%= page.new_item_description_en %></td>
         <td><%= page.new_item_label_language %></td>
         <td><%= page.executive_position %></td>

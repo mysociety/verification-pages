@@ -91,7 +91,6 @@ export default template({
         this.statements = response.data.statements
         this.sortStatements(this.sortBy)
         this.page = response.data.page
-        this.country = response.data.country
       }).then(() => {
         this.loaded = true
         this.$emit('statements-loaded')

@@ -14,7 +14,7 @@ export default template({
       updateError: null
     }
   },
-  props: ['statement', 'page', 'country'],
+  props: ['statement', 'page'],
   created: function () {
     if (this.statement.bulk_update) {
       // To avoid lots of statements being actioned in parallel, which

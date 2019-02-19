@@ -17,7 +17,7 @@ export default template({
       languageCode: 'en'
     }
   },
-  props: ['statement', 'page', 'country'],
+  props: ['statement', 'page'],
   computed: {
     bulkFieldPrefix: function () {
       return {

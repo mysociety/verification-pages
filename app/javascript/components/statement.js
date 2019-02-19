@@ -18,7 +18,7 @@ export default template({
       loadingText: null
     }
   },
-  props: ['statement', 'page', 'country'],
+  props: ['statement', 'page'],
   computed: {
     classifierVersion: function () {
       return this.$parent.classifierVersion

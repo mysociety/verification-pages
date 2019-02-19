@@ -109,4 +109,28 @@ RSpec.describe Page, type: :model do
       it { is_expected.to be_nil }
     end
   end
+
+  describe '#new_item_label_language' do
+    let(:lang) { 'en' }
+    let(:country) { build(:country, label_lang: 'ca') }
+    let(:page) { build(:page, new_item_label_language: lang, country: country) }
+
+    subject { page.new_item_label_language }
+
+    it { is_expected.to eq lang }
+
+    context 'without label language' do
+      let(:lang) { nil }
+
+      it 'delegates to the Country#label_lang' do
+        expect(page.new_item_label_language).to eq('ca')
+      end
+    end
+
+    context 'without label language or country' do
+      let(:lang) { nil }
+      let(:country) { nil }
+      it { is_expected.to be_nil }
+    end
+  end
 end

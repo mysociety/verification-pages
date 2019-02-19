@@ -23,6 +23,10 @@ class Page < ApplicationRecord
     super || country&.description_en
   end
 
+  def new_item_label_language
+    super || country&.label_lang
+  end
+
   private
 
   def set_position_held_name

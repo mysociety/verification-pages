@@ -24,8 +24,7 @@ RSpec.describe GenerateVerificationPage, type: :service do
         .with(page.position_held_item)
         .and_return(position_held_data)
 
-      statements = double(:statements)
-      classify_page = double(:classify_page, statements: statements)
+      classify_page = double(:classify_page)
       expect(PageClassifier).to receive(:new)
         .with('page_title')
         .and_return(classify_page)
@@ -33,7 +32,7 @@ RSpec.describe GenerateVerificationPage, type: :service do
       template = Rails.root.join('app', 'views', 'wiki', 'verification.mediawiki.erb')
 
       expect(service).to receive(:render)
-        .with(template, page: page, statements: statements)
+        .with(template, page: page, statements: classify_page)
 
       service.run
     end

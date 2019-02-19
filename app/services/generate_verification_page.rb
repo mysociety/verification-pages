@@ -11,7 +11,7 @@ class GenerateVerificationPage < ServiceBase
   end
 
   def run
-    render template, page: page, statements: classify_page.statements
+    render template, page: page, statements: classify_page
   end
 
   private

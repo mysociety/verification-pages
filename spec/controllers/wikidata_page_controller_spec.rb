@@ -12,6 +12,8 @@ RSpec.describe WikidataPageController, type: :controller do
         page_attributes: {
           position_held_item:      'Q123',
           country:                 canada,
+          country_item:            'Q16',
+          country_code:            'ca',
           parliamentary_term_item: 'Q456',
           csv_source_url:          'https://example.com/members.csv',
           new_item_description_en: 'Canadian politician',

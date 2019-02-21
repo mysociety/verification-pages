@@ -15,8 +15,9 @@ class Page
       # IDs resulting in duplicate Statements being created when page CSV
       # sources are next fetched
       case hash_epoch
-      when 1 then { country: country.code }
-      when 2 then { country: country.code, page: id }
+      when 1 then { country: country_code }
+      when 2 then { country: country_code, page: id }
+      when 3 then { country: country_item, page: id }
       else raise UnknownHashEpochError
       end
     end

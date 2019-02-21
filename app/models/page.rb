@@ -13,6 +13,7 @@ class Page < ApplicationRecord
   validates :reference_url, length: { maximum: 2000 }
   validates :csv_source_url, presence: true
 
+  before_validation :fetch_country
   before_validation :set_position_held_name, if: :position_held_item_changed?
   before_validation :set_parliamentary_term_name, if: :parliamentary_term_item_changed?
   before_validation :set_country_name, if: :country_item_changed?
@@ -22,6 +23,12 @@ class Page < ApplicationRecord
   end
 
   private
+
+  def fetch_country
+    return unless position_held_item_changed? || parliamentary_term_item_changed?
+
+    self.country_item = RetrieveCountry.run(position_held_item, parliamentary_term_item)&.country
+  end
 
   def set_position_held_name
     self.position_held_name = item_data[position_held_item]&.label

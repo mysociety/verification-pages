@@ -57,11 +57,26 @@ RSpec.describe Page, type: :model do
     end
 
     before do
+      allow(RetrieveCountry).to receive(:run).with('Q2', 'Q3').and_return(
+        OpenStruct.new(country: 'Q4')
+      )
       allow(RetrieveItems).to receive(:run).with('Q2', 'Q3', 'Q4').and_return(
         'Q2' => OpenStruct.new(label: 'Position'),
         'Q3' => OpenStruct.new(label: 'Term'),
         'Q4' => OpenStruct.new(label: 'Country')
       )
+    end
+
+    context 'position held and parliamentary term items changed' do
+      before do
+        allow(page).to receive(:position_held_item_changed?) { true }
+        allow(page).to receive(:parliamentary_term_item_changed?) { true }
+      end
+
+      it 'should set country item' do
+        page.country_item = nil
+        expect { page.valid? }.to change(page, :country_item).to('Q4')
+      end
     end
 
     context 'position held item changed' do

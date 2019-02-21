@@ -44,3 +44,9 @@ en:
         new_item_description_en: Item description
         new_item_label_language: Item label language
         csv_source_url: CSV source URL
+    errors:
+      models:
+        page:
+          attributes:
+            country_item:
+              blank: could not be derived from the position_held_item or parliamentary_term_item. Please check they have a P17 country property.

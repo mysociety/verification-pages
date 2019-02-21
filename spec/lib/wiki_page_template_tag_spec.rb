@@ -8,7 +8,7 @@ RSpec.describe WikiPageTemplateTag, type: :service do
   let(:wiki_template) do
     <<~TEMPLATE
       {{#{subject.send(:wiki_template_name)}
-      |country_code=ca
+      |country_item=Q16
       |position_held_item=Q123
       |parliamentary_term_item=Q456
       |csv_source_url=https://example.com/members.csv
@@ -30,10 +30,6 @@ RSpec.describe WikiPageTemplateTag, type: :service do
     "https://#{ENV['WIKIDATA_SITE']}/w/api.php?action=query&format=json&meta=tokens&type=csrf"
   end
 
-  let!(:canada) do
-    create(:country, code: 'ca')
-  end
-
   subject { WikiPageTemplateTag.new(page_title) }
 
   before do
@@ -47,7 +43,7 @@ RSpec.describe WikiPageTemplateTag, type: :service do
   describe '#page_attributes' do
     it 'parses the correct attributes from the template' do
       expect(subject.page_attributes).to eq(
-        country:                 canada,
+        country_item:            'Q16',
         position_held_item:      'Q123',
         parliamentary_term_item: 'Q456',
         csv_source_url:          'https://example.com/members.csv',

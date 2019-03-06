@@ -46,6 +46,8 @@ json.statements @classifier.statements do |statement|
 end
 
 json.page @classifier.page,
-          :position_held_item, :executive_position,
+          :position_held_item, :executive_position, :country_item,
           :reference_url, :reference_url_title, :reference_url_language,
-          :csv_source_language, :new_item_description_en
+          :csv_source_language, :new_item_description_en,
+          :new_party_description_en, :new_party_instance_of_item,
+          :new_district_description_en, :new_district_instance_of_item

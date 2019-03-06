@@ -78,8 +78,8 @@ class PagesController < ApplicationController
       :country_item, :country_code,
       :executive_position, :archived,
       :reference_url, :reference_url_title, :reference_url_language,
-      :csv_source_url,
-      :new_item_description_en, :new_item_label_language
+      :csv_source_url, :csv_source_language,
+      :new_item_description_en
     )
   end
 

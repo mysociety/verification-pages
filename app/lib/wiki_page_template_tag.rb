@@ -15,8 +15,8 @@ class WikiPageTemplateTag
       position_held_item:      params[:position_held_item],
       parliamentary_term_item: params[:parliamentary_term_item],
       csv_source_url:          params[:csv_source_url],
+      csv_source_language:     params[:csv_source_language],
       new_item_description_en: params[:new_item_description_en],
-      new_item_label_language: params[:new_item_label_language],
     }
   end
 

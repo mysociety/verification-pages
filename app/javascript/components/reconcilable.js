@@ -132,13 +132,13 @@ export default template({
     createPerson: function () {
       wikidataClient.createPerson(
         {
-          lang: this.page.new_item_label_language,
           value: this.searchTerm
         },
         {
           lang: 'en',
           value: this.page.new_item_description_en
         }
+            lang: this.page.csv_source_language,
       ).then(createdItemData => {
         this.reconcileWithItem(createdItemData.item)
       })

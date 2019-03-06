@@ -48,4 +48,4 @@ end
 json.page @classifier.page,
           :position_held_item, :executive_position,
           :reference_url, :reference_url_title, :reference_url_language,
-          :new_item_label_language, :new_item_description_en
+          :csv_source_language, :new_item_description_en

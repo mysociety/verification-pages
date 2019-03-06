@@ -45,4 +45,7 @@ json.statements @classifier.statements do |statement|
   json.bulk_update @bulk_update
 end
 
-json.page @classifier.page, :reference_url, :position_held_item, :executive_position, :reference_url_title, :reference_url_language, :new_item_description_en, :new_item_label_language
+json.page @classifier.page,
+          :position_held_item, :executive_position,
+          :reference_url, :reference_url_title, :reference_url_language,
+          :new_item_label_language, :new_item_description_en

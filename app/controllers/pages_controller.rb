@@ -79,7 +79,9 @@ class PagesController < ApplicationController
       :executive_position, :archived,
       :reference_url, :reference_url_title, :reference_url_language,
       :csv_source_url, :csv_source_language,
-      :new_item_description_en
+      :new_item_description_en,
+      :new_party_description_en, :new_party_instance_of_item,
+      :new_district_description_en, :new_district_instance_of_item
     )
   end
 

@@ -53,17 +53,22 @@ RSpec.describe Page, type: :model do
 
   describe 'before validation' do
     let(:page) do
-      build(:page, position_held_item: 'Q2', parliamentary_term_item: 'Q3', country_item: 'Q4')
+      build(:page,
+            position_held_item: 'Q2', parliamentary_term_item: 'Q3',
+            country_item: 'Q4', new_party_instance_of_item: 'Q5',
+            new_district_instance_of_item: 'Q6')
     end
 
     before do
       allow(RetrieveCountry).to receive(:run).with('Q2', 'Q3').and_return(
         OpenStruct.new(country: 'Q4')
       )
-      allow(RetrieveItems).to receive(:run).with('Q2', 'Q3', 'Q4').and_return(
+      allow(RetrieveItems).to receive(:run).with('Q2', 'Q3', 'Q4', 'Q5', 'Q6').and_return(
         'Q2' => OpenStruct.new(label: 'Position'),
         'Q3' => OpenStruct.new(label: 'Term'),
-        'Q4' => OpenStruct.new(label: 'Country')
+        'Q4' => OpenStruct.new(label: 'Country'),
+        'Q5' => OpenStruct.new(label: 'Party'),
+        'Q6' => OpenStruct.new(label: 'District')
       )
     end
 
@@ -124,6 +129,38 @@ RSpec.describe Page, type: :model do
 
       it 'should not set country name' do
         expect { page.valid? }.to_not change(page, :country_name)
+      end
+    end
+
+    context 'new party instance of item changed' do
+      before { allow(page).to receive(:new_party_instance_of_item_changed?) { true } }
+
+      it 'should set new party instance of name' do
+        expect { page.valid? }.to change(page, :new_party_instance_of_name).to('Party')
+      end
+    end
+
+    context 'new party instance of item is unchanged' do
+      before { allow(page).to receive(:new_party_instance_of_item_changed?) { false } }
+
+      it 'should not set new party instance of name' do
+        expect { page.valid? }.to_not change(page, :new_party_instance_of_name)
+      end
+    end
+
+    context 'new district instance of item changed' do
+      before { allow(page).to receive(:new_district_instance_of_item_changed?) { true } }
+
+      it 'should set new district instance of name' do
+        expect { page.valid? }.to change(page, :new_district_instance_of_name).to('District')
+      end
+    end
+
+    context 'new district instance of item is unchanged' do
+      before { allow(page).to receive(:new_district_instance_of_item_changed?) { false } }
+
+      it 'should not set new district instance of name' do
+        expect { page.valid? }.to_not change(page, :new_district_instance_of_name)
       end
     end
   end

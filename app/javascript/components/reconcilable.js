@@ -129,16 +129,33 @@ export default template({
         }
       )
     },
-    createPerson: function () {
-      wikidataClient.createPerson(
-        {
-          value: this.searchTerm
-        },
-        {
-          lang: 'en',
-          value: this.page.new_item_description_en
-        }
+    create: function (resourceType) {
+      switch (resourceType) {
+        case 'person':
+          this.createItem(wikidataClient.getPersonCreateData, 'en', this.page.new_item_description_en)
+          break
+        case 'party':
+          this.createItem(wikidataClient.getCreateData, 'en', this.page.new_party_description_en, this.page.country_item, this.page.new_party_instance_of_item)
+          break
+        case 'district':
+          this.createItem(wikidataClient.getCreateData, 'en', this.page.new_district_description_en, this.page.country_item, this.page.new_district_instance_of_item)
+          break
+      }
+    },
+    createItem: function (fn, descriptionLang, description, countryItem = null, instanceOfItem = null) {
+      wikidataClient.createItem(
+        fn(
+          {
             lang: this.page.csv_source_language,
+            value: this.searchTerm
+          },
+          {
+            lang: descriptionLang,
+            value: description
+          },
+          countryItem,
+          instanceOfItem
+        )
       ).then(createdItemData => {
         this.reconcileWithItem(createdItemData.item)
       })

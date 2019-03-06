@@ -44,8 +44,8 @@
           <p v-html="wpResult.snippetHTML" class="description"></p>
         </div>
       </li>
-      <li v-if="this.searchResourceType === 'person'">
-        <button v-on:click="createPerson()" class="mw-ui-button">Create new item: {{ searchTerm }}</button>
+      <li>
+        <button v-on:click="create(searchResourceType)" class="mw-ui-button">Create new item: {{ searchTerm }}</button>
       </li>
     </ul>
   </span>

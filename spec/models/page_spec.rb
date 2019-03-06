@@ -103,10 +103,10 @@ RSpec.describe Page, type: :model do
       end
     end
 
-    context 'position held item is unchanged' do
+    context 'parliamentary term item is unchanged' do
       before { allow(page).to receive(:parliamentary_term_item_changed?) { false } }
 
-      it 'should not set position held name' do
+      it 'should not set parliamentary term name' do
         expect { page.valid? }.to_not change(page, :parliamentary_term_name)
       end
     end
@@ -119,10 +119,10 @@ RSpec.describe Page, type: :model do
       end
     end
 
-    context 'position held item is unchanged' do
+    context 'country item is unchanged' do
       before { allow(page).to receive(:country_item_changed?) { false } }
 
-      it 'should not set position held name' do
+      it 'should not set country name' do
         expect { page.valid? }.to_not change(page, :country_name)
       end
     end

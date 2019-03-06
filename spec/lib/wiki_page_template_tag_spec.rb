@@ -13,6 +13,10 @@ RSpec.describe WikiPageTemplateTag, type: :service do
       |csv_source_url=https://example.com/members.csv
       |csv_source_language=en
       |new_item_description_en=Canadian politician
+      |new_party_description_en=political party in Canada
+      |new_party_instance_of_item=Q777
+      |new_district_description_en=electrial district in Canada
+      |new_district_instance_of_item=Q888
       }}
     TEMPLATE
   end
@@ -42,11 +46,15 @@ RSpec.describe WikiPageTemplateTag, type: :service do
   describe '#page_attributes' do
     it 'parses the correct attributes from the template' do
       expect(subject.page_attributes).to eq(
-        position_held_item:      'Q123',
-        parliamentary_term_item: 'Q456',
-        csv_source_url:          'https://example.com/members.csv',
-        csv_source_language:     'en',
-        new_item_description_en: 'Canadian politician'
+        position_held_item:            'Q123',
+        parliamentary_term_item:       'Q456',
+        csv_source_url:                'https://example.com/members.csv',
+        csv_source_language:           'en',
+        new_item_description_en:       'Canadian politician',
+        new_party_description_en:      'political party in Canada',
+        new_party_instance_of_item:    'Q777',
+        new_district_description_en:   'electrial district in Canada',
+        new_district_instance_of_item: 'Q888'
       )
     end
   end

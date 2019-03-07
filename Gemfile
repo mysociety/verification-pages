@@ -32,7 +32,7 @@ gem 'rest-client'
 # API for retrieving data from Wikidata
 gem 'mediawiki_api'
 # Webpack for client side asset compilation
-gem 'webpacker', '~> 3.5'
+gem 'webpacker', '~> 4.0'
 # pry for debugging help
 gem 'pry'
 # redis for cache store

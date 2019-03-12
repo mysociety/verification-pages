@@ -12,11 +12,15 @@ class WikiPageTemplateTag
 
   def page_attributes
     {
-      position_held_item:      params[:position_held_item],
-      parliamentary_term_item: params[:parliamentary_term_item],
-      csv_source_url:          params[:csv_source_url],
-      new_item_description_en: params[:new_item_description_en],
-      new_item_label_language: params[:new_item_label_language],
+      position_held_item:            params[:position_held_item],
+      parliamentary_term_item:       params[:parliamentary_term_item],
+      csv_source_url:                params[:csv_source_url],
+      csv_source_language:           params[:csv_source_language],
+      new_item_description_en:       params[:new_item_description_en],
+      new_party_description_en:      params[:new_party_description_en],
+      new_party_instance_of_item:    params[:new_party_instance_of_item],
+      new_district_description_en:   params[:new_district_description_en],
+      new_district_instance_of_item: params[:new_district_instance_of_item],
     }
   end
 

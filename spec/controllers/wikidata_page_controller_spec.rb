@@ -14,8 +14,8 @@ RSpec.describe WikidataPageController, type: :controller do
           country_code:            'ca',
           parliamentary_term_item: 'Q456',
           csv_source_url:          'https://example.com/members.csv',
+          csv_source_language:     'en',
           new_item_description_en: 'Canadian politician',
-          new_item_label_language: 'en',
         },
         update_page:     true,
         wikidata_url:    wikidata_url

@@ -487,6 +487,7 @@ var wikidata = function (spec) {
         'parliamentary term': 'P2937',
         'title': 'P1476',
         'language of work or name': 'P407',
+        'country': 'P17',
         'instance of': 'P31',
         'start time': 'P580',
         'end time': 'P582'
@@ -502,6 +503,7 @@ var wikidata = function (spec) {
         'parliamentary term': 'P70901',
         'title': 'P77107',
         'language of work or name': 'P77090',
+        'country': 'P17',
         'instance of': 'P82',
         'start time': 'P355',
         'end time': 'P356'
@@ -521,6 +523,7 @@ var wikidata = function (spec) {
         'parliamentary term': 'P70901',
         'title': 'P77107',
         'language of work or name': 'P77090',
+        'country': 'P17',
         'instance of': 'P82',
         'start time': 'P355',
         'end time': 'P356'
@@ -556,7 +559,7 @@ var wikidata = function (spec) {
     }[that.serverName][itemLabel]
   }
 
-  function getPersonCreateData (label, description) {
+  that.getPersonCreateData = function (label, description) {
     var data = {
       labels: {},
       descriptions: {}
@@ -598,10 +601,52 @@ var wikidata = function (spec) {
     return JSON.stringify(data)
   }
 
-  that.createPerson = function (personLabel, personDescription) {
+  that.getCreateData = function (label, description, countryItem, instanceOfItem) {
+    var data = {
+      labels: {},
+      descriptions: {}
+    }
+    data.labels[label.lang] = {
+      language: label.lang,
+      value: label.value
+    }
+    data.descriptions[description.lang] = {
+      language: description.lang,
+      value: description.value
+    }
+    data.claims = [
+      {
+        'mainsnak': {
+          'snaktype': 'value',
+          'property': that.getPropertyID('country'),
+          'datavalue': {
+            'value': getItemValue(countryItem),
+            'type': 'wikibase-entityid'
+          }
+        },
+        'type': 'statement',
+        'rank': 'normal'
+      },
+      {
+        'mainsnak': {
+          'snaktype': 'value',
+          'property': that.getPropertyID('instance of'),
+          'datavalue': {
+            'value': getItemValue(instanceOfItem),
+            'type': 'wikibase-entityid'
+          }
+        },
+        'type': 'statement',
+        'rank': 'normal'
+      }
+    ]
+    return JSON.stringify(data)
+  }
+
+  that.createItem = function (data) {
     return that.ajaxAPI(true, 'wbeditentity', {
       new: 'item',
-      data: getPersonCreateData(personLabel, personDescription),
+      data: data,
       summary: this.summary()
     }).then(function (result) {
       return {

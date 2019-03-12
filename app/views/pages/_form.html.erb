@@ -67,11 +67,32 @@
     <%= f.error_span(:new_item_description_en) %>
   </div>
   <div class="form-group">
-    <%= f.label :new_item_label_language, class: 'control-label col-lg-2' %>
+    <%= f.label :new_party_description_en, class: 'control-label col-lg-2' %>
     <div class="col-lg-10">
-      <%= f.text_field :new_item_label_language, class: 'form-control' %>
+      <%= f.text_field :new_party_description_en, class: 'form-control' %>
     </div>
-    <%= f.error_span(:new_item_label_language) %>
+    <%= f.error_span(:new_party_description_en) %>
+  </div>
+  <div class="form-group">
+    <%= f.label :new_party_instance_of, class: 'control-label col-lg-2' %>
+    <div class="col-lg-10">
+      <%= f.text_field :new_party_instance_of, class: 'form-control' %>
+    </div>
+    <%= f.error_span(:new_party_instance_of) %>
+  </div>
+  <div class="form-group">
+    <%= f.label :new_district_description_en, class: 'control-label col-lg-2' %>
+    <div class="col-lg-10">
+      <%= f.text_field :new_district_description_en, class: 'form-control' %>
+    </div>
+    <%= f.error_span(:new_district_description_en) %>
+  </div>
+  <div class="form-group">
+    <%= f.label :new_district_instance_of, class: 'control-label col-lg-2' %>
+    <div class="col-lg-10">
+      <%= f.text_field :new_district_instance_of, class: 'form-control' %>
+    </div>
+    <%= f.error_span(:new_district_instance_of) %>
   </div>
   <!--
   <div class="form-group">
@@ -95,6 +116,13 @@
       <%= f.text_field :csv_source_url, class: 'form-control' %>
     </div>
     <%= f.error_span(:csv_source_url) %>
+  </div>
+  <div class="form-group">
+    <%= f.label :csv_source_language, class: 'control-label col-lg-2' %>
+    <div class="col-lg-10">
+      <%= f.text_field :csv_source_language, class: 'form-control' %>
+    </div>
+    <%= f.error_span(:csv_source_language) %>
   </div>
   <div class="form-check">
     <%= f.check_box :executive_position %>

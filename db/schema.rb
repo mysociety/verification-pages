@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2019_02_14_154548) do
+ActiveRecord::Schema.define(version: 2019_03_06_125511) do
 
   create_table "pages", options: "ENGINE=InnoDB DEFAULT CHARSET=utf8", force: :cascade do |t|
     t.string "title", null: false
@@ -28,10 +28,16 @@ ActiveRecord::Schema.define(version: 2019_02_14_154548) do
     t.integer "hash_epoch", default: 3
     t.boolean "archived", default: false, null: false
     t.string "new_item_description_en"
-    t.string "new_item_label_language"
+    t.string "csv_source_language"
     t.string "country_item"
     t.string "country_name"
     t.string "country_code"
+    t.string "new_party_description_en"
+    t.string "new_party_instance_of_item"
+    t.string "new_party_instance_of_name"
+    t.string "new_district_description_en"
+    t.string "new_district_instance_of_item"
+    t.string "new_district_instance_of_name"
   end
 
   create_table "reconciliations", options: "ENGINE=InnoDB DEFAULT CHARSET=utf8", force: :cascade do |t|

@@ -64,7 +64,7 @@ GEM
     bootsnap (1.4.0)
       msgpack (~> 1.0)
     builder (3.2.3)
-    byebug (10.0.2)
+    byebug (11.0.1)
     coderay (1.1.2)
     commonjs (0.2.7)
     concurrent-ruby (1.1.5)

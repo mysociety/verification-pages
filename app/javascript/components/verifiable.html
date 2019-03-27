@@ -12,7 +12,7 @@
       <button v-on:click="onChangeReferenceURL">Continue</button>
     </div>
   </span>
-  <span v-else-if="!editing && page.reference_url">
+  <span v-else-if="!editing && referenceURL">
     <p>
       Is this shown at <a target="_blank" rel="noopener nofollow" class="external free" :href="referenceURL">{{ referenceURL }}</a>?
       <small>(<a v-on:click="editing = true">change reference URL</a>)</small>

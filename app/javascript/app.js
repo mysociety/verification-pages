@@ -32,6 +32,7 @@ export default template({
     this.loadStatements()
     this.$on('statement-update', (requestFunction, cb) => {
       requestFunction().then(response => {
+        if (!response) { return }
         response.data.statements.forEach(function (newStatement) {
           var index = this.statements.findIndex(s => {
             return s.transaction_id === newStatement.transaction_id

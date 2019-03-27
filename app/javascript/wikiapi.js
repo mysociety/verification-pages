@@ -415,6 +415,8 @@ var wikidata = function (spec) {
       that.apiURL, params, { responseType: 'json' }
     ).then(function (response) {
       return response.data
+    }).catch(error => {
+      console.log(error)
     })
   }
 

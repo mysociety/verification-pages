@@ -85,6 +85,9 @@ export default template({
           item: itemID,
           resource_type: this.searchResourceType,
           update_type: updateType
+        }).catch(error => {
+          console.log(error)
+          this.$parent.$emit('error')
         })
       })
     },

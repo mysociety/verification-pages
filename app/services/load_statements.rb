@@ -76,7 +76,7 @@ class Row < OpenStruct
   end
 
   def position_end
-    super || start_end
+    super || end_date
   end
 
   def parse

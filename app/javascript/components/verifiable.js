@@ -25,6 +25,9 @@ export default template({
           user: wikidataClient.user,
           status,
           reference_url: this.referenceURL
+        }).catch(error => {
+          console.log(error)
+          this.$parent.$emit('error')
         })
       })
     },

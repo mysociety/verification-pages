@@ -44,7 +44,7 @@ class StatementClassifier
       term:     suggested_term,
       person:   suggested_person,
       party:    suggested_party,
-      district: suggested_dates
+      district: suggested_district
     ).merge(suggested_dates)
   end
 

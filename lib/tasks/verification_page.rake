@@ -16,19 +16,28 @@ namespace :verification_page do
     end
   end
 
+  def update_page_with_title(page_title)
+    UpdateVerificationPage.run(page_title)
+    puts 'Verification page now visible at: ' \
+      "https://#{ENV['WIKIDATA_SITE']}/wiki/#{page_title}"
+  rescue MediawikiApi::EditError => ex
+    puts ex.response.inspect
+  end
+
   desc 'Update verification page for the page_title given'
   task :update, %i[page_title] => %i[environment] do |_, args|
-    begin
-      abort('Require page title argument') if args.page_title.blank?
-      UpdateVerificationPage.run(args.page_title)
-      puts 'Verification page now visible at: ' \
-        "https://#{ENV['WIKIDATA_SITE']}/wiki/#{args.page_title}"
-    rescue MediawikiApi::EditError => ex
-      puts ex.response.inspect
-    end
+    abort('Require page title argument') if args.page_title.blank?
+    update_page_with_title(args.page_title)
   end
 
   namespace :update do
+    desc 'Create or update all verification pages'
+    task all: :environment do
+      Page.find_each do |page|
+        update_page_with_title(page.title)
+      end
+    end
+
     desc 'Update verification page templates'
     task templates: :environment do
       UpdateVerificationTemplates.run(

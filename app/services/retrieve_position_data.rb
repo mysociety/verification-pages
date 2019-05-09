@@ -14,7 +14,7 @@ class RetrievePositionData < ServiceBase
   def run
     run_query(query).map do |row|
       %i[position_start position_end term_start term_end].each do |key|
-        row[key] = Date.parse(row[key]) if row[key]
+        row[key] = (Date.parse(row[key]) if /\d{4}-\d{2}-\d{2}/.match?(row[key]))
       end
       row
     end

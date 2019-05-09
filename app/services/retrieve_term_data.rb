@@ -14,7 +14,7 @@ class RetrieveTermData < ServiceBase
     result = run_query(query).first
 
     %i[start end previous_term_end next_term_start].each do |key|
-      result[key] = Date.parse(result[key]) if result[key]
+      result[key] = (Date.parse(result[key]) if /\d{4}-\d{2}-\d{2}/.match?(result[key]))
     end
 
     result

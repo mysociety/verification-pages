@@ -36,12 +36,12 @@
   <dd><%= @page.new_item_description_en %></dd>
   <dt><strong><%= model_class.human_attribute_name(:new_party_description_en) %>:</strong></dt>
   <dd><%= @page.new_party_description_en %></dd>
-  <dt><strong><%= model_class.human_attribute_name(:new_party_instance_of) %>:</strong></dt>
-  <dd><%= @page.new_party_instance_of %></dd>
+  <dt><strong><%= model_class.human_attribute_name(:new_party_instance_of_item) %>:</strong></dt>
+  <dd><%= link_to_wiki @page.new_party_instance_of_name, @page.new_party_instance_of_item %></dd>
   <dt><strong><%= model_class.human_attribute_name(:new_district_description_en) %>:</strong></dt>
   <dd><%= @page.new_district_description_en %></dd>
-  <dt><strong><%= model_class.human_attribute_name(:new_district_instance_of) %>:</strong></dt>
-  <dd><%= @page.new_district_instance_of %></dd>
+  <dt><strong><%= model_class.human_attribute_name(:new_district_instance_of_item) %>:</strong></dt>
+  <dd><%= link_to_wiki @page.new_district_instance_of_name, @page.new_district_instance_of_item %></dd>
   <dt><strong><%= model_class.human_attribute_name(:executive_position) %>:</strong></dt>
   <dd><%= @page.executive_position %></dd>
   <dt><strong><%= model_class.human_attribute_name(:archived) %>:</strong></dt>

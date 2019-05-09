@@ -12,7 +12,12 @@ class RetrievePositionData < ServiceBase
   end
 
   def run
-    run_query(query)
+    run_query(query).map do |row|
+      %i[position_start position_end term_start term_end].each do |key|
+        row[key] = Date.parse(row[key]) if row[key]
+      end
+      row
+    end
   end
 
   def query

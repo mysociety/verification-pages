@@ -11,7 +11,13 @@ class RetrieveTermData < ServiceBase
   end
 
   def run
-    run_query(query).first
+    result = run_query(query).first
+
+    %i[start end previous_term_end next_term_start].each do |key|
+      result[key] = Date.parse(result[key]) if result[key]
+    end
+
+    result
   end
 
   def query

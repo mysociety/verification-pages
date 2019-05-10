@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-json.statements @classifier.statements do |statement|
+json.statements @classifier.statements do |statement| # rubocop:disable Metrics/BlockLength
   json.call(
     statement,
     :type,
@@ -32,12 +32,14 @@ json.statements @classifier.statements do |statement|
 
   if statement.position_start
     json.position_start "+#{statement.position_start.iso8601}T00:00:00Z"
+    json.position_start_date statement.position_start
   else
     json.position_start nil
   end
 
   if statement.position_end
     json.position_end "+#{statement.position_end.iso8601}T00:00:00Z"
+    json.position_end_date statement.position_end
   else
     json.position_end nil
   end

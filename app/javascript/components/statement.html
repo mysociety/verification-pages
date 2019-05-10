@@ -44,12 +44,18 @@
       </div>
     </div>
   </td>
+  <td>
+    {{ statement.position_start_date }}
+  </td>
+  <td>
+    {{ statement.position_end_date }}
+  </td>
   <td class="verification-tool__table__cell--narrow">
     <a class="verification-tool__table__cell-link" :href="'#s:' + statement.transaction_id" v-on:click="scrollHere($event)" title="Link to this statement">§</a>
   </td>
 </tr>
 <tr>
-  <td colspan="5" v-bind:class="'verification-tool__statement-controls verification-tool__statement-controls--' + stylingClass">
+  <td colspan="7" v-bind:class="'verification-tool__statement-controls verification-tool__statement-controls--' + stylingClass">
     <keep-alive>
       <component
         v-bind:is="currentView"

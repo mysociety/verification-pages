@@ -43,12 +43,16 @@ class Statement < ApplicationRecord
 
   def self_and_duplicate_statements
     Statement.where(
-      page:                    page,
-      person_name:             person_name,
-      electoral_district_name: electoral_district_name,
-      electoral_district_item: electoral_district_item,
-      fb_identifier:           fb_identifier,
-      removed_from_source:     false
+      page:                     page,
+      person_name:              person_name,
+      electoral_district_name:  electoral_district_name,
+      electoral_district_item:  electoral_district_item,
+      parliamentary_group_item: parliamentary_group_item,
+      parliamentary_group_name: parliamentary_group_name,
+      position_start:           position_start,
+      position_end:             position_end,
+      fb_identifier:            fb_identifier,
+      removed_from_source:      false
     )
   end
 

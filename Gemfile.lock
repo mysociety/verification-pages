@@ -1,6 +1,6 @@
 GIT
   remote: https://github.com/everypolitician/membership-comparison.git
-  revision: 787897e12a0585959467871975978b721533834a
+  revision: 2e06442cb39db8a3ea3aa8260d3017b18d2b629c
   specs:
     membership-comparison (0.1.0)
 

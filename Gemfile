@@ -22,7 +22,7 @@ gem 'sass-rails', '~> 5.0'
 # Use Uglifier as compressor for JavaScript assets
 gem 'uglifier', '>= 1.3.0'
 # Code linting
-gem 'rubocop', '~> 0.64.0', require: false
+gem 'rubocop', '~> 0.74.0', require: false
 # Bootstrap styling
 gem 'twitter-bootstrap-rails'
 # For configuring CORS headers
